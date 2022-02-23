@@ -1,13 +1,14 @@
-import type { NextPage } from 'next'
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 
-const Home: NextPage = () => {
+const GiveTo: NextPage = () => {
+  const router = useRouter();
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
         <h1 className="text-2xl font-bold mt-5 mb-3">
           Give Snaps
         </h1>
-
         <h2 className="my-2">Who are you sending to?</h2>
 
         <label className="block text-sm font-medium text-gray-700 mt-3">First Name</label>
@@ -33,10 +34,11 @@ const Home: NextPage = () => {
         <button
           type="button"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={() => router.push('/give/category')}
         >Next</button>
       </div>
     </div>
   )
 }
 
-export default Home
+export default GiveTo
