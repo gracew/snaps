@@ -1,5 +1,6 @@
 import { createReadStream } from 'fs'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import Card from '../../components/card'
 
 const types = [
@@ -28,7 +29,9 @@ const types = [
     description: "You seek what is best for Netflix, rather than what is best for yourself or your group. You are open-minded in search of great ideas. You make time to help colleagues."
   },
 ]
-const Home: NextPage = () => {
+
+const GiveCategory: NextPage = () => {
+  const router = useRouter();
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
@@ -43,10 +46,11 @@ const Home: NextPage = () => {
         <button
           type="button"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={() => router.push('/give/note')}
         >Next</button>
       </div>
     </div>
   )
 }
 
-export default Home
+export default GiveCategory;
