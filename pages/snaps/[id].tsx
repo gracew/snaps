@@ -1,17 +1,20 @@
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import Card from '../../components/card'
 
 const GiveCategory: NextPage = () => {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+
+  // TODO: fetch sender, recipient from DB
+  // TODO: add claim button if not signed in as sender
 
   async function copy() {
     const host = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000";
     await navigator.clipboard.writeText(`${host}/${router.asPath}`);
     setCopied(true);
   }
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
