@@ -6,7 +6,7 @@ interface ButtonContainer {
 
 const ButtonContainer = ({ children }: ButtonContainer) => {
     return (
-        <div className="my-5 flex flex-col">
+        <div className="my-6 flex gap-x-4">
             {children}
         </div>
     )

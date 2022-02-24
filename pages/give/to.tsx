@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ButtonContainer from '../../components/buttonContainer';
 import Or from '../../components/or';
 import PrimaryButton from '../../components/primaryButton';
+import SecondaryButton from '../../components/secondaryButton';
 
 const GiveTo: NextPage = () => {
   const router = useRouter();
@@ -65,6 +66,10 @@ const GiveTo: NextPage = () => {
 
           </div>}
         {recipientType && <ButtonContainer>
+          <SecondaryButton
+            text="Back"
+            onClick={() => setRecipientType(undefined)}
+          />
           <PrimaryButton
             text="Next"
             onClick={() => router.push('/give/category')}
