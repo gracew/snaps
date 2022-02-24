@@ -1,7 +1,9 @@
-import { createReadStream } from 'fs'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import ButtonContainer from '../../components/buttonContainer'
 import Card from '../../components/card'
+import PrimaryButton from '../../components/primaryButton'
 
 const types = [
   {
@@ -32,6 +34,8 @@ const types = [
 
 const GiveCategory: NextPage = () => {
   const router = useRouter();
+  const [category, setCategory] = useState<string>();
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
@@ -41,13 +45,21 @@ const GiveCategory: NextPage = () => {
 
         <h2 className="my-2">Select a category:</h2>
 
-        {types.map(t => <Card key={t.label} onClick={() => { }} label={t.label} description={t.description} />)}
+        {types.map(t => <Card
+          key={t.label}
+          selected={category === t.label}
+          onClick={() => setCategory(t.label)}
+          label={t.label}
+          description={t.description}
+        />)}
 
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          onClick={() => router.push('/give/note')}
-        >Next</button>
+        <ButtonContainer>
+          <PrimaryButton
+            text="Next"
+            onClick={() => router.push('/give/note')}
+            disabled={!category}
+          />
+        </ButtonContainer>
       </div>
     </div>
   )

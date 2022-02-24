@@ -1,8 +1,13 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import ButtonContainer from '../../components/buttonContainer';
+import PrimaryButton from '../../components/primaryButton';
 
 const GiveNote: NextPage = () => {
   const router = useRouter();
+  const [note, setNote] = useState<string>();
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
@@ -17,14 +22,18 @@ const GiveNote: NextPage = () => {
             id="note"
             className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
             rows={5}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
           />
         </div>
 
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          onClick={() => router.push('/snaps/1')}
-        >Finish</button>
+        <ButtonContainer>
+          <PrimaryButton
+            text="Finish"
+            onClick={() => router.push('/snaps/1')}
+            disabled={!note}
+          />
+        </ButtonContainer>
       </div>
     </div>
   )
