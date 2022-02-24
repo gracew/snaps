@@ -6,9 +6,26 @@ import Or from '../../components/or';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
 
+enum RecipientType {
+  EMAIL = "email",
+  ADDRESS = "address",
+}
+
 const GiveTo: NextPage = () => {
   const router = useRouter();
-  const [recipientType, setRecipientType] = useState<string>();
+  const [recipientType, setRecipientType] = useState<RecipientType>();
+  const [recipientName, setRecipientName] = useState<string>();
+  const [recipientEmail, setRecipientEmail] = useState<string>();
+  const [recipientAddress, setRecipientAddress] = useState<string>();
+
+  function disabled() {
+    if (recipientType === RecipientType.EMAIL) {
+      return !recipientName || !recipientEmail;
+    } else if (recipientType === RecipientType.ADDRESS) {
+      return !recipientAddress;
+    }
+    return false;
+  }
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
@@ -21,12 +38,12 @@ const GiveTo: NextPage = () => {
         {!recipientType && <div className="flex flex-col">
           <PrimaryButton
             text="Email"
-            onClick={() => setRecipientType("email")}
+            onClick={() => setRecipientType(RecipientType.EMAIL)}
           />
           <Or />
           <PrimaryButton
             text="Polygon Address"
-            onClick={() => setRecipientType("address")}
+            onClick={() => setRecipientType(RecipientType.ADDRESS)}
           />
         </div>}
 
@@ -38,6 +55,8 @@ const GiveTo: NextPage = () => {
               name="fname"
               id="fname"
               className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              value={recipientName}
+              onChange={(e) => setRecipientName(e.target.value)}
             />
           </div>
 
@@ -48,6 +67,8 @@ const GiveTo: NextPage = () => {
               name="email"
               id="email"
               className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              value={recipientEmail}
+              onChange={(e) => setRecipientEmail(e.target.value)}
             />
           </div>
         </div>}
@@ -61,6 +82,8 @@ const GiveTo: NextPage = () => {
                 name="polygonaddress"
                 id="polygonaddress"
                 className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                value={recipientAddress}
+                onChange={(e) => setRecipientAddress(e.target.value)}
               />
             </div>
 
@@ -73,6 +96,7 @@ const GiveTo: NextPage = () => {
           <PrimaryButton
             text="Next"
             onClick={() => router.push('/give/category')}
+            disabled={disabled()}
           />
         </ButtonContainer>}
 
