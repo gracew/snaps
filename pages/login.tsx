@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import GoogleLogin from "react-google-login";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+import Or from "../components/or";
+import SecondaryButton from "../components/secondaryButton";
 import { signatureInput } from "./api/auth";
 
 const GiveTo: NextPage = () => {
@@ -82,26 +84,17 @@ const GiveTo: NextPage = () => {
           onSuccess={onGoogleSuccess}
           onFailure={onGoogleFailure}
           render={renderProps => (
-            <button
-              type="button"
-              className="px-5 py-2.5 mt-3 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-              onClick={renderProps.onClick} 
-              disabled={renderProps.disabled}
-            >
-              Log In with Google
-            </button>
+            <SecondaryButton
+              text="Log In with Google"
+              onClick={renderProps.onClick}
+            />
           )}
-        />,
-        <div className="text-center text-sm uppercase">
-          or
-        </div>
-        <button
-          type="button"
-          className="px-5 py-2.5 mt-3 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        />
+        <Or />
+        <SecondaryButton
+          text="Connect Wallet"
           onClick={connect}
-        >
-          Connect Wallet
-        </button>
+        />
       </div>
     </div>
   )

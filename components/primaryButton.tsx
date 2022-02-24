@@ -1,5 +1,3 @@
-import { prependOnceListener } from "process";
-
 interface PrimaryButtonProps {
     text: string;
     onClick: () => void;

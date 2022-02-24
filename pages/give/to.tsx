@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import ButtonContainer from '../../components/buttonContainer';
 import Or from '../../components/or';
 import PrimaryButton from '../../components/primaryButton';
 
@@ -48,12 +49,6 @@ const GiveTo: NextPage = () => {
               className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
             />
           </div>
-
-          <button
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={() => router.push('/give/category')}
-          >Next</button>
         </div>}
 
         {recipientType === "address" &&
@@ -68,12 +63,13 @@ const GiveTo: NextPage = () => {
               />
             </div>
 
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              onClick={() => router.push('/give/category')}
-            >Next</button>
           </div>}
+        {recipientType && <ButtonContainer>
+          <PrimaryButton
+            text="Next"
+            onClick={() => router.push('/give/category')}
+          />
+        </ButtonContainer>}
 
       </div>
     </div>
