@@ -59,12 +59,12 @@ const GiveTo: NextPage = () => {
     const web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     await login({ web3, account: accounts[0] });
-    router.push("/give/to")
+    router.push("/snaps")
   }
 
   function onGoogleSuccess(res: any) {
     console.log("success", res);
-    router.push("/give/to")
+    router.push("/snaps")
   }
 
   function onGoogleFailure(res: any) {
