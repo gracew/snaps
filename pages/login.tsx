@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import Web3 from "web3";
 import { connect, signatureInput } from "../auth";
@@ -8,6 +9,22 @@ import SecondaryButton from "../components/secondaryButton";
 
 const Login: NextPage = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    fetch('/api/me', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}),
+    })
+      .then(res => res.json())
+      .then(({ address, email }) => {
+        if (address || email) {
+          router.push("/snaps")
+        }
+      });
+  }, []);
 
   async function login({ web3, account }: { web3: Web3, account: string }) {
     const { nonce, validToken } = await fetch('/api/login/getNonce', {
