@@ -40,6 +40,7 @@ const GiveCategory: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [category, setCategory] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getExistingData() {
@@ -57,10 +58,12 @@ const GiveCategory: NextPage = () => {
   }, [id]);
 
   async function onNext() {
+    setLoading(true);
     await supabase
         .from<definitions["snaps"]>("snaps")
         .update({ category })
         .eq('id', id as string);
+    setLoading(false);
     router.push(`/give/${id}/note`);
   }
 
@@ -92,6 +95,7 @@ const GiveCategory: NextPage = () => {
             text="Next"
             onClick={onNext}
             disabled={!category}
+            loading={loading}
           />
         </ButtonContainer>
       </div>

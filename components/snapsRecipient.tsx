@@ -18,6 +18,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   const [recipientName, setRecipientName] = useState<string>(existingData?.recipient_fname || "");
   const [recipientEmail, setRecipientEmail] = useState<string>(existingData?.recipient_email || "");
   const [recipientAddress, setRecipientAddress] = useState<string>(existingData?.recipient_wallet_address || "");
+  const [loading, setLoading] = useState(false);
 
   function disabled() {
     if (recipientType === AuthType.EMAIL) {
@@ -29,6 +30,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   }
 
   async function onNext() {
+    setLoading(true);
     const snaps = await fetch('/api/createSnaps', {
       method: 'POST',
       headers: {
@@ -41,6 +43,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
         recipientAddress,
       }),
     }).then(res => res.json());
+    setLoading(false);
     router.push(`/give/${snaps.id}/category`);
   }
 
@@ -115,6 +118,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
             text="Next"
             onClick={onNext}
             disabled={disabled()}
+            loading={loading}
           />
         </ButtonContainer>}
 

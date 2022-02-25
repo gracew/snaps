@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ButtonContainer from '../../../components/buttonContainer';
 import Nav from '../../../components/nav';
 import PrimaryButton from '../../../components/primaryButton';
-import Spinner from '../../../components/spinner';
+import LargeSpinner from '../../../components/largeSpinner';
 import { definitions } from "../../../types/supabase";
 import { supabase } from '../../api/supabase';
 
@@ -13,6 +13,7 @@ const GiveNote: NextPage = () => {
   const { id } = router.query;
   const [snaps, setSnaps] = useState<definitions["snaps"]>();
   const [note, setNote] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getExistingData() {
@@ -29,17 +30,19 @@ const GiveNote: NextPage = () => {
   }, [id]);
 
   async function onFinish() {
+    setLoading(true);
     await supabase
       .from<definitions["snaps"]>("snaps")
       .update({ note })
       .eq('id', id as string);
+    setLoading(false);
     router.push(`/snaps/${id}`);
   }
 
   if (!snaps) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center">
-          <Spinner />
+          <LargeSpinner />
       </div>
     );
   }
@@ -70,6 +73,7 @@ const GiveNote: NextPage = () => {
             text="Finish"
             onClick={onFinish}
             disabled={!note}
+            loading={loading}
           />
         </ButtonContainer>
       </div>
