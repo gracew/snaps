@@ -38,7 +38,7 @@ const GiveCategory: NextPage = () => {
   const category = spcTypes.find(c => c.id === snaps?.category);
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center">
+    <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 flex flex-col">
         <Nav />
         <div className="mt-5 mb-3 flex justify-between">

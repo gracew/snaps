@@ -65,7 +65,7 @@ const GiveCategory: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center">
+    <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 flex flex-col">
         <Nav />
         <h1 className="text-2xl font-bold mt-5 mb-3">
