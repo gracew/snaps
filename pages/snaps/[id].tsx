@@ -43,7 +43,7 @@ const GiveCategory: NextPage = () => {
 
   async function copy() {
     const host = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000";
-    await navigator.clipboard.writeText(`${host}/${router.asPath}`);
+    await navigator.clipboard.writeText(`${host}${router.asPath}`);
     setCopied(true);
   }
 
