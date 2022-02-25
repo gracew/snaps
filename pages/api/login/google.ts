@@ -55,7 +55,7 @@ export default async function handler(
     return;
   }
 
-  const token = jwt.sign({ sub: id, type: "email", email: payload.email }, process.env.JWT_SECRET!);
+  const token = jwt.sign({ sub: id, type: "email", email: payload.email, fname: payload.given_name }, process.env.JWT_SECRET!);
   res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
   res.end();
 }

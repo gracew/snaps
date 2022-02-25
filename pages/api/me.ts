@@ -6,5 +6,5 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   await runMiddleware(req, res, validateJwtIfExists);
-  res.status(200).json({ address: req.body.address, email: req.body.email });
+  res.status(200).json({ address: req.body.address, email: req.body.email, fname: req.body.fname });
 }

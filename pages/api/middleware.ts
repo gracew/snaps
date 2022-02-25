@@ -31,6 +31,7 @@ export function validateJwtIfExists(req: NextApiRequest, res: NextApiResponse, n
                 req.body.address = decoded.address;
             } else if (decoded.type === AuthType.EMAIL) {
                 req.body.email = decoded.email;
+                req.body.fname = decoded.fname;
             }
             req.body.validToken = true;
             next();
@@ -54,6 +55,7 @@ export function validateJwt(req: NextApiRequest, res: NextApiResponse, next: exp
             req.body.address = decoded.address;
         } else if (decoded.type === AuthType.EMAIL) {
             req.body.email = decoded.email;
+            req.body.fname = decoded.fname;
         }
         next();
     });

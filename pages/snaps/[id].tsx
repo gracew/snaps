@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Card from '../../components/card';
+import LargeSpinner from '../../components/largeSpinner';
 import Nav from '../../components/nav';
 import { definitions } from "../../types/supabase";
 import { supabase } from '../api/supabase';
@@ -11,6 +12,7 @@ const GiveCategory: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [snaps, setSnaps] = useState<definitions["snaps"]>();
+  const [me, setMe] = useState<any>();
   const [copied, setCopied] = useState(false);
 
   // TODO: add claim button if not signed in as sender
@@ -24,6 +26,16 @@ const GiveCategory: NextPage = () => {
       if (!error && data && data.length > 0) {
         setSnaps(data[0]);
       }
+
+      const meRes = await fetch('/api/me', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({}),
+      })
+        .then(res => res.json())
+      setMe(meRes);
     };
 
     getExistingData();
@@ -37,14 +49,22 @@ const GiveCategory: NextPage = () => {
 
   const category = spcTypes.find(c => c.id === snaps?.category);
 
+  if (!snaps || !me) {
+    return (
+      <div className="flex flex-col min-h-screen items-center justify-center">
+        <LargeSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 flex flex-col">
         <Nav />
         <div className="mt-5 mb-3 flex justify-between">
-          <h2>From: Grace</h2>
           {/* TODO: look up ENS */}
-          <h2>To: {snaps?.recipient_fname || snaps?.recipient_wallet_address}</h2>
+          <h2>From: <div className="w-20 truncate">{me.fname || me.address}</div></h2>
+          <h2>To: <div className="w-20 truncate">{snaps.recipient_fname || snaps.recipient_wallet_address}</div></h2>
         </div>
 
         <Card
