@@ -1,16 +1,25 @@
+import AuthButton from "./authButton";
+import PrimaryButton from "./primaryButton";
 
-interface CardProps {
-  onClick: () => void;
-  label: string;
-  description: string;
-}
-const Card = ({ onClick, label, description }: CardProps) => {
+const Nav = () => {
   return (
-    <a onClick={onClick} className="block my-3 px-6 py-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{label}</h5>
-      <p className="font-normal text-gray-700 dark:text-gray-400">{description}</p>
-    </a>
+    <nav className="bg-white px-2 py-2.5 dark:bg-gray-800">
+      <div className="container flex flex-wrap justify-between items-center mx-auto">
+        <a href="#" className="flex">
+          <svg className="mr-3 h-10" viewBox="0 0 52 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.87695 53H28.7791C41.5357 53 51.877 42.7025 51.877 30H24.9748C12.2182 30 1.87695 40.2975 1.87695 53Z" fill="#76A9FA"></path><path d="M0.000409561 32.1646L0.000409561 66.4111C12.8618 66.4111 23.2881 55.9849 23.2881 43.1235L23.2881 8.87689C10.9966 8.98066 1.39567 19.5573 0.000409561 32.1646Z" fill="#A4CAFE"></path><path d="M50.877 5H23.9748C11.2182 5 0.876953 15.2975 0.876953 28H27.7791C40.5357 28 50.877 17.7025 50.877 5Z" fill="#1C64F2"></path></svg>
+          <span className="sm:hidden self-center text-lg font-semibold whitespace-nowrap dark:text-white">Snaps</span>
+        </a>
+        <div className="flex w-auto">
+          <PrimaryButton
+            text="Give Snaps"
+            onClick={() => { }}
+          />
+          <AuthButton text="gracewang92@gmail.com" />
+        </div>
+      </div>
+    </nav>
+
   )
 }
 
-export default Card
+export default Nav;

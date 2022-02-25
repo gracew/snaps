@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Nav from '../../components/nav';
 
 const Snaps: NextPage = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const Snaps: NextPage = () => {
   return (
     <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 my-4 flex flex-col">
+        <Nav />
         <div className="border-b border-gray-200 dark:border-gray-700">
           <ul className="flex flex-wrap -mb-px">
             <li className="mr-2">

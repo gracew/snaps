@@ -1,3 +1,8 @@
+export enum AuthType {
+  EMAIL = "email",
+  ADDRESS = "address",
+}
+
 export function signatureInput(nonce: string) {
     return `Sign this message to prove you have access to this wallet and we will sign you in.
 

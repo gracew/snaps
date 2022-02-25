@@ -5,23 +5,19 @@ import ButtonContainer from '../../components/buttonContainer';
 import Or from '../../components/or';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
-
-enum RecipientType {
-  EMAIL = "email",
-  ADDRESS = "address",
-}
+import { AuthType } from '../api/auth';
 
 const GiveTo: NextPage = () => {
   const router = useRouter();
-  const [recipientType, setRecipientType] = useState<RecipientType>();
+  const [recipientType, setRecipientType] = useState<AuthType>();
   const [recipientName, setRecipientName] = useState<string>();
   const [recipientEmail, setRecipientEmail] = useState<string>();
   const [recipientAddress, setRecipientAddress] = useState<string>();
 
   function disabled() {
-    if (recipientType === RecipientType.EMAIL) {
+    if (recipientType === AuthType.EMAIL) {
       return !recipientName || !recipientEmail;
-    } else if (recipientType === RecipientType.ADDRESS) {
+    } else if (recipientType === AuthType.ADDRESS) {
       return !recipientAddress;
     }
     return false;
@@ -38,12 +34,12 @@ const GiveTo: NextPage = () => {
         {!recipientType && <div className="flex flex-col">
           <PrimaryButton
             text="Email"
-            onClick={() => setRecipientType(RecipientType.EMAIL)}
+            onClick={() => setRecipientType(AuthType.EMAIL)}
           />
           <Or />
           <PrimaryButton
             text="Polygon Address"
-            onClick={() => setRecipientType(RecipientType.ADDRESS)}
+            onClick={() => setRecipientType(AuthType.ADDRESS)}
           />
         </div>}
 
