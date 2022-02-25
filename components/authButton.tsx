@@ -1,16 +1,15 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+import { useRouter } from 'next/router'
 import { Fragment, useEffect, useState } from 'react'
+import { getWeb3Modal } from '../auth'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-function disconnectWallet() {
-}
-
 const AuthButton = () => {
-    const [web3Modal, setWeb3Modal] = useState<any>();
+    const router = useRouter();
     const [address, setAddress] = useState<string>();
     const [email, setEmail] = useState<string>();
 
@@ -28,6 +27,18 @@ const AuthButton = () => {
                 setEmail(email);
             });
     }, []);
+
+    async function logout() {
+        await fetch('/api/logout');
+        if (address) {
+            const web3Modal = getWeb3Modal();
+            web3Modal.clearCachedProvider();
+            setAddress(undefined);
+        } else {
+            setEmail(undefined);
+        }
+        router.push('/login');
+    }
 
     return (
         <Menu as="div" className="relative inline-block text-left">
@@ -49,21 +60,20 @@ const AuthButton = () => {
             >
                 <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                        <form method="POST" action="#">
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        type="submit"
-                                        className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                            'block w-full text-left px-4 py-2 text-sm'
-                                        )}
-                                    >
-                                        {address ? "Disconnect" : "Log Out"}
-                                    </button>
-                                )}
-                            </Menu.Item>
-                        </form>
+                        <Menu.Item>
+                            {({ active }) => (
+                                <button
+                                    type="submit"
+                                    className={classNames(
+                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        'block w-full text-left px-4 py-2 text-sm'
+                                    )}
+                                    onClick={logout}
+                                >
+                                    {address ? "Disconnect" : "Log Out"}
+                                </button>
+                            )}
+                        </Menu.Item>
                     </div>
                 </Menu.Items>
             </Transition>
