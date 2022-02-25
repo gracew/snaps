@@ -26,10 +26,15 @@ export default async function handler(
   console.log(payload);
 
   // successful login; insert into users table
-  const { data: newUsers } = await supabase
+  const { data: newUsers, error } = await supabase
     .from("users")
     .insert([{ email: payload.email }]);
 
+  if (error) {
+    console.log(error);
+    res.status(500).end();
+    return;
+  }
   if (!newUsers || newUsers.length === 0) {
     res.status(500).end();
     return;

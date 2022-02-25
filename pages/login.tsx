@@ -58,8 +58,11 @@ const Login: NextPage = () => {
 
   async function onClickConnect() {
     const res = await connect();
-    await login(res);
-    router.push("/snaps")
+    const success = await login(res);
+    if (success) {
+      router.push("/snaps")
+    }
+    // TODO: handle failure case
   }
 
   async function onGoogleSuccess(res: GoogleLoginResponse) {

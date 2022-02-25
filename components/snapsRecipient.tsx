@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AuthType } from '../auth';
 import { definitions } from "../types/supabase";
 import ButtonContainer from './buttonContainer';
+import Nav from './nav';
 import Or from './or';
 import PrimaryButton from './primaryButton';
 import SecondaryButton from './secondaryButton';
@@ -44,6 +45,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
+        <Nav />
         <h1 className="text-2xl font-bold mt-5 mb-3">
           Give Snaps
         </h1>

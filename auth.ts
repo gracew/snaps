@@ -1,6 +1,6 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import Web3Modal from "web3modal";
 import Web3 from "web3";
+import Web3Modal from "web3modal";
 
 export enum AuthType {
   EMAIL = "email",
@@ -36,9 +36,9 @@ export async function connect() {
 };
 
 export function signatureInput(nonce: string) {
-  return `Sign this message to prove you have access to this wallet and we will sign you in.
+  return `Sign this message to prove you have access to this wallet and we will log you in.
 
-This won't cost you any Ether.
+This won't cost you anything.
 
 Nonce: ${nonce}`;
 }

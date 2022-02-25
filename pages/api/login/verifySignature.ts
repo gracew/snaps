@@ -34,10 +34,15 @@ export default async function handler(
         .from("nonces")
         .update({ nonce: randomUUID() })
         .eq('wallet_address', address);
-    const { data: newUsers } = await supabase
+    const { data: newUsers, error } = await supabase
         .from("users")
         .insert([{ wallet_address: address }]);
 
+    if (error) {
+        console.log(error);
+        res.status(500).end();
+        return;
+    }
     if (!newUsers || newUsers.length === 0) {
         res.status(500).end();
         return;

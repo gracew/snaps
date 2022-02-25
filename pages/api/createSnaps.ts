@@ -9,7 +9,7 @@ export default async function handler(
 
   await runMiddleware(req, res, validateJwt);
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("snaps")
     .insert([{
       sender_id: req.body.sub,
@@ -17,6 +17,11 @@ export default async function handler(
       recipient: req.body.recipient,
     }]);
 
+  if (error) {
+    console.log(error);
+    res.status(500).end();
+    return;
+  }
   if (!data || data.length === 0) {
     res.status(500).end();
     return;

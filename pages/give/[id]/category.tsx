@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import ButtonContainer from '../../../components/buttonContainer'
 import Card from '../../../components/card'
+import Nav from '../../../components/nav'
 import PrimaryButton from '../../../components/primaryButton'
 
 const types = [
@@ -39,6 +40,7 @@ const GiveCategory: NextPage = () => {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
+        <Nav />
         <h1 className="text-2xl font-bold mt-5 mb-3">
           Give Snaps
         </h1>
