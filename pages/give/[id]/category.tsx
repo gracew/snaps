@@ -96,6 +96,7 @@ const GiveCategory: NextPage = () => {
         {spcTypes.map(t => <Card
           key={t.label}
           selected={category === t.id}
+          hover={true}
           onClick={() => setCategory(t.id)}
           imageUrl={t.image}
           label={t.label}
