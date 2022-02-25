@@ -1,13 +1,39 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ButtonContainer from '../../../components/buttonContainer';
 import Nav from '../../../components/nav';
 import PrimaryButton from '../../../components/primaryButton';
+import { definitions } from "../../../types/supabase";
+import { supabase } from '../../api/supabase';
 
 const GiveNote: NextPage = () => {
   const router = useRouter();
+  const { id } = router.query;
+  const [snaps, setSnaps] = useState<definitions["snaps"]>();
   const [note, setNote] = useState<string>();
+
+  useEffect(() => {
+    async function getExistingData() {
+      const { data, error } = await supabase
+        .from<definitions["snaps"]>("snaps")
+        .select("*")
+        .eq("id", id as string);
+      if (!error && data && data.length > 0) {
+        setSnaps(data[0]);
+      }
+    };
+
+    getExistingData();
+  }, [id]);
+
+  async function onFinish() {
+    await supabase
+      .from<definitions["snaps"]>("snaps")
+      .update({ note })
+      .eq('id', id as string);
+    router.push(`/snaps/${id}`);
+  }
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
@@ -16,7 +42,8 @@ const GiveNote: NextPage = () => {
         <h1 className="text-2xl font-bold mt-5 mb-3">
           Give Snaps
         </h1>
-        <h2 className="my-2">Write a note of appreciation for Helena!</h2>
+        {/* TODO: look up ENS */}
+        <h2 className="my-2">Write a note of appreciation for {snaps?.recipient_fname || snaps?.recipient_wallet_address}!</h2>
 
         <div className="mt-1 relative rounded-md shadow-sm">
           <textarea
@@ -32,7 +59,7 @@ const GiveNote: NextPage = () => {
         <ButtonContainer>
           <PrimaryButton
             text="Finish"
-            onClick={() => router.push('/snaps/1')}
+            onClick={onFinish}
             disabled={!note}
           />
         </ButtonContainer>

@@ -1,13 +1,32 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Card from '../../components/card';
+import { definitions } from "../../types/supabase";
+import { supabase } from '../api/supabase';
+import { spcTypes } from '../give/[id]/category';
 
 const GiveCategory: NextPage = () => {
   const router = useRouter();
+  const { id } = router.query;
+  const [snaps, setSnaps] = useState<definitions["snaps"]>();
   const [copied, setCopied] = useState(false);
 
-  // TODO: fetch sender, recipient from DB
   // TODO: add claim button if not signed in as sender
+
+  useEffect(() => {
+    async function getExistingData() {
+      const { data, error } = await supabase
+        .from<definitions["snaps"]>("snaps")
+        .select("*")
+        .eq("id", id as string);
+      if (!error && data && data.length > 0) {
+        setSnaps(data[0]);
+      }
+    };
+
+    getExistingData();
+  }, [id]);
 
   async function copy() {
     const host = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000";
@@ -15,23 +34,23 @@ const GiveCategory: NextPage = () => {
     setCopied(true);
   }
 
+  const category = spcTypes.find(c => c.id === snaps?.category);
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
         <div className="mt-5 mb-3 flex justify-between">
           <h2>From: Grace</h2>
-          <h2>To: Helena</h2>
+          {/* TODO: look up ENS */}
+          <h2>To: {snaps?.recipient_fname || snaps?.recipient_wallet_address}</h2>
         </div>
 
-        <video
-          src="https://s3.us-west-1.amazonaws.com/100t-lcs-nft.commemorative.assets.prod/100T%20Chain%20Card_square_LargePrint.mp4"
-          autoPlay
-          loop
+        <Card
+          onClick={() => { }}
+          imageUrl={category?.image!}
+          label={category?.label!}
+          description={snaps?.note!}
         />
-        <h2 className="text-xl font-semibold mt-4 mb-2">Selflessness</h2>
-        <p>
-          I appreciate how you always make time to listen to my concerns! Thank you 😊
-        </p>
 
         <button
           type="button"
