@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from 'next';
+import { AuthType } from '../../auth';
 
 // https://nextjs.org/docs/api-routes/api-middlewares#connectexpress-middleware-support
 export function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
@@ -25,7 +26,11 @@ export function validateJwtIfExists(req: NextApiRequest, res: NextApiResponse, n
                 res.status(401).json({});
                 return;
             }
-            req.body.address = decoded.sub;
+            if (decoded.type === AuthType.ADDRESS) {
+                req.body.address = decoded.sub;
+            } else if (decoded.type === AuthType.EMAIL) {
+                req.body.email = decoded.sub;
+            }
             req.body.validToken = true;
             next();
         });
@@ -43,7 +48,11 @@ export function validateJwt(req: NextApiRequest, res: NextApiResponse, next: exp
             res.status(401).json({});
             return;
         }
-        req.body.address = decoded.sub;
+        if (decoded.type === AuthType.ADDRESS) {
+            req.body.address = decoded.sub;
+        } else if (decoded.type === AuthType.EMAIL) {
+            req.body.email = decoded.sub;
+        }
         next();
     });
 }

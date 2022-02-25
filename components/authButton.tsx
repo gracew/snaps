@@ -1,7 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Fragment, useEffect, useState } from 'react'
-import { AuthType, connect, getWeb3Modal } from '../auth'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -16,12 +15,19 @@ const AuthButton = () => {
     const [email, setEmail] = useState<string>();
 
     useEffect(() => {
-        const web3Modal = getWeb3Modal();
-        setWeb3Modal(web3Modal);
-        if (web3Modal.cachedProvider) {
-            connect().then(res => setAddress(res.account));
-        }
-    });
+        fetch('/api/me', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({}),
+        })
+            .then(res => res.json())
+            .then(({ address, email }) => {
+                setAddress(address);
+                setEmail(email);
+            });
+    }, []);
 
     return (
         <Menu as="div" className="relative inline-block text-left">
@@ -53,7 +59,7 @@ const AuthButton = () => {
                                             'block w-full text-left px-4 py-2 text-sm'
                                         )}
                                     >
-                                        {type === AuthType.EMAIL ? "Log Out" : "Disconnect"}
+                                        {address ? "Disconnect" : "Log Out"}
                                     </button>
                                 )}
                             </Menu.Item>
