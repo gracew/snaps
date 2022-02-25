@@ -1,22 +1,33 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import { Fragment } from 'react'
-
-interface AuthButtonProps {
-    text: string;
-}
-
+import { Fragment, useEffect, useState } from 'react'
+import { AuthType, connect, getWeb3Modal } from '../auth'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const AuthButton = ({ text }: AuthButtonProps) => {
+function disconnectWallet() {
+}
+
+const AuthButton = () => {
+    const [web3Modal, setWeb3Modal] = useState<any>();
+    const [address, setAddress] = useState<string>();
+    const [email, setEmail] = useState<string>();
+
+    useEffect(() => {
+        const web3Modal = getWeb3Modal();
+        setWeb3Modal(web3Modal);
+        if (web3Modal.cachedProvider) {
+            connect().then(res => setAddress(res.account));
+        }
+    });
+
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
                 <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm ml-2 px-3 py-2.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                    <div className="w-20 truncate">{text}</div>
+                    <div className="w-20 truncate">{address || email || "Loading..."}</div>
                     <ChevronDownIcon className="-mr-1 h-5 w-5" aria-hidden="true" />
                 </Menu.Button>
             </div>
@@ -42,7 +53,7 @@ const AuthButton = ({ text }: AuthButtonProps) => {
                                             'block w-full text-left px-4 py-2 text-sm'
                                         )}
                                     >
-                                        Log Out
+                                        {type === AuthType.EMAIL ? "Log Out" : "Disconnect"}
                                     </button>
                                 )}
                             </Menu.Item>

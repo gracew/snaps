@@ -1,24 +1,13 @@
-import WalletConnectProvider from "@walletconnect/web3-provider";
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import GoogleLogin from "react-google-login";
+import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import Web3 from "web3";
-import Web3Modal from "web3modal";
+import { connect, signatureInput } from "../auth";
 import Or from "../components/or";
 import SecondaryButton from "../components/secondaryButton";
-import { signatureInput } from "./api/auth";
 
-const GiveTo: NextPage = () => {
+const Login: NextPage = () => {
   const router = useRouter();
-
-  const providerOptions = {
-    walletconnect: {
-      package: WalletConnectProvider,
-      options: {
-        infuraId: "9d0e761f26a04fad965b7d1cac96176f",
-      }
-    }
-  };
 
   async function login({ web3, account }: { web3: Web3, account: string }) {
     const { nonce, validToken } = await fetch('/api/login/getNonce', {
@@ -50,22 +39,20 @@ const GiveTo: NextPage = () => {
     }
   }
 
-  async function connect() {
-    const web3Modal = new Web3Modal({
-      network: "polygon",
-      cacheProvider: true,
-      providerOptions,
-    });
-
-    const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    await login({ web3, account: accounts[0] });
+  async function onClickConnect() {
+    const res = await connect();
+    await login(res);
     router.push("/snaps")
   }
 
-  function onGoogleSuccess(res: any) {
-    console.log("success", res);
+  async function onGoogleSuccess(res: GoogleLoginResponse) {
+    await fetch('/api/login/google', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ tokenId: res.tokenId }),
+    });
     router.push("/snaps")
   }
 
@@ -81,7 +68,7 @@ const GiveTo: NextPage = () => {
         </h1>
         <GoogleLogin
           clientId="314131181818-4oos4568l2idp0t71u5lembd9qb55f9e.apps.googleusercontent.com"
-          onSuccess={onGoogleSuccess}
+          onSuccess={onGoogleSuccess as any}
           onFailure={onGoogleFailure}
           render={renderProps => (
             <SecondaryButton
@@ -93,11 +80,11 @@ const GiveTo: NextPage = () => {
         <Or />
         <SecondaryButton
           text="Connect Wallet"
-          onClick={connect}
+          onClick={onClickConnect}
         />
       </div>
     </div>
   )
 }
 
-export default GiveTo;
+export default Login;

@@ -3,7 +3,7 @@ import { serialize } from 'cookie';
 import { randomUUID } from 'crypto';
 import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { signatureInput } from '../auth';
+import { signatureInput } from '../../../auth';
 import { supabase } from '../supabase';
 
 export default async function handler(
@@ -35,7 +35,7 @@ export default async function handler(
         .update({ nonce: randomUUID() })
         .eq('wallet_address', address);
 
-    const token = jwt.sign({ sub: recoveredAddress }, process.env.JWT_SECRET!);
+    const token = jwt.sign({ sub: recoveredAddress, type: "address" }, process.env.JWT_SECRET!);
     res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
     res.end();
 }

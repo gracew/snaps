@@ -14,7 +14,7 @@ const Nav = () => {
             text="Give Snaps"
             onClick={() => { }}
           />
-          <AuthButton text="gracewang92@gmail.com" />
+          <AuthButton />
         </div>
       </div>
     </nav>

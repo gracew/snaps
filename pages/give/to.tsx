@@ -5,7 +5,7 @@ import ButtonContainer from '../../components/buttonContainer';
 import Or from '../../components/or';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
-import { AuthType } from '../api/auth';
+import { AuthType } from '../../auth';
 
 const GiveTo: NextPage = () => {
   const router = useRouter();
