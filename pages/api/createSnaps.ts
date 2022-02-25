@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { AuthType } from '../../auth';
+import { definitions } from "../../types/supabase";
 import { runMiddleware, validateJwt } from './middleware';
 import { supabase } from './supabase';
 
@@ -9,12 +11,15 @@ export default async function handler(
 
   await runMiddleware(req, res, validateJwt);
 
+  const recipientInfo: Partial<definitions["snaps"]> = req.body.recipientType === AuthType.EMAIL
+    ? { recipient_fname: req.body.recipientName, recipient_email: req.body.recipientEmail }
+    : { recipient_wallet_address: req.body.recipientAddress };
   const { data, error } = await supabase
-    .from("snaps")
+    .from<definitions["snaps"]>("snaps")
     .insert([{
       sender_id: req.body.sub,
       recipient_type: req.body.recipientType,
-      recipient: req.body.recipient,
+      ...recipientInfo,
     }]);
 
   if (error) {

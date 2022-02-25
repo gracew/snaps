@@ -111,10 +111,10 @@ export interface paths {
           sender_id?: parameters["rowFilter.snaps.sender_id"];
           recipient_type?: parameters["rowFilter.snaps.recipient_type"];
           recipient_fname?: parameters["rowFilter.snaps.recipient_fname"];
-          category?: parameters["rowFilter.snaps.category"];
-          note?: parameters["rowFilter.snaps.note"];
           recipient_email?: parameters["rowFilter.snaps.recipient_email"];
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
+          category?: parameters["rowFilter.snaps.category"];
+          note?: parameters["rowFilter.snaps.note"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -170,10 +170,10 @@ export interface paths {
           sender_id?: parameters["rowFilter.snaps.sender_id"];
           recipient_type?: parameters["rowFilter.snaps.recipient_type"];
           recipient_fname?: parameters["rowFilter.snaps.recipient_fname"];
-          category?: parameters["rowFilter.snaps.category"];
-          note?: parameters["rowFilter.snaps.note"];
           recipient_email?: parameters["rowFilter.snaps.recipient_email"];
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
+          category?: parameters["rowFilter.snaps.category"];
+          note?: parameters["rowFilter.snaps.note"];
         };
         header: {
           /** Preference */
@@ -193,10 +193,10 @@ export interface paths {
           sender_id?: parameters["rowFilter.snaps.sender_id"];
           recipient_type?: parameters["rowFilter.snaps.recipient_type"];
           recipient_fname?: parameters["rowFilter.snaps.recipient_fname"];
-          category?: parameters["rowFilter.snaps.category"];
-          note?: parameters["rowFilter.snaps.note"];
           recipient_email?: parameters["rowFilter.snaps.recipient_email"];
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
+          category?: parameters["rowFilter.snaps.category"];
+          note?: parameters["rowFilter.snaps.note"];
         };
         body: {
           /** snaps */
@@ -327,40 +327,38 @@ export interface definitions {
   };
   snaps: {
     /**
-     * Format: bigint
+     * Format: uuid
      * @description Note:
      * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
      */
-    id: number;
+    id: string;
     /**
      * Format: timestamp with time zone
      * @default now()
      */
     created_at: string;
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
-     */
+    /** Format: uuid */
     sender_id: string;
     /** Format: text */
     recipient_type: string;
     /** Format: text */
     recipient_fname?: string;
     /** Format: text */
-    category?: string;
-    /** Format: text */
-    note?: string;
-    /** Format: text */
     recipient_email?: string;
     /** Format: text */
     recipient_wallet_address?: string;
+    /** Format: text */
+    category?: string;
+    /** Format: text */
+    note?: string;
   };
   users: {
     /**
      * Format: uuid
      * @description Note:
      * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
      */
     id: string;
     /**
@@ -416,7 +414,7 @@ export interface parameters {
   "rowFilter.nonces.nonce": string;
   /** @description snaps */
   "body.snaps": definitions["snaps"];
-  /** Format: bigint */
+  /** Format: uuid */
   "rowFilter.snaps.id": string;
   /** Format: timestamp with time zone */
   "rowFilter.snaps.created_at": string;
@@ -427,13 +425,13 @@ export interface parameters {
   /** Format: text */
   "rowFilter.snaps.recipient_fname": string;
   /** Format: text */
-  "rowFilter.snaps.category": string;
-  /** Format: text */
-  "rowFilter.snaps.note": string;
-  /** Format: text */
   "rowFilter.snaps.recipient_email": string;
   /** Format: text */
   "rowFilter.snaps.recipient_wallet_address": string;
+  /** Format: text */
+  "rowFilter.snaps.category": string;
+  /** Format: text */
+  "rowFilter.snaps.note": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: uuid */

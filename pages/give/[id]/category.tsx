@@ -5,36 +5,34 @@ import ButtonContainer from '../../../components/buttonContainer'
 import Card from '../../../components/card'
 import Nav from '../../../components/nav'
 import PrimaryButton from '../../../components/primaryButton'
+import SecondaryButton from '../../../components/secondaryButton'
 
 const types = [
   {
-    label: 'Judgement',
-    description: "You make wise decisions despite ambiguity. You identify root causes, and get beyond treating symptoms. You think strategically, and can articulate what you are, and are not, trying to do.",
+    label: 'Nurture Yourself',
+    description: "The best work is built on a foundation of self-care. Don't be afraid to get your needs met.",
+    image: "/spc/nurture.png"
   },
   {
-    label: 'Communication',
-    description: "You are concise and articulate in speech and writing. You listen well and seek to understand before reacting. You maintain calm poise in stressful situations to draw out the clearest thinking.",
+    label: 'Scale Your Mountain',
+    description: "We explore with intention and ask hard questions of each other, to find work that matters to us.",
+    image: "/spc/scale.png"
   },
   {
-    label: 'Curiosity',
-    description: "You learn rapidly and eagerly. You contribute effectively outside of your specialty. You make connections that others miss. You seek to understand our members around the world, and how we entertain them",
+    label: 'Dig Deep Wells',
+    description: "By showing up authentically and investing in meaningful relationships, we forge bonds that will last beyond our time at SPC.",
+    image: "/spc/dig.png"
   },
   {
-    label: 'Courage',
-    description: "You say what you think, when it’s in the best interest of Netflix, even if it is uncomfortable. You make tough decisions without agonizing. You take smart risks and are open to possible failure.",
-  },
-  {
-    label: 'Passion',
-    description: "You inspire others with your thirst for excellence. You care intensely about our members and Netflix's success. You are tenacious and optimistic. You are quietly confident and openly humble.",
-  },
-  {
-    label: 'Selflessness',
-    description: "You seek what is best for Netflix, rather than what is best for yourself or your group. You are open-minded in search of great ideas. You make time to help colleagues."
+    label: 'Own Your Better Future',
+    description: "By immersing yourself and taking initiative, you leave a legacy for those who will walk in your steps. SPC is yours now: you don't need to ask for permission!",
+    image: "/spc/own.png"
   },
 ]
 
 const GiveCategory: NextPage = () => {
   const router = useRouter();
+  const { id } = router.query;
   const [category, setCategory] = useState<string>();
 
   return (
@@ -51,14 +49,19 @@ const GiveCategory: NextPage = () => {
           key={t.label}
           selected={category === t.label}
           onClick={() => setCategory(t.label)}
+          imageUrl={t.image}
           label={t.label}
           description={t.description}
         />)}
 
         <ButtonContainer>
+          <SecondaryButton
+            text="Back"
+            onClick={() => router.push(`/give/${id}`)}
+          />
           <PrimaryButton
             text="Next"
-            onClick={() => router.push('/give/note')}
+            onClick={() => router.push(`/give/${id}/note`)}
             disabled={!category}
           />
         </ButtonContainer>

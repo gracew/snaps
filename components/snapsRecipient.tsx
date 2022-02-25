@@ -36,7 +36,9 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
       },
       body: JSON.stringify({
         recipientType,
-        recipient: recipientEmail || recipientAddress,
+        recipientName,
+        recipientEmail,
+        recipientAddress,
       }),
     }).then(res => res.json());
     router.push(`/give/${snaps.id}/category`);
