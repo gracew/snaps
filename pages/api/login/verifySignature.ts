@@ -29,11 +29,14 @@ export default async function handler(
         return;
     }
 
-    // successful login; replace nonce
+    // successful login; replace nonce and insert into users table
     await supabase
         .from("nonces")
         .update({ nonce: randomUUID() })
         .eq('wallet_address', address);
+    await supabase
+        .from("users")
+        .insert([{ wallet_address: address }]);
 
     const token = jwt.sign({ sub: recoveredAddress, type: "address" }, process.env.JWT_SECRET!);
     res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
