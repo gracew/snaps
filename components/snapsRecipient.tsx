@@ -13,6 +13,15 @@ interface SnapsRecipientProps {
   existingData?: definitions["snaps"];
 }
 
+// https://stackoverflow.com/a/46181
+function validateEmail(email: string) {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   const router = useRouter();
   const [recipientType, setRecipientType] = useState<AuthType | undefined>(existingData?.recipient_type as AuthType);
@@ -65,6 +74,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
     setLoading(false);
     router.push(`/give/${newId}/category`);
   }
+
 
   return (
     <div className="flex flex-col min-h-screen items-center">

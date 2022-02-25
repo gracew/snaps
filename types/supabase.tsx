@@ -221,6 +221,7 @@ export interface paths {
           created_at?: parameters["rowFilter.users.created_at"];
           email?: parameters["rowFilter.users.email"];
           wallet_address?: parameters["rowFilter.users.wallet_address"];
+          fname?: parameters["rowFilter.users.fname"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -275,6 +276,7 @@ export interface paths {
           created_at?: parameters["rowFilter.users.created_at"];
           email?: parameters["rowFilter.users.email"];
           wallet_address?: parameters["rowFilter.users.wallet_address"];
+          fname?: parameters["rowFilter.users.fname"];
         };
         header: {
           /** Preference */
@@ -293,6 +295,7 @@ export interface paths {
           created_at?: parameters["rowFilter.users.created_at"];
           email?: parameters["rowFilter.users.email"];
           wallet_address?: parameters["rowFilter.users.wallet_address"];
+          fname?: parameters["rowFilter.users.fname"];
         };
         body: {
           /** users */
@@ -370,6 +373,8 @@ export interface definitions {
     email?: string;
     /** Format: text */
     wallet_address?: string;
+    /** Format: text */
+    fname?: string;
   };
 }
 
@@ -442,6 +447,8 @@ export interface parameters {
   "rowFilter.users.email": string;
   /** Format: text */
   "rowFilter.users.wallet_address": string;
+  /** Format: text */
+  "rowFilter.users.fname": string;
 }
 
 export interface operations {}

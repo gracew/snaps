@@ -4,7 +4,30 @@ import { randomUUID } from 'crypto';
 import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { signatureInput } from '../../../auth';
+import { definitions } from '../../../types/supabase';
 import { supabase } from '../supabase';
+
+async function insertIntoUsers(address: string) {
+    const existingRes = await supabase
+        .from<definitions["users"]>("users")
+        .select("*")
+        .eq("wallet_address", address);
+    if (existingRes.error) {
+        return undefined;
+    }
+
+    if (existingRes.data && existingRes.data.length > 0) {
+        return existingRes.data[0].id;
+    }
+
+    const newRes = await supabase
+        .from<definitions["users"]>("users")
+        .insert([{ wallet_address: address }]);
+    if (newRes.error || !newRes.data || newRes.data.length === 0) {
+        return undefined;
+    }
+    return newRes.data[0].id;
+}
 
 export default async function handler(
     req: NextApiRequest,
@@ -34,21 +57,13 @@ export default async function handler(
         .from("nonces")
         .update({ nonce: randomUUID() })
         .eq('wallet_address', address);
-    const { data: newUsers, error } = await supabase
-        .from("users")
-        .insert([{ wallet_address: address }]);
 
-    if (error) {
-        console.log(error);
-        res.status(500).end();
-        return;
-    }
-    if (!newUsers || newUsers.length === 0) {
+    const id = insertIntoUsers(address);
+    if (!id) {
         res.status(500).end();
         return;
     }
 
-    const id = newUsers[0].id;
     const token = jwt.sign({ sub: id, type: "address", address }, process.env.JWT_SECRET!);
     res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
     res.end();

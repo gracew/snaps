@@ -1,12 +1,35 @@
 import { serialize } from 'cookie';
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { definitions } from '../../../types/supabase';
 import { supabase } from '../supabase';
 
 type Data = {
   nonce: string
   validToken: boolean
+}
+
+async function insertIntoUsers(payload: TokenPayload) {
+  const existingRes = await supabase
+    .from<definitions["users"]>("users")
+    .select("*")
+    .eq("email", payload.email);
+  if (existingRes.error) {
+    return undefined;
+  }
+
+  if (existingRes.data && existingRes.data.length > 0) {
+    return existingRes.data[0].id;
+  }
+
+  const newRes = await supabase
+    .from<definitions["users"]>("users")
+    .insert([{ email: payload.email, fname: payload.given_name }]);
+  if (newRes.error || !newRes.data || newRes.data.length === 0) {
+    return undefined;
+  }
+  return newRes.data[0].id;
 }
 
 export default async function handler(
@@ -26,21 +49,12 @@ export default async function handler(
   console.log(payload);
 
   // successful login; insert into users table
-  const { data: newUsers, error } = await supabase
-    .from("users")
-    .insert([{ email: payload.email }]);
-
-  if (error) {
-    console.log(error);
-    res.status(500).end();
-    return;
-  }
-  if (!newUsers || newUsers.length === 0) {
+  const id = await insertIntoUsers(payload);
+  if (!id) {
     res.status(500).end();
     return;
   }
 
-  const id = newUsers[0].id;
   const token = jwt.sign({ sub: id, type: "email", email: payload.email }, process.env.JWT_SECRET!);
   res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
   res.end();
