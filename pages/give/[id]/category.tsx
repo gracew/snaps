@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ButtonContainer from '../../../components/buttonContainer'
 import Card from '../../../components/card'
+import LargeSpinner from '../../../components/largeSpinner'
 import Nav from '../../../components/nav'
 import PrimaryButton from '../../../components/primaryButton'
 import SecondaryButton from '../../../components/secondaryButton'
@@ -40,6 +41,7 @@ const GiveCategory: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [category, setCategory] = useState<string>();
+  const [snaps, setSnaps] = useState<definitions["snaps"]>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -49,8 +51,8 @@ const GiveCategory: NextPage = () => {
         .select("*")
         .eq("id", id as string);
       if (!error && data && data.length > 0) {
-        const snaps = data[0];
-        setCategory(snaps.category);
+        setSnaps(data[0]);
+        setCategory(data[0].category);
       }
     };
 
@@ -60,11 +62,25 @@ const GiveCategory: NextPage = () => {
   async function onNext() {
     setLoading(true);
     await supabase
-        .from<definitions["snaps"]>("snaps")
-        .update({ category })
-        .eq('id', id as string);
+      .from<definitions["snaps"]>("snaps")
+      .update({ category })
+      .eq('id', id as string);
     setLoading(false);
     router.push(`/give/${id}/note`);
+  }
+
+  if (!snaps) {
+    return (
+      <div className="flex flex-col min-h-screen items-center justify-center">
+          <LargeSpinner />
+      </div>
+    );
+  }
+
+  if (snaps.note) {
+    // the snaps is already complete
+    router.push(`/snaps/${id}`);
+    return <></>
   }
 
   return (

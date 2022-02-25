@@ -48,6 +48,12 @@ const GiveNote: NextPage = () => {
     );
   }
 
+  if (snaps.note) {
+    // the snaps is already complete
+    router.push(`/snaps/${id}`);
+    return <></>
+  }
+
   return (
     <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 flex flex-col">

@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import SnapsRecipient from '../../../components/snapsRecipient';
-import { supabase } from '../../api/supabase';
-import { definitions } from "../../../types/supabase";
 import LargeSpinner from '../../../components/largeSpinner';
+import SnapsRecipient from '../../../components/snapsRecipient';
+import { definitions } from "../../../types/supabase";
+import { supabase } from '../../api/supabase';
 
 const GiveToEdit: NextPage = () => {
   const router = useRouter();
@@ -31,6 +31,12 @@ const GiveToEdit: NextPage = () => {
           <LargeSpinner />
       </div>
     );
+  }
+
+  if (snaps.note) {
+    // the snaps is already complete
+    router.push(`/snaps/${id}`);
+    return <></>
   }
 
   return (
