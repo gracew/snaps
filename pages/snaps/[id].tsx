@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Card from '../../components/card';
+import Nav from '../../components/nav';
 import { definitions } from "../../types/supabase";
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
@@ -39,6 +40,7 @@ const GiveCategory: NextPage = () => {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       <div className="w-96 flex flex-col">
+        <Nav />
         <div className="mt-5 mb-3 flex justify-between">
           <h2>From: Grace</h2>
           {/* TODO: look up ENS */}

@@ -1,4 +1,3 @@
-import { route } from "next/dist/server/router";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import AuthButton from "./authButton";
@@ -9,7 +8,7 @@ const Nav = () => {
   return (
     <nav className="bg-white py-2.5 dark:bg-gray-800">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
-        <a href="#" className="flex">
+        <a href="/snaps" className="flex">
           <Image
             src="/snaps_100.png"
             height={50}

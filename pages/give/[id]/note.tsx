@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ButtonContainer from '../../../components/buttonContainer';
 import Nav from '../../../components/nav';
 import PrimaryButton from '../../../components/primaryButton';
+import Spinner from '../../../components/spinner';
 import { definitions } from "../../../types/supabase";
 import { supabase } from '../../api/supabase';
 
@@ -33,6 +34,14 @@ const GiveNote: NextPage = () => {
       .update({ note })
       .eq('id', id as string);
     router.push(`/snaps/${id}`);
+  }
+
+  if (!snaps) {
+    return (
+      <div className="flex flex-col min-h-screen items-center justify-center">
+          <Spinner />
+      </div>
+    );
   }
 
   return (

@@ -1,6 +1,9 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletLink from "walletlink";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+
+const INFURA_ID = "9d0e761f26a04fad965b7d1cac96176f";
 
 export enum AuthType {
   EMAIL = "email",
@@ -12,10 +15,18 @@ export function getWeb3Modal() {
     walletconnect: {
       package: WalletConnectProvider,
       options: {
-        infuraId: "9d0e761f26a04fad965b7d1cac96176f",
+        infuraId: INFURA_ID,
+      }
+    },
+    walletlink: {
+      package: WalletLink,
+      options: {
+          infuraId: INFURA_ID,
+          rpc: "https://mainnet.infura.io/v3/", 
       }
     }
-  }
+  };
+
   return new Web3Modal({
     network: "polygon",
     cacheProvider: true,

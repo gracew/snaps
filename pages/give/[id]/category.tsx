@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ButtonContainer from '../../../components/buttonContainer'
 import Card from '../../../components/card'
 import Nav from '../../../components/nav'
@@ -40,6 +40,21 @@ const GiveCategory: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [category, setCategory] = useState<string>();
+
+  useEffect(() => {
+    async function getExistingData() {
+      const { data, error } = await supabase
+        .from<definitions["snaps"]>("snaps")
+        .select("*")
+        .eq("id", id as string);
+      if (!error && data && data.length > 0) {
+        const snaps = data[0];
+        setCategory(snaps.category);
+      }
+    };
+
+    getExistingData();
+  }, [id]);
 
   async function onNext() {
     await supabase
