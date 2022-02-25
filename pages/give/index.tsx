@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { AuthType } from '../../auth';
 import ButtonContainer from '../../components/buttonContainer';
 import Or from '../../components/or';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
-import { AuthType } from '../../auth';
 
 const GiveTo: NextPage = () => {
   const router = useRouter();
@@ -21,6 +21,20 @@ const GiveTo: NextPage = () => {
       return !recipientAddress;
     }
     return false;
+  }
+
+  async function onNext() {
+    const snaps = await fetch('/api/createSnaps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        recipientType,
+        recipient: recipientEmail || recipientAddress,
+      }),
+    }).then(res => res.json());
+    router.push(`/give/${snaps.id}/category`);
   }
 
   return (
@@ -91,7 +105,7 @@ const GiveTo: NextPage = () => {
           />
           <PrimaryButton
             text="Next"
-            onClick={() => router.push('/give/category')}
+            onClick={onNext}
             disabled={disabled()}
           />
         </ButtonContainer>}

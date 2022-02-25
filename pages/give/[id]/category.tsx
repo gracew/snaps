@@ -1,9 +1,9 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import ButtonContainer from '../../components/buttonContainer'
-import Card from '../../components/card'
-import PrimaryButton from '../../components/primaryButton'
+import ButtonContainer from '../../../components/buttonContainer'
+import Card from '../../../components/card'
+import PrimaryButton from '../../../components/primaryButton'
 
 const types = [
   {

@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import ButtonContainer from '../../components/buttonContainer';
-import PrimaryButton from '../../components/primaryButton';
+import ButtonContainer from '../../../components/buttonContainer';
+import PrimaryButton from '../../../components/primaryButton';
 
 const GiveNote: NextPage = () => {
   const router = useRouter();

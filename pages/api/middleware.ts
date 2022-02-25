@@ -26,10 +26,11 @@ export function validateJwtIfExists(req: NextApiRequest, res: NextApiResponse, n
                 res.status(401).json({});
                 return;
             }
+            req.body.sub = decoded.sub;
             if (decoded.type === AuthType.ADDRESS) {
-                req.body.address = decoded.sub;
+                req.body.address = decoded.address;
             } else if (decoded.type === AuthType.EMAIL) {
-                req.body.email = decoded.sub;
+                req.body.email = decoded.email;
             }
             req.body.validToken = true;
             next();
@@ -38,7 +39,7 @@ export function validateJwtIfExists(req: NextApiRequest, res: NextApiResponse, n
 }
 
 export function validateJwt(req: NextApiRequest, res: NextApiResponse, next: express.NextFunction) {
-    const token = req.cookies.token;
+    const token = req.cookies.snToken;
     if (!token) {
         res.status(401).json({});
         return;
@@ -48,10 +49,11 @@ export function validateJwt(req: NextApiRequest, res: NextApiResponse, next: exp
             res.status(401).json({});
             return;
         }
+        req.body.sub = decoded.sub;
         if (decoded.type === AuthType.ADDRESS) {
-            req.body.address = decoded.sub;
+            req.body.address = decoded.address;
         } else if (decoded.type === AuthType.EMAIL) {
-            req.body.email = decoded.sub;
+            req.body.email = decoded.email;
         }
         next();
     });

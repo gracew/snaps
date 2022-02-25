@@ -26,11 +26,17 @@ export default async function handler(
   console.log(payload);
 
   // successful login; insert into users table
-  await supabase
+  const { data: newUsers } = await supabase
     .from("users")
     .insert([{ email: payload.email }]);
 
-  const token = jwt.sign({ sub: payload.email, type: "email" }, process.env.JWT_SECRET!);
+  if (!newUsers || newUsers.length === 0) {
+    res.status(500).end();
+    return;
+  }
+
+  const id = newUsers[0].id;
+  const token = jwt.sign({ sub: id, type: "email", email: payload.email }, process.env.JWT_SECRET!);
   res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
   res.end();
 }

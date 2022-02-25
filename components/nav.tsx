@@ -1,8 +1,11 @@
+import { route } from "next/dist/server/router";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import AuthButton from "./authButton";
 import PrimaryButton from "./primaryButton";
 
 const Nav = () => {
+  const router = useRouter();
   return (
     <nav className="bg-white py-2.5 dark:bg-gray-800">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
@@ -18,7 +21,7 @@ const Nav = () => {
         <div className="flex w-auto">
           <PrimaryButton
             text="Give Snaps"
-            onClick={() => { }}
+            onClick={() => router.push("/give")}
           />
           <AuthButton />
         </div>
