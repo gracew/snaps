@@ -2,9 +2,10 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ButtonContainer from '../../../components/buttonContainer';
+import LargeSpinner from '../../../components/largeSpinner';
 import Nav from '../../../components/nav';
 import PrimaryButton from '../../../components/primaryButton';
-import LargeSpinner from '../../../components/largeSpinner';
+import SecondaryButton from '../../../components/secondaryButton';
 import { definitions } from "../../../types/supabase";
 import { supabase } from '../../api/supabase';
 
@@ -69,6 +70,10 @@ const GiveNote: NextPage = () => {
         </div>
 
         <ButtonContainer>
+          <SecondaryButton
+            text="Back"
+            onClick={() => router.push(`/give/${id}/category`)}
+          />
           <PrimaryButton
             text="Finish"
             onClick={onFinish}

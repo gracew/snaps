@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AuthType } from '../auth';
+import { supabase } from '../pages/api/supabase';
 import { definitions } from "../types/supabase";
 import ButtonContainer from './buttonContainer';
 import Nav from './nav';
@@ -29,8 +30,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
     return false;
   }
 
-  async function onNext() {
-    setLoading(true);
+  async function createSnaps() {
     const snaps = await fetch('/api/createSnaps', {
       method: 'POST',
       headers: {
@@ -43,8 +43,27 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
         recipientAddress,
       }),
     }).then(res => res.json());
+    return snaps.id;
+  }
+
+  async function updateSnaps() {
+    await supabase
+      .from<definitions["snaps"]>("snaps")
+      .update({
+        recipient_type: recipientType,
+        recipient_fname: recipientName,
+        recipient_email: recipientEmail,
+        recipient_wallet_address: recipientAddress,
+      })
+      .eq('id', existingData!.id);
+    return existingData!.id;
+  }
+
+  async function onNext() {
+    setLoading(true);
+    const newId = await (existingData ? updateSnaps() : createSnaps());
     setLoading(false);
-    router.push(`/give/${snaps.id}/category`);
+    router.push(`/give/${newId}/category`);
   }
 
   return (
