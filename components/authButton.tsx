@@ -3,6 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useState } from 'react'
 import { getWeb3Modal } from '../auth'
+import SecondaryButton from './secondaryButton'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -10,8 +11,7 @@ function classNames(...classes: string[]) {
 
 const AuthButton = () => {
     const router = useRouter();
-    const [address, setAddress] = useState<string>();
-    const [email, setEmail] = useState<string>();
+    const [me, setMe] = useState<any>();
 
     useEffect(() => {
         fetch('/api/me', {
@@ -22,30 +22,37 @@ const AuthButton = () => {
             body: JSON.stringify({}),
         })
             .then(res => res.json())
-            .then(({ address, email }) => {
-                setAddress(address);
-                setEmail(email);
-            });
+            .then(setMe);
     }, []);
 
     async function logout() {
         await fetch('/api/logout');
-        if (address) {
+        if (me.address) {
             const web3Modal = getWeb3Modal();
             web3Modal.clearCachedProvider();
-            setAddress(undefined);
-        } else {
-            setEmail(undefined);
         }
+        setMe(undefined);
         router.push('/login');
+    }
+
+    console.log(me);
+
+    if (!me || !me.sub) {
+        return <div className="relative inline-block">
+            <SecondaryButton
+                className="inline-flex rounded-full ml-2"
+                text="Log In"
+                onClick={() => router.push('/login')}
+            />
+        </div>;
     }
 
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm ml-2 px-3 py-2.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                    <div className="w-20 truncate">{address || email || "Loading..."}</div>
-                    <ChevronDownIcon className="-mr-1 h-5 w-5" aria-hidden="true" />
+                <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm ml-2 px-4 py-2.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                    <div className="w-20 truncate">{me?.address || me?.email || "Log In"}</div>
+                    {me && Object.keys(me).length > 0 && <ChevronDownIcon className="-mr-1 h-5 w-5" aria-hidden="true" />}
                 </Menu.Button>
             </div>
 
@@ -70,7 +77,7 @@ const AuthButton = () => {
                                     )}
                                     onClick={logout}
                                 >
-                                    {address ? "Disconnect" : "Log Out"}
+                                    {me?.address ? "Disconnect" : "Log Out"}
                                 </button>
                             )}
                         </Menu.Item>

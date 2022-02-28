@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Card from '../../components/card';
 import LargeSpinner from '../../components/largeSpinner';
+import MintPanel from '../../components/mintPanel';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
@@ -10,12 +11,14 @@ import { definitions } from "../../types/supabase";
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
 
+
 const GiveCategory: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [snaps, setSnaps] = useState<definitions["snaps"]>();
   const [me, setMe] = useState<any>();
   const [copied, setCopied] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
     async function getExistingData() {
@@ -66,7 +69,7 @@ const GiveCategory: NextPage = () => {
         <Nav />
         <div className="mt-5 mb-3 flex justify-between">
           {/* TODO: look up ENS */}
-          <h2>From: <div className="w-20 truncate">{me.fname || me.address}</div></h2>
+          <h2>From: <div className="w-20 truncate">{me?.fname || me?.address}</div></h2>
           <h2 className="text-right">To: <div className="w-20 truncate">{snaps.recipient_fname || snaps.recipient_wallet_address}</div></h2>
         </div>
 
@@ -87,7 +90,7 @@ const GiveCategory: NextPage = () => {
           <>
             <PrimaryButton
               className="my-3"
-              onClick={() => {}}
+              onClick={() => setShowPanel(true)}
               text="Claim"
             />
             <SecondaryButton
@@ -96,6 +99,7 @@ const GiveCategory: NextPage = () => {
             />
           </>
         }
+        <MintPanel snaps={snaps} me={me} open={showPanel} onClose={() => setShowPanel(false)} />
       </div>
     </div>
   )
