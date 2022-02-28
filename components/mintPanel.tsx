@@ -1,87 +1,18 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
-import { Fragment } from 'react';
-import { AuthType, connect, walletLogin } from '../auth';
+import { Fragment, ReactNode, useContext } from 'react';
+import { UserContext } from '../pages/_app';
 import { definitions } from '../types/supabase';
-import GoogleButton from './googleButton';
-import MintPanelContents from './mintPanelContents';
-import PrimaryButton from './primaryButton';
 
 interface MintPanelProps {
   snaps: definitions["snaps"];
-  me: any;
   open: boolean;
   onClose: () => void;
-  refresh: () => void;
+  children: ReactNode;
 }
 
-export default function MintPanel({ snaps, me, open, onClose, refresh }: MintPanelProps) {
-  async function mintNFT() {
-    // TODO: call backend
-  }
-
-  async function onClickConnect() {
-    const res = await connect();
-    const success = await walletLogin(res);
-    if (success) {
-      refresh();
-    }
-    // TODO: handle failure case
-  }
-
-  function getInnerComponent() {
-    const connectWallet = (
-      <MintPanelContents
-        text="If you own the Polygon address that this collectible was sent to, connect your wallet to claim."
-      >
-        <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
-      </MintPanelContents>
-    );
-    const connectEmail = (
-      <MintPanelContents
-        text="If you own the email address that this collectible was sent to, log in with Google to claim."
-      >
-        <GoogleButton />
-      </MintPanelContents>
-    );
-
-    if (!me?.sub) {
-      // not logged in
-      if (snaps.recipient_type === AuthType.ADDRESS) {
-        return connectWallet;
-      } else {
-        return connectEmail;
-      }
-    } else if (me.address) {
-      if (snaps.recipient_type === AuthType.ADDRESS) {
-        if (me.address.toLowerCase() === snaps.recipient_wallet_address?.toLowerCase()) {
-          return (
-            <MintPanelContents
-              text="This won't cost you any transaction fees."
-            >
-              <PrimaryButton text="Claim as NFT" onClick={mintNFT} />
-            </MintPanelContents>
-          );
-        } else {
-          return connectEmail;
-        }
-      }
-    } else if (me.email) {
-      if (snaps.recipient_type === AuthType.ADDRESS) {
-        return connectWallet;
-      } else {
-        return (
-          <div className="flex flex-col pb-3">
-            <div className="mb-4">
-              In order to claim this collectible, you'll need to connect a crypto wallet. If you don't have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
-            </div>
-            <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
-          </div>
-        )
-
-      }
-    }
-  }
+export default function MintPanel({ snaps, open, onClose, children }: MintPanelProps) {
+  const [me, setMe] = useContext(UserContext);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -133,7 +64,7 @@ export default function MintPanel({ snaps, me, open, onClose, refresh }: MintPan
                   <div className="w-96 flex flex-col">
                     <Dialog.Title className="text-lg font-medium text-gray-900">Claim Collectible</Dialog.Title>
                     <div className="relative mt-6 flex-1">
-                      {getInnerComponent()}
+                      {children}
                     </div>
                   </div>
                 </div>

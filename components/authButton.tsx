@@ -16,7 +16,7 @@ const AuthButton = () => {
     const [me, setMe] = useContext(UserContext);
 
     function getMe() {
-        fetch('/api/me', {
+        return fetch('/api/me', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

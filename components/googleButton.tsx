@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
+import { UserContext } from "../pages/_app";
 import SecondaryButton from "./secondaryButton";
 
 interface GoogleButtonProps {
@@ -20,14 +22,31 @@ export function onGoogleFailure(res: any) {
 }
 
 const GoogleButton = ({ onSuccess }: GoogleButtonProps) => {
+  const [me, setMe] = useContext(UserContext);
+
+  async function getMe() {
+    return fetch('/api/me', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}),
+    })
+      .then(res => res.json())
+      .then(setMe);
+  };
+
   return (
     <GoogleLogin
       clientId="314131181818-4oos4568l2idp0t71u5lembd9qb55f9e.apps.googleusercontent.com"
       onSuccess={(res) => {
-        onGoogleSuccess(res as any);
-        if (onSuccess) {
-          onSuccess();
-        }
+        onGoogleSuccess(res as any)
+          .then(getMe)
+          .then(() => {
+            if (onSuccess) {
+              onSuccess();
+            }
+          })
       }}
       onFailure={onGoogleFailure}
       render={renderProps => (
