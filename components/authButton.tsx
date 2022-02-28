@@ -14,7 +14,7 @@ const AuthButton = () => {
     const router = useRouter();
     const [me, setMe] = useState<any>();
 
-    useEffect(() => {
+    function getMe() {
         fetch('/api/me', {
             method: 'POST',
             headers: {
@@ -24,6 +24,10 @@ const AuthButton = () => {
         })
             .then(res => res.json())
             .then(setMe);
+    }
+
+    useEffect(() => {
+        getMe();
     }, []);
 
     async function logout() {
@@ -42,7 +46,7 @@ const AuthButton = () => {
         const res = await connect();
         const success = await walletLogin(res);
         if (success) {
-            // TODO
+            getMe();
         }
         // TODO: handle failure case
     }
@@ -72,7 +76,7 @@ const AuthButton = () => {
                                 <GoogleLogin
                                     clientId="314131181818-4oos4568l2idp0t71u5lembd9qb55f9e.apps.googleusercontent.com"
                                     onSuccess={(res) => {
-                                        onGoogleSuccess(res as any);
+                                        onGoogleSuccess(res as any).then(getMe);
                                     }}
                                     onFailure={onGoogleFailure}
                                     render={renderProps => (
