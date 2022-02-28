@@ -21,8 +21,8 @@ export function getWeb3Modal() {
     walletlink: {
       package: WalletLink,
       options: {
-          infuraId: INFURA_ID,
-          rpc: "https://mainnet.infura.io/v3/", 
+        infuraId: INFURA_ID,
+        rpc: "https://mainnet.infura.io/v3/",
       }
     }
   };
@@ -41,10 +41,41 @@ export async function connect() {
   const accounts = await web3.eth.getAccounts();
 
   return {
-      web3,
-      account: accounts[0],
+    web3,
+    account: accounts[0],
   };
 };
+
+export async function walletLogin({ web3, account }: { web3: Web3, account: string }) {
+  const { nonce, validToken } = await fetch('/api/login/getNonce', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ address: account }),
+  }).then(res => res.json());
+
+  if (validToken) {
+    return true;
+  }
+
+  try {
+    const signature = await web3.eth.personal.sign(signatureInput(nonce), account, "");
+
+    await fetch('/api/login/verifySignature', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ address: account, signature }),
+    });
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 
 export function signatureInput(nonce: string) {
   return `Sign this message to prove you have access to this wallet and we will log you in.

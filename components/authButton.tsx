@@ -32,7 +32,6 @@ const AuthButton = () => {
             web3Modal.clearCachedProvider();
         }
         setMe(undefined);
-        router.push('/login');
     }
 
     console.log(me);

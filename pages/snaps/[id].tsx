@@ -20,6 +20,18 @@ const GiveCategory: NextPage = () => {
   const [copied, setCopied] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
 
+  async function getMe() {
+    const meRes = await fetch('/api/me', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}),
+    })
+      .then(res => res.json())
+    setMe(meRes);
+  };
+
   useEffect(() => {
     async function getExistingData() {
       const { data, error } = await supabase
@@ -30,18 +42,6 @@ const GiveCategory: NextPage = () => {
         setSnaps(data[0]);
       }
     }
-
-    async function getMe() {
-      const meRes = await fetch('/api/me', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({}),
-      })
-        .then(res => res.json())
-      setMe(meRes);
-    };
 
     getExistingData();
     getMe();
@@ -99,7 +99,13 @@ const GiveCategory: NextPage = () => {
             />
           </>
         }
-        <MintPanel snaps={snaps} me={me} open={showPanel} onClose={() => setShowPanel(false)} />
+        <MintPanel
+          snaps={snaps}
+          me={me}
+          open={showPanel}
+          onClose={() => setShowPanel(false)}
+          refresh={getMe}
+        />
       </div>
     </div>
   )
