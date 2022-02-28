@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Card from '../../components/card';
 import LargeSpinner from '../../components/largeSpinner';
 import Nav from '../../components/nav';
+import PrimaryButton from '../../components/primaryButton';
+import SecondaryButton from '../../components/secondaryButton';
 import { definitions } from "../../types/supabase";
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
@@ -15,8 +17,6 @@ const GiveCategory: NextPage = () => {
   const [me, setMe] = useState<any>();
   const [copied, setCopied] = useState(false);
 
-  // TODO: add claim button if not signed in as sender
-
   useEffect(() => {
     async function getExistingData() {
       const { data, error } = await supabase
@@ -26,7 +26,9 @@ const GiveCategory: NextPage = () => {
       if (!error && data && data.length > 0) {
         setSnaps(data[0]);
       }
+    }
 
+    async function getMe() {
       const meRes = await fetch('/api/me', {
         method: 'POST',
         headers: {
@@ -39,6 +41,7 @@ const GiveCategory: NextPage = () => {
     };
 
     getExistingData();
+    getMe();
   }, [id]);
 
   async function copy() {
@@ -49,7 +52,7 @@ const GiveCategory: NextPage = () => {
 
   const category = spcTypes.find(c => c.id === snaps?.category);
 
-  if (!snaps || !me) {
+  if (!snaps) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center">
         <LargeSpinner />
@@ -64,7 +67,7 @@ const GiveCategory: NextPage = () => {
         <div className="mt-5 mb-3 flex justify-between">
           {/* TODO: look up ENS */}
           <h2>From: <div className="w-20 truncate">{me.fname || me.address}</div></h2>
-          <h2>To: <div className="w-20 truncate">{snaps.recipient_fname || snaps.recipient_wallet_address}</div></h2>
+          <h2 className="text-right">To: <div className="w-20 truncate">{snaps.recipient_fname || snaps.recipient_wallet_address}</div></h2>
         </div>
 
         <Card
@@ -74,11 +77,25 @@ const GiveCategory: NextPage = () => {
           description={snaps?.note!}
         />
 
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 my-6 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          onClick={copy}
-        >{copied ? "Copied!" : "Share"}</button>
+        {me.sub === snaps.sender_id &&
+          <PrimaryButton
+            className="my-3"
+            onClick={copy}
+            text={copied ? "Copied!" : "Share"}
+          />}
+        {!me || me.sub !== snaps.sender_id &&
+          <>
+            <PrimaryButton
+              className="my-3"
+              onClick={() => {}}
+              text="Claim"
+            />
+            <SecondaryButton
+              onClick={copy}
+              text={copied ? "Copied!" : "Share"}
+            />
+          </>
+        }
       </div>
     </div>
   )
