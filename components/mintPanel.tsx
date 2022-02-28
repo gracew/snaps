@@ -75,6 +75,7 @@ export default function MintPanel({ snaps, me, open, onClose, refresh }: MintPan
             <div className="mb-4">
               In order to claim this collectible, you'll need to connect a crypto wallet. If you don't have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
             </div>
+            <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
           </div>
         )
 

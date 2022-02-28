@@ -1,9 +1,10 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import GoogleLogin from 'react-google-login'
 import { connect, getWeb3Modal, walletLogin } from '../auth'
+import { UserContext } from '../pages/_app'
 import { onGoogleFailure, onGoogleSuccess } from './googleButton'
 
 function classNames(...classes: string[]) {
@@ -12,7 +13,7 @@ function classNames(...classes: string[]) {
 
 const AuthButton = () => {
     const router = useRouter();
-    const [me, setMe] = useState<any>();
+    const [me, setMe] = useContext(UserContext);
 
     function getMe() {
         fetch('/api/me', {
@@ -25,10 +26,6 @@ const AuthButton = () => {
             .then(res => res.json())
             .then(setMe);
     }
-
-    useEffect(() => {
-        getMe();
-    }, []);
 
     async function logout() {
         await fetch('/api/logout');
