@@ -2,8 +2,9 @@ import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useState } from 'react'
-import { getWeb3Modal } from '../auth'
-import SecondaryButton from './secondaryButton'
+import GoogleLogin from 'react-google-login'
+import { connect, getWeb3Modal, walletLogin } from '../auth'
+import { onGoogleFailure, onGoogleSuccess } from './googleButton'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -32,18 +33,18 @@ const AuthButton = () => {
             web3Modal.clearCachedProvider();
         }
         setMe(undefined);
+        if (router.asPath === "/snaps") {
+            router.push("/login");
+        }
     }
 
-    console.log(me);
-
-    if (!me || !me.sub) {
-        return <div className="relative inline-block">
-            <SecondaryButton
-                className="inline-flex rounded-full ml-2"
-                text="Log In"
-                onClick={() => router.push('/login')}
-            />
-        </div>;
+    async function onClickConnect() {
+        const res = await connect();
+        const success = await walletLogin(res);
+        if (success) {
+            // TODO
+        }
+        // TODO: handle failure case
     }
 
     return (
@@ -51,7 +52,7 @@ const AuthButton = () => {
             <div>
                 <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm ml-2 px-4 py-2.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
                     <div className="w-20 truncate">{me?.address || me?.email || "Log In"}</div>
-                    {me && Object.keys(me).length > 0 && <ChevronDownIcon className="-mr-1 h-5 w-5" aria-hidden="true" />}
+                    <ChevronDownIcon className="-mr-1 h-5 w-5" aria-hidden="true" />
                 </Menu.Button>
             </div>
 
@@ -66,10 +67,44 @@ const AuthButton = () => {
             >
                 <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                        <Menu.Item>
+                        {(!me || !me.sub) && <Menu.Item>
+                            {({ active }) => (
+                                <GoogleLogin
+                                    clientId="314131181818-4oos4568l2idp0t71u5lembd9qb55f9e.apps.googleusercontent.com"
+                                    onSuccess={(res) => {
+                                        onGoogleSuccess(res as any);
+                                    }}
+                                    onFailure={onGoogleFailure}
+                                    render={renderProps => (
+                                        <button
+                                            className={classNames(
+                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                'block w-full text-left px-4 py-2 text-sm'
+                                            )}
+                                            onClick={renderProps.onClick}
+                                        >
+                                            With Google
+                                        </button>
+                                    )}
+                                />
+                            )}
+                        </Menu.Item>}
+                        {(!me || !me.sub) && <Menu.Item>
                             {({ active }) => (
                                 <button
-                                    type="submit"
+                                    className={classNames(
+                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        'block w-full text-left px-4 py-2 text-sm'
+                                    )}
+                                    onClick={onClickConnect}
+                                >
+                                    With Wallet
+                                </button>
+                            )}
+                        </Menu.Item>}
+                        {me && me.sub && <Menu.Item>
+                            {({ active }) => (
+                                <button
                                     className={classNames(
                                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                         'block w-full text-left px-4 py-2 text-sm'
@@ -79,7 +114,7 @@ const AuthButton = () => {
                                     {me?.address ? "Disconnect" : "Log Out"}
                                 </button>
                             )}
-                        </Menu.Item>
+                        </Menu.Item>}
                     </div>
                 </Menu.Items>
             </Transition>

@@ -40,7 +40,7 @@ const Login: NextPage = () => {
         <h1 className="text-2xl font-bold mt-5 mb-3">
           Log In
         </h1>
-        <GoogleButton onSuccess={() => router.push("/snaps")} />h
+        <GoogleButton onSuccess={() => router.push("/snaps")} />
         <Or />
         <SecondaryButton
           text="Connect Wallet"
