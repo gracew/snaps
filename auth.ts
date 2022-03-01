@@ -84,3 +84,7 @@ This won't cost you anything.
 
 Nonce: ${nonce}`;
 }
+
+export function shortenAddress(address: string) {
+  return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+}

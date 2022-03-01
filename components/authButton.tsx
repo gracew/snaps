@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { Fragment, useContext } from 'react'
 import GoogleLogin from 'react-google-login'
-import { connect, getWeb3Modal, walletLogin } from '../auth'
+import { connect, getWeb3Modal, shortenAddress, walletLogin } from '../auth'
 import { UserContext } from '../pages/_app'
 import { onGoogleFailure, onGoogleSuccess } from './googleButton'
 
@@ -94,7 +94,9 @@ const AuthButton = () => {
         <Menu as="div" className="relative inline-block text-left">
             <div>
                 <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm ml-2 px-4 py-2.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                    <div className="w-20 truncate">{me?.address || me?.email || "Log In"}</div>
+                    {me?.address && <div>{shortenAddress(me.address)}</div>}
+                    {me?.email && <div className="w-20 truncate">{me.email}</div>}
+                    {!me && <div>Log In</div>}
                     <ChevronDownIcon className="-mr-1 h-5 w-5" aria-hidden="true" />
                 </Menu.Button>
             </div>

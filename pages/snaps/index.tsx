@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
+import { shortenAddress } from '../../auth';
 import LargeSpinner from '../../components/largeSpinner';
 import MinimalCard from '../../components/minimalCard';
 import Nav from '../../components/nav';
@@ -101,7 +102,7 @@ const Snaps: NextPage = () => {
           <div className='my-5 py-3 grid grid-cols-2 gap-3'>
             {given.map(snaps => {
               const category = spcTypes.find(c => c.id === snaps.category);
-              const secondaryLabel = `To: ${snaps.recipient_fname || snaps.recipient_wallet_address}`;
+              const secondaryLabel = `To: ${snaps.recipient_fname || shortenAddress(snaps.recipient_wallet_address!)}`;
               return (
                 <MinimalCard
                   onClick={() => router.push(`/snaps/${snaps.id}`)}
@@ -124,7 +125,7 @@ const Snaps: NextPage = () => {
           <div className='my-5 py-3 grid grid-cols-2 gap-3'>
             {received.map((snaps: any) => {
               const category = spcTypes.find(c => c.id === snaps.category);
-              const secondaryLabel = `From: ${snaps.sender_fname || snaps.sender_wallet_address}`;
+              const secondaryLabel = `From: ${snaps.sender_fname || shortenAddress(snaps.sender_wallet_address)}`;
               return (
                 <MinimalCard
                   onClick={() => router.push(`/snaps/${snaps.id}`)}

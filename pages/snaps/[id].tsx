@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { AuthType, connect, walletLogin } from '../../auth';
+import { AuthType, connect, shortenAddress, walletLogin } from '../../auth';
 import Card from '../../components/card';
 import GoogleButton from '../../components/googleButton';
 import LargeSpinner from '../../components/largeSpinner';
@@ -147,8 +147,16 @@ const GiveCategory: NextPage = () => {
         <Nav />
         <div className="mt-5 mb-3 flex justify-between">
           {/* TODO: look up ENS */}
-          <h2>From: <div className="w-20 truncate">{snaps.sender_fname || snaps.sender_wallet_address}</div></h2>
-          <h2 className="text-right">To: <div className="w-20 truncate">{snaps.recipient_fname || snaps.recipient_wallet_address}</div></h2>
+          <h2>From:
+            <div>
+              {snaps.sender_fname || shortenAddress(snaps.sender_wallet_address)}
+            </div>
+          </h2>
+          <h2 className="text-right">To:
+            <div>
+              {snaps.recipient_fname || shortenAddress(snaps.recipient_wallet_address)}
+            </div>
+          </h2>
         </div>
 
         <Card

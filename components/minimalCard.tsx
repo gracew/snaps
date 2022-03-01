@@ -1,10 +1,11 @@
 import Image from "next/image";
+import { ReactNode } from "react";
 
 interface MinimalCardProps {
   onClick: () => void;
   imageUrl: string;
   label: string;
-  secondaryLabel: string;
+  secondaryLabel: string | ReactNode;
   selected?: boolean;
   hover?: boolean;
 }
