@@ -43,7 +43,7 @@ const GiveNote: NextPage = () => {
   if (!snaps) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center">
-          <LargeSpinner />
+        <LargeSpinner />
       </div>
     );
   }
@@ -55,39 +55,37 @@ const GiveNote: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center">
-      <div className="w-96 flex flex-col">
-        <Nav />
-        <h1 className="text-2xl font-bold mt-5 mb-3">
-          Give Snaps
-        </h1>
-        {/* TODO: look up ENS */}
-        <h2 className="my-2">Write a note of appreciation for {snaps?.recipient_fname || snaps?.recipient_wallet_address}!</h2>
+    <div className="w-96 flex flex-col">
+      <Nav />
+      <h1 className="text-2xl font-bold mt-5 mb-3">
+        Give Snaps
+      </h1>
+      {/* TODO: look up ENS */}
+      <h2 className="my-2">Write a note of appreciation for {snaps?.recipient_fname || snaps?.recipient_wallet_address}!</h2>
 
-        <div className="mt-1 relative rounded-md shadow-sm">
-          <textarea
-            name="note"
-            id="note"
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            rows={5}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </div>
-
-        <ButtonContainer>
-          <SecondaryButton
-            text="Back"
-            onClick={() => router.push(`/give/${id}/category`)}
-          />
-          <PrimaryButton
-            text="Finish"
-            onClick={onFinish}
-            disabled={!note}
-            loading={loading}
-          />
-        </ButtonContainer>
+      <div className="mt-1 relative rounded-md shadow-sm">
+        <textarea
+          name="note"
+          id="note"
+          className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-500 rounded-md"
+          rows={5}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+        />
       </div>
+
+      <ButtonContainer>
+        <SecondaryButton
+          text="Back"
+          onClick={() => router.push(`/give/${id}/category`)}
+        />
+        <PrimaryButton
+          text="Finish"
+          onClick={onFinish}
+          disabled={!note}
+          loading={loading}
+        />
+      </ButtonContainer>
     </div>
   )
 }

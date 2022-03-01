@@ -142,57 +142,55 @@ const GiveCategory: NextPage = () => {
 
   console.log("me " + me?.sub);
   return (
-    <div className="flex flex-col min-h-screen items-center">
-      <div className="w-96 flex flex-col">
-        <Nav />
-        <div className="mt-5 mb-3 flex justify-between">
-          {/* TODO: look up ENS */}
-          <h2>From:
-            <div>
-              {snaps.sender_fname || shortenAddress(snaps.sender_wallet_address)}
-            </div>
-          </h2>
-          <h2 className="text-right">To:
-            <div>
-              {snaps.recipient_fname || shortenAddress(snaps.recipient_wallet_address)}
-            </div>
-          </h2>
-        </div>
+    <div className="w-96 flex flex-col">
+      <Nav />
+      <div className="mt-5 mb-3 flex justify-between">
+        {/* TODO: look up ENS */}
+        <h2>From:
+          <div>
+            {snaps.sender_fname || shortenAddress(snaps.sender_wallet_address)}
+          </div>
+        </h2>
+        <h2 className="text-right">To:
+          <div>
+            {snaps.recipient_fname || shortenAddress(snaps.recipient_wallet_address)}
+          </div>
+        </h2>
+      </div>
 
-        <Card
-          onClick={() => { }}
-          imageUrl={category?.image!}
-          label={category?.label!}
-          description={snaps?.note!}
-        />
+      <Card
+        onClick={() => { }}
+        imageUrl={category?.image!}
+        label={category?.label!}
+        description={snaps?.note!}
+      />
 
-        {!claimable &&
+      {!claimable &&
+        <PrimaryButton
+          className="my-3"
+          onClick={copy}
+          text={copied ? "Copied!" : "Share"}
+        />}
+      {claimable &&
+        <>
           <PrimaryButton
             className="my-3"
+            onClick={() => setShowPanel(true)}
+            text="Claim"
+          />
+          <SecondaryButton
             onClick={copy}
             text={copied ? "Copied!" : "Share"}
-          />}
-        {claimable &&
-          <>
-            <PrimaryButton
-              className="my-3"
-              onClick={() => setShowPanel(true)}
-              text="Claim"
-            />
-            <SecondaryButton
-              onClick={copy}
-              text={copied ? "Copied!" : "Share"}
-            />
-          </>
-        }
-        <MintPanel
-          snaps={snaps}
-          open={showPanel}
-          onClose={() => setShowPanel(false)}
-        >
-          {inner}
-        </MintPanel>
-      </div>
+          />
+        </>
+      }
+      <MintPanel
+        snaps={snaps}
+        open={showPanel}
+        onClose={() => setShowPanel(false)}
+      >
+        {inner}
+      </MintPanel>
     </div>
   )
 }

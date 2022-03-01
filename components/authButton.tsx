@@ -93,7 +93,7 @@ const AuthButton = () => {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm ml-2 px-4 py-2.5 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-400 shadow-sm ml-2 px-4 py-2.5 bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
                     {me?.address && <div>{shortenAddress(me.address)}</div>}
                     {me?.email && <div className="w-20 truncate">{me.email}</div>}
                     {!me && <div>Log In</div>}

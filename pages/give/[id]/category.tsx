@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import ButtonContainer from '../../../components/buttonContainer'
 import Card from '../../../components/card'
 import LargeSpinner from '../../../components/largeSpinner'
+import MinimalCard from '../../../components/minimalCard'
 import Nav from '../../../components/nav'
 import PrimaryButton from '../../../components/primaryButton'
 import SecondaryButton from '../../../components/secondaryButton'
@@ -72,7 +73,7 @@ const GiveCategory: NextPage = () => {
   if (!snaps) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center">
-          <LargeSpinner />
+        <LargeSpinner />
       </div>
     );
   }
@@ -84,38 +85,38 @@ const GiveCategory: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center">
-      <div className="w-96 flex flex-col">
-        <Nav />
-        <h1 className="text-2xl font-bold mt-5 mb-3">
-          Give Snaps
-        </h1>
+    <div className="w-96 flex flex-col">
+      <Nav />
+      <h1 className="text-2xl font-bold mt-5 mb-3">
+        Give Snaps
+      </h1>
 
-        <h2 className="my-2">Select a category:</h2>
+      <h2 className="my-2">Select a category:</h2>
 
-        {spcTypes.map(t => <Card
+      <div className='my-5 py-3 grid grid-cols-2 gap-3'>
+        {spcTypes.map(t => <MinimalCard
           key={t.label}
           selected={category === t.id}
           hover={true}
           onClick={() => setCategory(t.id)}
           imageUrl={t.image}
           label={t.label}
-          description={t.description}
+          secondaryLabel={t.description}
         />)}
-
-        <ButtonContainer>
-          <SecondaryButton
-            text="Back"
-            onClick={() => router.push(`/give/${id}`)}
-          />
-          <PrimaryButton
-            text="Next"
-            onClick={onNext}
-            disabled={!category}
-            loading={loading}
-          />
-        </ButtonContainer>
       </div>
+
+      <ButtonContainer>
+        <SecondaryButton
+          text="Back"
+          onClick={() => router.push(`/give/${id}`)}
+        />
+        <PrimaryButton
+          text="Next"
+          onClick={onNext}
+          disabled={!category}
+          loading={loading}
+        />
+      </ButtonContainer>
     </div>
   )
 }

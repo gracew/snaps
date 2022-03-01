@@ -12,12 +12,12 @@ const Card = ({ onClick, imageUrl, label, description, selected, hover }: CardPr
   return (
     <a
       onClick={onClick}
-      className={`my-2 overflow-hidden max-w-sm bg-white rounded-lg border-2 border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 ${hover? "hover:border-blue-500" : ""} ${selected ? "border-blue-500" : ""}`}
+      className={`my-2 overflow-hidden max-w-sm bg-gray-800 rounded-lg border-2 shadow-md ${hover ? "hover:border-blue-500" : ""} ${selected ? "border-blue-500" : "border-gray-700"}`}
     >
       <img src={imageUrl} alt="snaps image" />
       <div className="p-5">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{label}</h5>
-        <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">{description}</p>
+        <h5 className="mb-2 text-xl font-bold tracking-tight">{label}</h5>
+        <p className="mb-2 font-normal">{description}</p>
       </div>
     </a>
   )

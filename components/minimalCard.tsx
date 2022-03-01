@@ -14,13 +14,13 @@ const MinimalCard = ({ onClick, imageUrl, label, secondaryLabel, selected, hover
   return (
     <a
       onClick={onClick}
-      className={`cursor-pointer my-2 overflow-hidden max-w-sm bg-white rounded-lg border-2 border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 ${hover ? "hover:border-blue-500" : ""} ${selected ? "border-blue-500" : ""}`}
+      className={`cursor-pointer my-2 overflow-hidden max-w-sm bg-gray-800 rounded-lg border-2 shadow-md ${hover ? "hover:border-blue-500" : ""} ${selected ? "border-blue-500" : "border-gray-700"}`}
     >
       <div className="h-48 overflow-hidden relative">
         <Image src={imageUrl} layout="fill" objectFit="cover" alt="" />
       </div>
       <div className="py-3 px-5">
-        <h5 className="mb-1 text-md font-bold text-gray-900 dark:text-white">{label}</h5>
+        <h5 className="mb-1 text-md font-bold">{label}</h5>
         <div className="text-sm">{secondaryLabel}</div>
       </div>
     </a>

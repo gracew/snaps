@@ -27,7 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <link rel="icon" href="/sunglasses_100.png" />
     </Head>
     <UserContext.Provider value={[me, setMe]}>
-      <Component {...pageProps} />
+      <div className="flex flex-col min-h-screen items-center bg-gray-900 text-gray-200">
+        <Component {...pageProps} />
+      </div>
     </UserContext.Provider>
   </div>
 }

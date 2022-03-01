@@ -11,7 +11,7 @@ interface NavProps {
 const Nav = ({ hideGiveSnaps }: NavProps) => {
   const router = useRouter();
   return (
-    <nav className="bg-white mt-4 py-2.5 dark:bg-gray-800">
+    <nav className="mt-4 py-2.5">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <div className="cursor-pointer">
           <Link href="/snaps">
