@@ -57,7 +57,15 @@ const GiveCategory: NextPage = () => {
   }
 
   async function mintNFT() {
-    // TODO: call backend
+    fetch('/api/mint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id }),
+    })
+      .then(res => res.json())
+      .then(setSnaps);
   }
 
   async function onClickConnect() {
@@ -131,7 +139,12 @@ const GiveCategory: NextPage = () => {
   }
 
   const inner = getInnerComponent();
+  const claimable = !snaps.claimed &&
+    (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
+    inner !== undefined;
 
+  console.log("me " + me?.sub);
+  console.log("sender " + snaps.sender_id);
   return (
     <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 flex flex-col">
@@ -149,13 +162,13 @@ const GiveCategory: NextPage = () => {
           description={snaps?.note!}
         />
 
-        {me?.sub === snaps.sender_id &&
+        {!claimable &&
           <PrimaryButton
             className="my-3"
             onClick={copy}
             text={copied ? "Copied!" : "Share"}
           />}
-        {!me || me.sub !== snaps.sender_id && inner &&
+        {claimable &&
           <>
             <PrimaryButton
               className="my-3"
@@ -172,9 +185,9 @@ const GiveCategory: NextPage = () => {
           snaps={snaps}
           open={showPanel}
           onClose={() => setShowPanel(false)}
-          >
-            {inner}
-          </MintPanel>
+        >
+          {inner}
+        </MintPanel>
       </div>
     </div>
   )

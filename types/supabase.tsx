@@ -115,6 +115,9 @@ export interface paths {
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
+          claimed?: parameters["rowFilter.snaps.claimed"];
+          claimed_at?: parameters["rowFilter.snaps.claimed_at"];
+          recipient_id?: parameters["rowFilter.snaps.recipient_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -174,6 +177,9 @@ export interface paths {
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
+          claimed?: parameters["rowFilter.snaps.claimed"];
+          claimed_at?: parameters["rowFilter.snaps.claimed_at"];
+          recipient_id?: parameters["rowFilter.snaps.recipient_id"];
         };
         header: {
           /** Preference */
@@ -197,6 +203,9 @@ export interface paths {
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
+          claimed?: parameters["rowFilter.snaps.claimed"];
+          claimed_at?: parameters["rowFilter.snaps.claimed_at"];
+          recipient_id?: parameters["rowFilter.snaps.recipient_id"];
         };
         body: {
           /** snaps */
@@ -355,6 +364,16 @@ export interface definitions {
     category?: string;
     /** Format: text */
     note?: string;
+    /** Format: boolean */
+    claimed: boolean;
+    /** Format: timestamp without time zone */
+    claimed_at?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
+     */
+    recipient_id?: string;
   };
   users: {
     /**
@@ -437,6 +456,12 @@ export interface parameters {
   "rowFilter.snaps.category": string;
   /** Format: text */
   "rowFilter.snaps.note": string;
+  /** Format: boolean */
+  "rowFilter.snaps.claimed": string;
+  /** Format: timestamp without time zone */
+  "rowFilter.snaps.claimed_at": string;
+  /** Format: uuid */
+  "rowFilter.snaps.recipient_id": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: uuid */
