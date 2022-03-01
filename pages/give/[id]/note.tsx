@@ -36,7 +36,6 @@ const GiveNote: NextPage = () => {
       .from<definitions["snaps"]>("snaps")
       .update({ note })
       .eq('id', id as string);
-    setLoading(false);
     router.push(`/snaps/${id}`);
   }
 

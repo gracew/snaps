@@ -40,7 +40,7 @@ const Login: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center">
+    <div className="flex flex-col flex-1 justify-center">
       <div className="w-80 flex flex-col">
         <h1 className="text-2xl font-bold mt-5 mb-3">
           Log In

@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
     </Head>
     <UserContext.Provider value={[me, setMe]}>
-      <div className="flex flex-col min-h-screen items-center bg-gray-900 text-gray-200">
+      <div className="flex flex-col min-h-screen items-center bg-gray-900 text-gray-200 pb-8">
         <Component {...pageProps} />
       </div>
     </UserContext.Provider>

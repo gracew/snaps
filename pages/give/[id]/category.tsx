@@ -65,7 +65,6 @@ const GiveCategory: NextPage = () => {
       .from<definitions["snaps"]>("snaps")
       .update({ category })
       .eq('id', id as string);
-    setLoading(false);
     router.push(`/give/${id}/note`);
   }
 

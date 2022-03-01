@@ -71,7 +71,6 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   async function onNext() {
     setLoading(true);
     const newId = await (existingData ? updateSnaps() : createSnaps());
-    setLoading(false);
     router.push(`/give/${newId}/category`);
   }
 
