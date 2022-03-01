@@ -1,7 +1,6 @@
 import express from 'express';
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from 'next';
-import { AuthType } from '../../auth';
 
 // https://nextjs.org/docs/api-routes/api-middlewares#connectexpress-middleware-support
 export function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
@@ -27,12 +26,9 @@ export function validateJwtIfExists(req: NextApiRequest, res: NextApiResponse, n
                 return;
             }
             req.body.sub = decoded.sub;
-            if (decoded.type === AuthType.ADDRESS) {
-                req.body.address = decoded.address;
-            } else if (decoded.type === AuthType.EMAIL) {
-                req.body.email = decoded.email;
-                req.body.fname = decoded.fname;
-            }
+            req.body.address = decoded.address;
+            req.body.email = decoded.email;
+            req.body.fname = decoded.fname;
             req.body.validToken = true;
             next();
         });
@@ -51,12 +47,10 @@ export function validateJwt(req: NextApiRequest, res: NextApiResponse, next: exp
             return;
         }
         req.body.sub = decoded.sub;
-        if (decoded.type === AuthType.ADDRESS) {
-            req.body.address = decoded.address;
-        } else if (decoded.type === AuthType.EMAIL) {
-            req.body.email = decoded.email;
-            req.body.fname = decoded.fname;
-        }
+        req.body.address = decoded.address;
+        req.body.email = decoded.email;
+        req.body.fname = decoded.fname;
+        req.body.validToken = true;
         next();
     });
 }

@@ -5,34 +5,35 @@ import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { signatureInput } from '../../../auth';
 import { definitions } from '../../../types/supabase';
+import { runMiddleware, validateJwtIfExists } from '../middleware';
 import { supabase } from '../supabase';
 
-async function insertIntoUsers(address: string) {
-    const existingRes = await supabase
-        .from<definitions["users"]>("users")
-        .select("*")
-        .eq("wallet_address", address);
-    if (existingRes.error) {
-        return undefined;
+async function insertIntoUsers(address: string, sub?: string) {
+    if (sub) {
+        const { data, error } = await supabase
+            .from<definitions["users"]>("users")
+            .update({ wallet_address: address })
+            .eq("id", sub);
+        if (error || !data || data.length === 0) {
+            return undefined;
+        }
+        return data[0];
     }
 
-    if (existingRes.data && existingRes.data.length > 0) {
-        return existingRes.data[0].id;
-    }
-
-    const newRes = await supabase
+    const { data, error } = await supabase
         .from<definitions["users"]>("users")
         .insert([{ wallet_address: address }]);
-    if (newRes.error || !newRes.data || newRes.data.length === 0) {
+    if (error || !data || data.length === 0) {
         return undefined;
     }
-    return newRes.data[0].id;
+    return data[0];
 }
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
+    await runMiddleware(req, res, validateJwtIfExists);
 
     const address = req.body.address?.toLowerCase();
     const { data } = await supabase
@@ -58,13 +59,18 @@ export default async function handler(
         .update({ nonce: randomUUID() })
         .eq('wallet_address', address);
 
-    const id = await insertIntoUsers(address);
-    if (!id) {
+    const user = await insertIntoUsers(address, req.body.sub);
+    if (!user) {
         res.status(500).end();
         return;
     }
 
-    const token = jwt.sign({ sub: id, type: "address", address }, process.env.JWT_SECRET!);
+    const token = jwt.sign({
+        sub: user.id,
+        address,
+        email: user.email,
+        fname: user.fname,
+    }, process.env.JWT_SECRET!);
     res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
     res.end();
 }

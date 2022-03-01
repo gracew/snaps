@@ -3,6 +3,7 @@ import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { definitions } from '../../../types/supabase';
+import { runMiddleware, validateJwtIfExists } from '../middleware';
 import { supabase } from '../supabase';
 
 type Data = {
@@ -10,32 +11,32 @@ type Data = {
   validToken: boolean
 }
 
-async function insertIntoUsers(payload: TokenPayload) {
-  const existingRes = await supabase
-    .from<definitions["users"]>("users")
-    .select("*")
-    .eq("email", payload.email);
-  if (existingRes.error) {
-    return undefined;
+async function insertIntoUsers(payload: TokenPayload, sub?: string) {
+  if (sub) {
+    const { data, error } = await supabase
+      .from<definitions["users"]>("users")
+      .update({ email: payload.email, fname: payload.given_name })
+      .eq("id", sub);
+    if (error || !data || data.length === 0) {
+      return undefined;
+    }
+    return data[0];
   }
 
-  if (existingRes.data && existingRes.data.length > 0) {
-    return existingRes.data[0].id;
-  }
-
-  const newRes = await supabase
+  const { data, error } = await supabase
     .from<definitions["users"]>("users")
     .insert([{ email: payload.email, fname: payload.given_name }]);
-  if (newRes.error || !newRes.data || newRes.data.length === 0) {
+  if (error || !data || data.length === 0) {
     return undefined;
   }
-  return newRes.data[0].id;
+  return data[0];
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await runMiddleware(req, res, validateJwtIfExists);
 
   const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
   const ticket = await googleClient.verifyIdToken({
@@ -49,13 +50,18 @@ export default async function handler(
   console.log(payload);
 
   // successful login; insert into users table
-  const id = await insertIntoUsers(payload);
-  if (!id) {
+  const user = await insertIntoUsers(payload);
+  if (!user) {
     res.status(500).end();
     return;
   }
 
-  const token = jwt.sign({ sub: id, type: "email", email: payload.email, fname: payload.given_name }, process.env.JWT_SECRET!);
+  const token = jwt.sign({
+    sub: user.id,
+    email: payload.email,
+    fname: payload.given_name,
+    address: user.wallet_address,
+  }, process.env.JWT_SECRET!);
   res.status(200).setHeader('Set-Cookie', serialize('snToken', token, { path: "/" }));
   res.end();
 }
