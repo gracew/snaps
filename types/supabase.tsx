@@ -321,6 +321,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/get_snaps_with_sender": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: uuid */
+            snaps_id: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {

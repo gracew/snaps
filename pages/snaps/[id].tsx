@@ -10,16 +10,14 @@ import MintPanelContents from '../../components/mintPanelContents';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
-import { definitions } from "../../types/supabase";
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
-
 const GiveCategory: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [snaps, setSnaps] = useState<definitions["snaps"]>();
+  const [snaps, setSnaps] = useState<any>();
   const [copied, setCopied] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [me, setMe] = useContext(UserContext);
@@ -39,9 +37,8 @@ const GiveCategory: NextPage = () => {
   useEffect(() => {
     async function getExistingData() {
       const { data, error } = await supabase
-        .from<definitions["snaps"]>("snaps")
-        .select("*")
-        .eq("id", id as string);
+        .rpc('get_snaps_with_sender', { snaps_id: id });
+      // TODO: handle error case
       if (!error && data && data.length > 0) {
         setSnaps(data[0]);
       }
@@ -144,14 +141,13 @@ const GiveCategory: NextPage = () => {
     inner !== undefined;
 
   console.log("me " + me?.sub);
-  console.log("sender " + snaps.sender_id);
   return (
     <div className="flex flex-col min-h-screen items-center">
       <div className="w-96 flex flex-col">
         <Nav />
         <div className="mt-5 mb-3 flex justify-between">
           {/* TODO: look up ENS */}
-          <h2>From: <div className="w-20 truncate">{me?.fname || me?.address}</div></h2>
+          <h2>From: <div className="w-20 truncate">{snaps.sender_fname || snaps.sender_wallet_address}</div></h2>
           <h2 className="text-right">To: <div className="w-20 truncate">{snaps.recipient_fname || snaps.recipient_wallet_address}</div></h2>
         </div>
 
