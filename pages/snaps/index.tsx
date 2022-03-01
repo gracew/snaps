@@ -35,7 +35,8 @@ const Snaps: NextPage = () => {
         .select("*")
         .eq("sender_id", me.sub);
       if (!error && data && data.length > 0) {
-        setGiven(data);
+        // filter out any incomplete snaps
+        setGiven(data.filter(s => s.note));
       }
     };
 
@@ -47,7 +48,8 @@ const Snaps: NextPage = () => {
       const { data, error } = await supabase
         .rpc('get_received_snaps_with_sender', { recipient_email: me.email, recipient_wallet_address: me.address });
       if (!error && data && data.length > 0) {
-        setReceived(data);
+        // filter out any incomplete snaps
+        setReceived(data.filter(s => s.note));
       }
     };
 
