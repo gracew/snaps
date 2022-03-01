@@ -10,7 +10,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   await runMiddleware(req, res, validateJwt);
-  const { id, sub } = req.body;
+  const { id, sub } = req.body.jwt;
   // first, upload image and metadata to IPFS
   //const blob = await fetch("/spc/nurture.png").then((r) => r.blob());
   //const imageResult = await client.add(blob);

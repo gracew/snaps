@@ -59,7 +59,7 @@ export default async function handler(
         .update({ nonce: randomUUID() })
         .eq('wallet_address', address);
 
-    const user = await insertIntoUsers(address, req.body.sub);
+    const user = await insertIntoUsers(address, req.body.jwt?.sub);
     if (!user) {
         res.status(500).end();
         return;

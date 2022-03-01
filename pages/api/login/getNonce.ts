@@ -5,7 +5,7 @@ import { supabase } from '../supabase';
 
 type Data = {
   nonce: string
-  validToken: boolean
+  validAddress: boolean
 }
 
 export default async function handler(
@@ -16,7 +16,7 @@ export default async function handler(
   const address = req.body.address?.toLowerCase();
   
   await runMiddleware(req, res, validateJwtIfExists);
-  const validToken = Boolean(req.body.validToken)
+  const validAddress = req.body.jwt?.address !== undefined;
 
   const { data } = await supabase
     .from("nonces")
@@ -24,7 +24,7 @@ export default async function handler(
     .eq("wallet_address", address);
 
   if (data && data.length > 0) {
-    res.status(200).json({ nonce: data[0].nonce, validToken });
+    res.status(200).json({ nonce: data[0].nonce, validAddress });
     return;
   }
 
@@ -33,7 +33,7 @@ export default async function handler(
     .insert([{ wallet_address: address }]);
   if (newData && newData.length > 0) {
     
-    res.status(200).json({ nonce: newData[0].nonce, validToken });
+    res.status(200).json({ nonce: newData[0].nonce, validAddress });
     return;
   };
 

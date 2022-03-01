@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext } from 'react'
 import GoogleLogin from 'react-google-login'
 import { connect, getWeb3Modal, walletLogin } from '../auth'
 import { UserContext } from '../pages/_app'
@@ -48,6 +48,47 @@ const AuthButton = () => {
         // TODO: handle failure case
     }
 
+    function googleMenuItem(text: string) {
+        return <Menu.Item>
+            {({ active }) => (
+                <GoogleLogin
+                    clientId="314131181818-4oos4568l2idp0t71u5lembd9qb55f9e.apps.googleusercontent.com"
+                    onSuccess={(res) => {
+                        onGoogleSuccess(res as any).then(getMe);
+                    }}
+                    onFailure={onGoogleFailure}
+                    render={renderProps => (
+                        <button
+                            className={classNames(
+                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                'block w-full text-left px-4 py-2 text-sm'
+                            )}
+                            onClick={renderProps.onClick}
+                        >
+                            {text}
+                        </button>
+                    )}
+                />
+            )}
+        </Menu.Item>
+    }
+
+    function walletMenuItem(text: string) {
+        return <Menu.Item>
+            {({ active }) => (
+                <button
+                    className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block w-full text-left px-4 py-2 text-sm'
+                    )}
+                    onClick={onClickConnect}
+                >
+                    {text}
+                </button>
+            )}
+        </Menu.Item>
+    }
+
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -68,41 +109,13 @@ const AuthButton = () => {
             >
                 <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                        {(!me || !me.sub) && <Menu.Item>
-                            {({ active }) => (
-                                <GoogleLogin
-                                    clientId="314131181818-4oos4568l2idp0t71u5lembd9qb55f9e.apps.googleusercontent.com"
-                                    onSuccess={(res) => {
-                                        onGoogleSuccess(res as any).then(getMe);
-                                    }}
-                                    onFailure={onGoogleFailure}
-                                    render={renderProps => (
-                                        <button
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block w-full text-left px-4 py-2 text-sm'
-                                            )}
-                                            onClick={renderProps.onClick}
-                                        >
-                                            With Google
-                                        </button>
-                                    )}
-                                />
-                            )}
-                        </Menu.Item>}
-                        {(!me || !me.sub) && <Menu.Item>
-                            {({ active }) => (
-                                <button
-                                    className={classNames(
-                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                        'block w-full text-left px-4 py-2 text-sm'
-                                    )}
-                                    onClick={onClickConnect}
-                                >
-                                    With Wallet
-                                </button>
-                            )}
-                        </Menu.Item>}
+                        {/* Unauthenticated options */}
+                        {(!me || !me.sub) && googleMenuItem("With Google")}
+                        {(!me || !me.sub) && walletMenuItem("With Wallet")}
+
+                        {/* Authenticated options */}
+                        {me && me.sub && !me.email && googleMenuItem("Connect Email")}
+                        {me && me.sub && !me.address && walletMenuItem("Connect Wallet")}
                         {me && me.sub && <Menu.Item>
                             {({ active }) => (
                                 <button
@@ -112,7 +125,7 @@ const AuthButton = () => {
                                     )}
                                     onClick={logout}
                                 >
-                                    {me?.address ? "Disconnect" : "Log Out"}
+                                    Log Out
                                 </button>
                             )}
                         </Menu.Item>}

@@ -17,8 +17,8 @@ export default async function handler(
   const { data, error } = await supabase
     .from<definitions["snaps"]>("snaps")
     .insert([{
-      sender_id: req.body.sub,
-      recipient_type: req.body.recipientType,
+      sender_id: req.body.jwt.sub,
+      recipient_type: req.body,
       ...recipientInfo,
     }]);
 

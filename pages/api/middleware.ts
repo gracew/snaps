@@ -25,11 +25,7 @@ export function validateJwtIfExists(req: NextApiRequest, res: NextApiResponse, n
                 res.status(401).json({});
                 return;
             }
-            req.body.sub = decoded.sub;
-            req.body.address = decoded.address;
-            req.body.email = decoded.email;
-            req.body.fname = decoded.fname;
-            req.body.validToken = true;
+            req.body.jwt = decoded;
             next();
         });
     }
@@ -46,11 +42,7 @@ export function validateJwt(req: NextApiRequest, res: NextApiResponse, next: exp
             res.status(401).json({});
             return;
         }
-        req.body.sub = decoded.sub;
-        req.body.address = decoded.address;
-        req.body.email = decoded.email;
-        req.body.fname = decoded.fname;
-        req.body.validToken = true;
+        req.body.jwt = decoded;
         next();
     });
 }

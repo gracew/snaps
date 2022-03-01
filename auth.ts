@@ -47,7 +47,7 @@ export async function connect() {
 };
 
 export async function walletLogin({ web3, account }: { web3: Web3, account: string }) {
-  const { nonce, validToken } = await fetch('/api/login/getNonce', {
+  const { nonce, validAddress } = await fetch('/api/login/getNonce', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ export async function walletLogin({ web3, account }: { web3: Web3, account: stri
     body: JSON.stringify({ address: account }),
   }).then(res => res.json());
 
-  if (validToken) {
+  if (validAddress) {
     return true;
   }
 

@@ -6,11 +6,6 @@ import { definitions } from '../../../types/supabase';
 import { runMiddleware, validateJwtIfExists } from '../middleware';
 import { supabase } from '../supabase';
 
-type Data = {
-  nonce: string
-  validToken: boolean
-}
-
 async function insertIntoUsers(payload: TokenPayload, sub?: string) {
   if (sub) {
     const { data, error } = await supabase
@@ -34,7 +29,7 @@ async function insertIntoUsers(payload: TokenPayload, sub?: string) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse,
 ) {
   await runMiddleware(req, res, validateJwtIfExists);
 
@@ -50,7 +45,7 @@ export default async function handler(
   console.log(payload);
 
   // successful login; insert into users table
-  const user = await insertIntoUsers(payload);
+  const user = await insertIntoUsers(payload, req.body.jwt?.sub);
   if (!user) {
     res.status(500).end();
     return;
