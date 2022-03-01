@@ -18,7 +18,7 @@ export default async function handler(
     .from<definitions["snaps"]>("snaps")
     .insert([{
       sender_id: req.body.jwt.sub,
-      recipient_type: req.body,
+      recipient_type: req.body.recipientType,
       ...recipientInfo,
     }]);
 

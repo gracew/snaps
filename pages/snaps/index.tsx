@@ -1,11 +1,13 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
+import LargeSpinner from '../../components/largeSpinner';
 import MinimalCard from '../../components/minimalCard';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import { definitions } from '../../types/supabase';
 import { supabase } from '../api/supabase';
+import { spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 enum Tab {
@@ -15,6 +17,7 @@ enum Tab {
 
 const Snaps: NextPage = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [given, setGiven] = useState<definitions["snaps"][]>([]);
   const [received, setReceived] = useState<definitions["snaps"][]>([]);
   const [currentTab, setCurrentTab] = useState(Tab.GIVEN);
@@ -22,6 +25,10 @@ const Snaps: NextPage = () => {
 
   useEffect(() => {
     async function getGiven() {
+      if (!me?.sub) {
+        return;
+      }
+
       const { data, error } = await supabase
         .from<definitions["snaps"]>("snaps")
         .select("*")
@@ -30,7 +37,8 @@ const Snaps: NextPage = () => {
         setGiven(data);
       }
     };
-  });
+    getGiven().then(() => setLoading(false));
+  }, [me]);
 
   function classNames(tab: Tab) {
     if (tab === currentTab) {
@@ -41,6 +49,9 @@ const Snaps: NextPage = () => {
   }
 
   const hideGiveSnapsInNav = given.length === 0;
+
+  if (loading) {
+  }
 
   return (
     <div className="flex flex-col min-h-screen items-center">
@@ -60,9 +71,14 @@ const Snaps: NextPage = () => {
             </li>
           </ul>
         </div>
-        {currentTab === Tab.GIVEN && hideGiveSnapsInNav && (
+        {loading && (
+          <div className="flex flex-col min-h-screen items-center justify-center">
+            <LargeSpinner />
+          </div>
+        )}
+        {!loading && currentTab === Tab.GIVEN && hideGiveSnapsInNav && (
           <div className='bg-gray-100 rounded-lg my-5 px-5 py-3'>
-            You haven't given any snaps yet. Try sending one now 😊
+            You haven't given any Snaps yet. Try sending one now 😊
             <div className="flex flex-col my-3 items-center">
               <PrimaryButton
                 text="Give Snaps"
@@ -71,21 +87,27 @@ const Snaps: NextPage = () => {
             </div>
           </div>
         )}
-        {currentTab === Tab.GIVEN && !hideGiveSnapsInNav && (
-          <div className='my-5 px-5 py-3'>
-            {given.map(snaps => (
-              <MinimalCard 
-                onClick={() => {}}
-                imageUrl="/spc/nurture.png"
-                label="Foo"
-              />
-            ))}
+        {!loading && currentTab === Tab.GIVEN && !hideGiveSnapsInNav && (
+          <div className='my-5 py-3 grid grid-cols-2 gap-3'>
+            {given.map(snaps => {
+              const category = spcTypes.find(c => c.id === snaps.category);
+              const secondaryLabel = `To: ${snaps.recipient_fname || snaps.recipient_wallet_address}`;
+              return (
+                <MinimalCard
+                  onClick={() => router.push(`/snaps/${snaps.id}`)}
+                  imageUrl={category?.image!}
+                  label={category?.label!}
+                  secondaryLabel={secondaryLabel}
+                  hover={true}
+                />
+              )
+            })}
           </div>
         )}
 
-        {currentTab === Tab.RECEIVED && received.length === 0 && (
+        {!loading && currentTab === Tab.RECEIVED && received.length === 0 && (
           <div className='bg-gray-100 rounded-lg my-5 px-5 py-3'>
-            You haven't received any snaps yet. Check back later!
+            You haven't received any Snaps yet. Check back later!
           </div>
         )}
       </div>
