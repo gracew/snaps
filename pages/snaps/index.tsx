@@ -89,7 +89,7 @@ const Snaps: NextPage = () => {
         )}
         {!loading && currentTab === Tab.GIVEN && hideGiveSnapsInNav && (
           <div className='bg-gray-100 rounded-lg my-5 px-5 py-3'>
-            You haven't given any Snaps yet. Try sending one now 😊
+            You haven&apos;t given any Snaps yet. Try sending one now 😊
             <div className="flex flex-col my-3 items-center">
               <PrimaryButton
                 text="Give Snaps"
@@ -105,6 +105,7 @@ const Snaps: NextPage = () => {
               const secondaryLabel = `To: ${snaps.recipient_fname || shortenAddress(snaps.recipient_wallet_address!)}`;
               return (
                 <MinimalCard
+                  key={snaps.id}
                   onClick={() => router.push(`/snaps/${snaps.id}`)}
                   imageUrl={category?.image!}
                   label={category?.label!}
@@ -118,7 +119,7 @@ const Snaps: NextPage = () => {
 
         {!loading && currentTab === Tab.RECEIVED && received.length === 0 && (
           <div className='bg-gray-100 rounded-lg my-5 px-5 py-3'>
-            You haven't received any Snaps yet. Check back later!
+            You haven&apos;t received any Snaps yet. Check back later!
           </div>
         )}
         {!loading && currentTab === Tab.RECEIVED && received.length > 0 && (
@@ -128,6 +129,7 @@ const Snaps: NextPage = () => {
               const secondaryLabel = `From: ${snaps.sender_fname || shortenAddress(snaps.sender_wallet_address)}`;
               return (
                 <MinimalCard
+                  key={snaps.id}
                   onClick={() => router.push(`/snaps/${snaps.id}`)}
                   imageUrl={category?.image!}
                   label={category?.label!}
