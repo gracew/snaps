@@ -23,7 +23,7 @@ const Login: NextPage = () => {
           router.push("/snaps")
         }
       });
-  }, []);
+  }, [router]);
 
   async function onClickConnect() {
     const res = await connect();

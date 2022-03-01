@@ -111,7 +111,7 @@ const GiveCategory: NextPage = () => {
         return (
           <div className="flex flex-col pb-3">
             <div className="mb-4">
-              In order to claim this collectible, you'll need to connect a crypto wallet. If you don't have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
+              In order to claim this collectible, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
             </div>
             <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
           </div>
