@@ -20,6 +20,18 @@ async function insertIntoUsers(address: string, sub?: string) {
         return data[0];
     }
 
+    const existingRes = await supabase
+        .from<definitions["users"]>("users")
+        .select("*")
+        .eq("wallet_address", address);
+    if (existingRes.error) {
+        return undefined;
+    }
+
+    if (existingRes.data && existingRes.data.length > 0) {
+        return existingRes.data[0];
+    }
+
     const { data, error } = await supabase
         .from<definitions["users"]>("users")
         .insert([{ wallet_address: address }]);
