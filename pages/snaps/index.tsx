@@ -1,8 +1,12 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import MinimalCard from '../../components/minimalCard';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
+import { definitions } from '../../types/supabase';
+import { supabase } from '../api/supabase';
+import { UserContext } from '../_app';
 
 enum Tab {
   GIVEN = "given",
@@ -11,9 +15,22 @@ enum Tab {
 
 const Snaps: NextPage = () => {
   const router = useRouter();
-  const [given, setGiven] = useState([]);
-  const [received, setReceived] = useState([]);
+  const [given, setGiven] = useState<definitions["snaps"][]>([]);
+  const [received, setReceived] = useState<definitions["snaps"][]>([]);
   const [currentTab, setCurrentTab] = useState(Tab.GIVEN);
+  const [me, setMe] = useContext(UserContext);
+
+  useEffect(() => {
+    async function getGiven() {
+      const { data, error } = await supabase
+        .from<definitions["snaps"]>("snaps")
+        .select("*")
+        .eq("sender_id", me.sub);
+      if (!error && data && data.length > 0) {
+        setGiven(data);
+      }
+    };
+  });
 
   function classNames(tab: Tab) {
     if (tab === currentTab) {
@@ -54,10 +71,22 @@ const Snaps: NextPage = () => {
             </div>
           </div>
         )}
+        {currentTab === Tab.GIVEN && !hideGiveSnapsInNav && (
+          <div className='my-5 px-5 py-3'>
+            {given.map(snaps => (
+              <MinimalCard 
+                onClick={() => {}}
+                imageUrl="/spc/nurture.png"
+                label="Foo"
+              />
+            ))}
+          </div>
+        )}
+
         {currentTab === Tab.RECEIVED && received.length === 0 && (
           <div className='bg-gray-100 rounded-lg my-5 px-5 py-3'>
             You haven't received any snaps yet. Check back later!
-            </div>
+          </div>
         )}
       </div>
     </div>

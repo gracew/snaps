@@ -34,7 +34,8 @@ const AuthButton = () => {
             web3Modal.clearCachedProvider();
         }
         setMe(undefined);
-        if (router.asPath === "/snaps") {
+        console.log(router.asPath);
+        if (router.asPath.startsWith("/snaps")) {
             router.push("/login");
         }
     }

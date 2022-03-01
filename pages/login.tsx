@@ -1,16 +1,18 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { connect, walletLogin } from "../auth";
 import GoogleButton from '../components/googleButton';
 import Or from "../components/or";
 import SecondaryButton from "../components/secondaryButton";
+import { UserContext } from './_app';
 
 const Login: NextPage = () => {
   const router = useRouter();
+  const [me, setMe] = useContext(UserContext);
 
-  useEffect(() => {
-    fetch('/api/me', {
+  function getMe() {
+    return fetch('/api/me', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -18,17 +20,20 @@ const Login: NextPage = () => {
       body: JSON.stringify({}),
     })
       .then(res => res.json())
-      .then(({ address, email }) => {
-        if (address || email) {
-          router.push("/snaps")
-        }
-      });
+      .then(setMe);
+  }
+
+  useEffect(() => {
+    if (me?.address || me?.email) {
+      router.push("/snaps")
+    }
   }, [router]);
 
   async function onClickConnect() {
     const res = await connect();
     const success = await walletLogin(res);
     if (success) {
+      getMe();
       router.push("/snaps")
     }
     // TODO: handle failure case
