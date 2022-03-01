@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <title>Snaps</title>
       <meta name="description" content="Show appreciation for teammates and colleagues through digital collectibles." />
       <link rel="icon" href="/sunglasses_100.png" />
+      <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
     </Head>
     <UserContext.Provider value={[me, setMe]}>
       <div className="flex flex-col min-h-screen items-center bg-gray-900 text-gray-200">
