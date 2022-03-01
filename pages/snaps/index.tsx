@@ -19,7 +19,7 @@ const Snaps: NextPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [given, setGiven] = useState<definitions["snaps"][]>([]);
-  const [received, setReceived] = useState<definitions["snaps"][]>([]);
+  const [received, setReceived] = useState<any>([]);
   const [currentTab, setCurrentTab] = useState(Tab.GIVEN);
   const [me, setMe] = useContext(UserContext);
 
@@ -37,7 +37,20 @@ const Snaps: NextPage = () => {
         setGiven(data);
       }
     };
-    getGiven().then(() => setLoading(false));
+
+    async function getReceived() {
+      if (!me?.sub) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .rpc('get_received_snaps_with_sender', { recipient_email: me.email, recipient_wallet_address: me.address });
+      if (!error && data && data.length > 0) {
+        setReceived(data);
+      }
+    };
+
+    Promise.all([getGiven(), getReceived()]).then(() => setLoading(false));
   }, [me]);
 
   function classNames(tab: Tab) {
@@ -49,9 +62,6 @@ const Snaps: NextPage = () => {
   }
 
   const hideGiveSnapsInNav = given.length === 0;
-
-  if (loading) {
-  }
 
   return (
     <div className="flex flex-col min-h-screen items-center">
@@ -108,6 +118,23 @@ const Snaps: NextPage = () => {
         {!loading && currentTab === Tab.RECEIVED && received.length === 0 && (
           <div className='bg-gray-100 rounded-lg my-5 px-5 py-3'>
             You haven't received any Snaps yet. Check back later!
+          </div>
+        )}
+        {!loading && currentTab === Tab.RECEIVED && received.length > 0 && (
+          <div className='my-5 py-3 grid grid-cols-2 gap-3'>
+            {received.map((snaps: any) => {
+              const category = spcTypes.find(c => c.id === snaps.category);
+              const secondaryLabel = `From: ${snaps.sender_fname || snaps.sender_wallet_address}`;
+              return (
+                <MinimalCard
+                  onClick={() => router.push(`/snaps/${snaps.id}`)}
+                  imageUrl={category?.image!}
+                  label={category?.label!}
+                  secondaryLabel={secondaryLabel}
+                  hover={true}
+                />
+              )
+            })}
           </div>
         )}
       </div>
