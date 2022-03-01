@@ -27,7 +27,7 @@ export default function MintPanel({ snaps, open, onClose, children }: MintPanelP
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <Dialog.Overlay className="absolute inset-0 bg-gray-700 bg-opacity-75 transition-opacity" />
           </Transition.Child>
           <div className="pointer-events-none fixed inset-x-0 bottom-0 flex">
             <Transition.Child
@@ -60,9 +60,9 @@ export default function MintPanel({ snaps, open, onClose, children }: MintPanelP
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="flex flex-col items-center bg-white px-4 py-6 shadow-xl">
+                <div className="flex flex-col items-center bg-gray-900 text-gray-200 px-4 py-6 shadow-xl">
                   <div className="w-96 flex flex-col">
-                    <Dialog.Title className="text-lg font-medium text-gray-900">Claim Collectible</Dialog.Title>
+                    <Dialog.Title className="text-lg font-medium">Claim Collectible</Dialog.Title>
                     <div className="relative mt-6 flex-1">
                       {children}
                     </div>

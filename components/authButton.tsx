@@ -61,7 +61,7 @@ const AuthButton = () => {
                     render={renderProps => (
                         <button
                             className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                active ? 'bg-gray-700 text-white' : 'text-gray-300',
                                 'block w-full text-left px-4 py-2 text-sm'
                             )}
                             onClick={renderProps.onClick}
@@ -79,7 +79,7 @@ const AuthButton = () => {
             {({ active }) => (
                 <button
                     className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        active ? 'bg-gray-700 text-white' : 'text-gray-300',
                         'block w-full text-left px-4 py-2 text-sm'
                     )}
                     onClick={onClickConnect}
@@ -93,7 +93,7 @@ const AuthButton = () => {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-400 shadow-sm ml-2 px-4 py-2.5 bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-400 shadow-sm ml-2 px-4 py-2.5 bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     {me?.address ?
                         <div>{shortenAddress(me.address)}</div>
                         :
@@ -113,7 +113,7 @@ const AuthButton = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {/* Unauthenticated options */}
                         {(!me || !me.sub) && googleMenuItem("With Google")}
@@ -126,7 +126,7 @@ const AuthButton = () => {
                             {({ active }) => (
                                 <button
                                     className={classNames(
-                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        active ? 'bg-gray-700 text-white' : 'text-gray-300',
                                         'block w-full text-left px-4 py-2 text-sm'
                                     )}
                                     onClick={logout}

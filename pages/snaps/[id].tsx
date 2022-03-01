@@ -21,6 +21,7 @@ const GiveCategory: NextPage = () => {
   const [copied, setCopied] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [me, setMe] = useContext(UserContext);
+  const [minting, setMinting] = useState(false);
 
   async function getMe() {
     return fetch('/api/me', {
@@ -54,6 +55,7 @@ const GiveCategory: NextPage = () => {
   }
 
   async function mintNFT() {
+    setMinting(true);
     fetch('/api/mint', {
       method: 'POST',
       headers: {
@@ -62,7 +64,8 @@ const GiveCategory: NextPage = () => {
       body: JSON.stringify({ id }),
     })
       .then(res => res.json())
-      .then(setSnaps);
+      .then(setSnaps)
+      .finally(() => setMinting(false));
   }
 
   async function onClickConnect() {
@@ -102,7 +105,7 @@ const GiveCategory: NextPage = () => {
             <MintPanelContents
               text="This won't cost you any transaction fees."
             >
-              <PrimaryButton text="Claim as NFT" onClick={mintNFT} />
+              <PrimaryButton text="Claim as NFT" onClick={mintNFT} loading={minting} />
             </MintPanelContents>
           );
         }
