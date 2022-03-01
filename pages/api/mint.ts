@@ -1,10 +1,7 @@
 import { ethers } from "ethers";
-import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ERC721NFT from "../../ERC721NFT.json";
 
-// @ts-ignore
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 export default async function handler(
   req: NextApiRequest,
