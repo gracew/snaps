@@ -4,7 +4,11 @@ import { useRouter } from "next/router";
 import AuthButton from "./authButton";
 import PrimaryButton from "./primaryButton";
 
-const Nav = () => {
+interface NavProps {
+  hideGiveSnaps?: boolean;
+}
+
+const Nav = ({ hideGiveSnaps }: NavProps) => {
   const router = useRouter();
   return (
     <nav className="bg-white mt-4 py-2.5 dark:bg-gray-800">
@@ -18,10 +22,10 @@ const Nav = () => {
           ></Image>
         </Link>
         <div className="flex w-auto">
-          <PrimaryButton
+          {!hideGiveSnaps && <PrimaryButton
             text="Give Snaps"
             onClick={() => router.push("/give")}
-          />
+          />}
           <AuthButton />
         </div>
       </div>
