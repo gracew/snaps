@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ButtonContainer from '../../../components/buttonContainer'
-import Card from '../../../components/card'
 import LargeSpinner from '../../../components/largeSpinner'
 import MinimalCard from '../../../components/minimalCard'
 import Nav from '../../../components/nav'
@@ -85,7 +84,7 @@ const GiveCategory: NextPage = () => {
   }
 
   return (
-    <div className="w-96 flex flex-col">
+    <div className="w-80 flex flex-col">
       <Nav />
       <h1 className="text-2xl font-bold mt-5 mb-3">
         Give Snaps

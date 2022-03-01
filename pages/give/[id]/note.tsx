@@ -55,7 +55,7 @@ const GiveNote: NextPage = () => {
   }
 
   return (
-    <div className="w-96 flex flex-col">
+    <div className="w-80 flex flex-col">
       <Nav />
       <h1 className="text-2xl font-bold mt-5 mb-3">
         Give Snaps

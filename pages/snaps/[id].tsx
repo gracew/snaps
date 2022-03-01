@@ -145,7 +145,7 @@ const GiveCategory: NextPage = () => {
 
   console.log("me " + me?.sub);
   return (
-    <div className="w-96 flex flex-col">
+    <div className="w-80 flex flex-col">
       <Nav />
       <div className="mt-5 mb-3 flex justify-between">
         {/* TODO: look up ENS */}

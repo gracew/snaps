@@ -61,7 +61,7 @@ export default function MintPanel({ snaps, open, onClose, children }: MintPanelP
                   </div>
                 </Transition.Child>
                 <div className="flex flex-col items-center bg-gray-900 text-gray-200 px-4 py-6 shadow-xl">
-                  <div className="w-96 flex flex-col">
+                  <div className="w-80 flex flex-col">
                     <Dialog.Title className="text-lg font-medium">Claim Collectible</Dialog.Title>
                     <div className="relative mt-6 flex-1">
                       {children}

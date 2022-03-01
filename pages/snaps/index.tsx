@@ -65,7 +65,7 @@ const Snaps: NextPage = () => {
   const hideGiveSnapsInNav = given.length === 0;
 
   return (
-    <div className="w-96 my-4 flex flex-col">
+    <div className="w-80 my-4 flex flex-col">
       <Nav hideGiveSnaps={hideGiveSnapsInNav} />
       <div className="border-b border-gray-700">
         <ul className="flex flex-wrap -mb-px">
