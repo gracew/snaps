@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Head>
       <title>Snaps</title>
       <meta name="description" content="Show appreciation for teammates and colleagues through digital collectibles." />
-      <link rel="icon" href="/snaps_100.png" />
+      <link rel="icon" href="/sunglasses_100.png" />
     </Head>
     <UserContext.Provider value={[me, setMe]}>
       <Component {...pageProps} />

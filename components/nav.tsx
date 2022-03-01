@@ -16,7 +16,7 @@ const Nav = ({ hideGiveSnaps }: NavProps) => {
         <div className="cursor-pointer">
           <Link href="/snaps">
             <Image
-              src="/snaps_100.png"
+              src="/sunglasses_100.png"
               height={50}
               width={50}
               alt="Snaps logo"
