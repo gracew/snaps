@@ -60,10 +60,7 @@ const AuthButton = () => {
                     onFailure={onGoogleFailure}
                     render={renderProps => (
                         <button
-                            className={classNames(
-                                active ? 'bg-gray-700 text-white' : 'text-gray-300',
-                                'block w-full text-left px-4 py-2 text-sm'
-                            )}
+                            className='block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white'
                             onClick={renderProps.onClick}
                         >
                             {text}
