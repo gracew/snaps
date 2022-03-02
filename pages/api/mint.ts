@@ -1,61 +1,98 @@
 import { ethers } from "ethers";
+import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ERC721NFT from "../../ERC721NFT.json";
+import { definitions } from "../../types/supabase";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
+// @ts-ignore
+const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
+
+const categoryIpfsMap: Record<string, string> = {
+  spc_nurture: "QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb",
+  spc_scale: "QmZ7yBnzGL1zRKo7eo5VorbgshoCX9mn2SGyunZ4N2rssM",
+  spc_dig: "QmaQ2HMkqc3r9JJvjcmyx6zFiB7fxvfUXW8Wc1qN6qfX5X",
+  spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
+};
+
+const provider = new ethers.providers.InfuraProvider("maticmum", "a71874bbcb6a450398f24a7bbd436eda")
+const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
+const contract = new ethers.Contract(process.env.NFT_CONTRACT_ADDRESS!, ERC721NFT.abi, signer);
+
+async function getRecipientWalletAddress(snaps: definitions["snaps"]) {
+  if (snaps.recipient_wallet_address) {
+    return snaps.recipient_wallet_address;
+  }
+  const { data, error }= await supabase
+    .from<definitions["users"]>("users")
+    .select("*")
+    .eq("email", snaps.recipient_email);
+  if (error || !data || data.length === 0) {
+    return undefined;
+  }
+  return data[0].wallet_address;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   await runMiddleware(req, res, validateJwt);
-  const { id, sub } = req.body.jwt;
-  // first, upload image and metadata to IPFS
-  //const blob = await fetch("/spc/nurture.png").then((r) => r.blob());
-  //const imageResult = await client.add(blob);
+  const snapsRes = await supabase
+    .from<definitions["snaps"]>("snaps")
+    .select("*")
+    .eq("id", req.body.id);
 
-  /*const data = {
-    name: "Snaps: International Women's Day 2022",
-    description: "test description",
-    image: `https://ipfs.infura.io/ipfs/QmStkJ2xYkg6tVKzXG551aMt4L6DHiehTZ41aQHWUtetT6`,
-  };
-  const metadataResult = await client.add(JSON.stringify(data));
-  const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
-  */
-  if (false) {
-
-    const url = "https://ipfs.infura.io/ipfs/QmbJuMhuRKrmjPgm7ARBfZJGt1UwcMmNhFN6ky4tFdACYi"
-    console.log("metadata url: ", url);
-
-
-    const provider = new ethers.providers.InfuraProvider("maticmum", "a71874bbcb6a450398f24a7bbd436eda")
-    const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-
-    // Step 1: Load the NFT contract
-    const address = "0x967442D189Be3d4Dc6457115C1CA67F7d76D3330";
-    const contract = new ethers.Contract(address, ERC721NFT.abi, signer);
-
-    // Step 2: give it the URI
-    let transaction = await contract.mintToCaller("0x9B572394d0f7bE31967D02E84D1C1D19c5E7d3E1", url);
-    let tx = await transaction.wait();
-    let event = tx.events[0];
-    console.log("transaction event: ", event);
-    let value = event.args[2];
-    let tokenId = value.toNumber();
-    console.log("token id: ", tokenId);
-    await transaction.wait();
-    const openSeaUrl = `https://testnets.opensea.io/assets/mumbai/${address}/${tokenId}`;
-    console.log(openSeaUrl);
+  if (snapsRes.error) {
+    res.status(500).end();
+    return;
   }
+  if (!snapsRes.data || snapsRes.data.length === 0) {
+    res.status(404).end();
+    return;
+  }
+
+  const snaps = snapsRes.data[0];
+  if (!snaps.note || !snaps.category) {
+    res.status(400).end("incomplete snap");
+    return;
+  }
+  if (!categoryIpfsMap[snaps.category]) {
+    res.status(400).end("unknown category: " + snaps.category);
+    return;
+  }
+  
+  const recipientAddress = await getRecipientWalletAddress(snaps);
+  if (!recipientAddress) {
+    res.status(400).end("missing recipient wallet address");
+    return;
+  }
+
+  const metadata = {
+    name: "Snaps",
+    description: snaps.note,
+    image: `https://ipfs.infura.io/ipfs/${categoryIpfsMap[snaps.category]}`,
+  };
+  const metadataResult = await client.add(JSON.stringify(metadata));
+  const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
+  console.log(`metadata url for snaps ${snaps.id}: ${url}`);
+
+  const transaction = await contract.mintToCaller(recipientAddress, url);
+  const tx = await transaction.wait();
+  const event = tx.events[0];
+  console.log("transaction event: ", event);
+  const tokenId = event.args[2].toNumber();
+  console.log("token id: ", tokenId);
+  const openSeaUrl = `https://testnets.opensea.io/assets/mumbai/${process.env.NFT_CONTRACT_ADDRESS}/${tokenId}`;
+  console.log(openSeaUrl);
 
   const { data, error } = await supabase
     .from("snaps")
     .update({
       claimed: true,
       claimed_at: new Date().toISOString(),
-      recipient_id: sub,
     })
-    .eq('id', id);
+    .eq('id', snaps.id);
   res.status(200).json(data);
 }

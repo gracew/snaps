@@ -3,7 +3,7 @@ import WalletLink from "walletlink";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 
-const INFURA_ID = "9d0e761f26a04fad965b7d1cac96176f";
+const INFURA_ID = "a71874bbcb6a450398f24a7bbd436eda";
 
 export enum AuthType {
   EMAIL = "email",
