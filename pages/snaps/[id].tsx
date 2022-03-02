@@ -11,7 +11,7 @@ import MintPanelContents from '../../components/mintPanelContents';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
-import ShortenedAddress, { shortenAddress } from '../../components/shortenedAddress';
+import { shortenAddress } from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
@@ -170,20 +170,12 @@ const SnapsDetails: NextPage = (props: any) => {
           {/* TODO: look up ENS */}
           <h2>From:
             <div>
-              {
-                snaps.sender_fname
-                  ? snaps.sender_fname
-                  : <ShortenedAddress address={snaps.sender_wallet_address} />
-              }
+              {snaps.sender_fname || props.sender}
             </div>
           </h2>
           <h2 className="text-right">To:
             <div>
-              {
-                snaps.recipient_fname
-                  ? snaps.recipient_fname
-                  : <ShortenedAddress address={snaps.recipient_wallet_address} />
-              }
+              {snaps.recipient_fname || props.recipient}
             </div>
           </h2>
         </div>
@@ -234,14 +226,22 @@ const SnapsDetails: NextPage = (props: any) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data, error } = await supabase
     .rpc('get_snaps_with_sender', { snaps_id: context.query.id });
+  const props: Record<string, string> = {};
   if (error || !data || data.length === 0) {
-    return {
-      props: {}
-    }
+    return { props };
   }
-  return {
-    props: { snaps: data[0] }
+
+  const snaps = data[0];
+  props.snaps = snaps;
+  if (snaps.sender_wallet_address) {
+    props.sender = (await shortenAddress(snaps.sender_wallet_address));
   }
+
+  if (snaps.recipient_wallet_address) {
+    props.recipient = (await shortenAddress(snaps.recipient_wallet_address));
+  }
+
+  return { props };
 }
 
 export default SnapsDetails;

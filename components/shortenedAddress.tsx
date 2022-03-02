@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { MAINNET_PROVIDER } from "../auth";
 
-export function shortenAddress(address: string) {
-    return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+export async function shortenAddress(address: string) {
+    const resolved = await MAINNET_PROVIDER.lookupAddress(address)
+    return resolved || `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
 }
 
 const ShortenedAddress = ({ address }: { address: string }) => {
-    const shortened = shortenAddress(address);
+    const shortened = `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     const [text, setText] = useState(shortened);
 
     useEffect(() => {
