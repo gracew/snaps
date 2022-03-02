@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { AuthType } from '../auth';
@@ -29,6 +30,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   const [recipientEmail, setRecipientEmail] = useState<string>(existingData?.recipient_email || "");
   const [recipientAddress, setRecipientAddress] = useState<string>(existingData?.recipient_wallet_address || "");
   const [validEmail, setValidEmail] = useState(true);
+  const [validAddress, setValidAddress] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -41,6 +43,17 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
 
     return () => clearTimeout(delayDebounceFn)
   }, [recipientEmail])
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      // only validate address after user has stopped typing for 1s
+      if (recipientAddress) {
+        setValidAddress(ethers.utils.isAddress(recipientAddress));
+      }
+    }, 1000)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [recipientAddress])
 
   function disabled() {
     if (recipientType === AuthType.EMAIL) {
@@ -141,7 +154,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
               type="text"
               name="polygonaddress"
               id="polygonaddress"
-              className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-500 rounded-md"
+              className={`bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md ${validAddress ? "border-gray-500" : "border-pink-500 text-pink-600"}`}
               value={recipientAddress}
               onChange={(e) => setRecipientAddress(e.target.value)}
             />
