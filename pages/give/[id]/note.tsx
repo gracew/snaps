@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { shortenAddress } from '../../../auth';
 import ButtonContainer from '../../../components/buttonContainer';
 import LargeSpinner from '../../../components/largeSpinner';
 import Nav from '../../../components/nav';
 import PrimaryButton from '../../../components/primaryButton';
 import SecondaryButton from '../../../components/secondaryButton';
+import ShortenedAddress from '../../../components/shortenedAddress';
 import { definitions } from "../../../types/supabase";
 import { supabase } from '../../api/supabase';
 
@@ -61,7 +61,7 @@ const GiveNote: NextPage = () => {
         Give Snaps
       </h1>
       {/* TODO: look up ENS */}
-      <h2 className="my-2">Write a note of appreciation for {snaps?.recipient_fname || shortenAddress(snaps?.recipient_wallet_address!)}!</h2>
+      <h2 className="my-2">Write a note of appreciation for {snaps?.recipient_fname || <ShortenedAddress address={snaps?.recipient_wallet_address!} />}!</h2>
 
       <div className="mt-1 relative rounded-md shadow-sm">
         <textarea

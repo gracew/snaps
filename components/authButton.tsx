@@ -3,9 +3,10 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { Fragment, useContext } from 'react'
 import GoogleLogin from 'react-google-login'
-import { connect, getWeb3Modal, shortenAddress, walletLogin } from '../auth'
+import { connect, getWeb3Modal, walletLogin } from '../auth'
 import { UserContext } from '../pages/_app'
 import { onGoogleFailure, onGoogleSuccess } from './googleButton'
+import ShortenedAddress from './shortenedAddress'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -34,7 +35,6 @@ const AuthButton = () => {
             web3Modal.clearCachedProvider();
         }
         setMe(undefined);
-        console.log(router.asPath);
         if (router.asPath.startsWith("/snaps")) {
             router.push("/login");
         }
@@ -92,7 +92,7 @@ const AuthButton = () => {
             <div>
                 <Menu.Button className="inline-flex justify-center w-full rounded-full border border-gray-400 shadow-sm ml-2 px-4 py-2.5 bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     {me?.address ?
-                        <div>{shortenAddress(me.address)}</div>
+                        <ShortenedAddress address={me.address} />
                         :
                         me?.email ? <div className="w-20 truncate">{me.email}</div>
                             :

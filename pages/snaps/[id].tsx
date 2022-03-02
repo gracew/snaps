@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { AuthType, connect, shortenAddress, walletLogin } from '../../auth';
+import { AuthType, connect, walletLogin } from '../../auth';
 import Card from '../../components/card';
 import GoogleButton from '../../components/googleButton';
 import LargeSpinner from '../../components/largeSpinner';
@@ -10,6 +10,7 @@ import MintPanelContents from '../../components/mintPanelContents';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import SecondaryButton from '../../components/secondaryButton';
+import ShortenedAddress from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
@@ -156,12 +157,20 @@ const GiveCategory: NextPage = () => {
         {/* TODO: look up ENS */}
         <h2>From:
           <div>
-            {snaps.sender_fname || shortenAddress(snaps.sender_wallet_address)}
+            {
+              snaps.sender_fname
+                ? snaps.sender_fname
+                : <ShortenedAddress address={snaps.sender_wallet_address} />
+            }
           </div>
         </h2>
         <h2 className="text-right">To:
           <div>
-            {snaps.recipient_fname || shortenAddress(snaps.recipient_wallet_address)}
+            {
+              snaps.recipient_fname
+                ? snaps.recipient_fname
+                : <ShortenedAddress address={snaps.recipient_wallet_address} />
+            }
           </div>
         </h2>
       </div>
@@ -191,7 +200,7 @@ const GiveCategory: NextPage = () => {
           <></>
       }
       <SecondaryButton
-            className="mt-3"
+        className="mt-3"
         onClick={copy}
         text={copied ? "Copied!" : "Share"}
       />
