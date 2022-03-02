@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { AuthType, connect, walletLogin } from '../../auth';
@@ -150,8 +151,20 @@ const GiveCategory: NextPage = () => {
     (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
     inner !== undefined;
 
+  const title = `Snaps from ${""} to ${""}`;
+
   return (
     <div className="w-80 flex flex-col">
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
+        <meta key="image" property="og:image" content={category?.image} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
+        <meta name="twitter:image" content={category?.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
+
       <Nav />
       <div className="mt-5 mb-3 flex justify-between">
         {/* TODO: look up ENS */}
