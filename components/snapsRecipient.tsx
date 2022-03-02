@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { AuthType } from '../auth';
+import { AuthType, MAINNET_PROVIDER } from '../auth';
 import { supabase } from '../pages/api/supabase';
 import { definitions } from "../types/supabase";
 import ButtonContainer from './buttonContainer';
@@ -29,8 +29,9 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   const [recipientName, setRecipientName] = useState<string>(existingData?.recipient_fname || "");
   const [recipientEmail, setRecipientEmail] = useState<string>(existingData?.recipient_email || "");
   const [recipientAddress, setRecipientAddress] = useState<string>(existingData?.recipient_wallet_address || "");
-  const [validEmail, setValidEmail] = useState(true);
-  const [validAddress, setValidAddress] = useState<boolean | undefined>(undefined);
+  const [validEmail, setValidEmail] = useState<boolean | undefined>();
+  const [validAddress, setValidAddress] = useState<boolean | undefined>();
+  const [resolvedAddress, setResolvedAddress] = useState<string>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -45,10 +46,21 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   }, [recipientEmail])
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
+    const delayDebounceFn = setTimeout(async () => {
       // only validate address after user has stopped typing for 1s
       if (recipientAddress) {
-        setValidAddress(ethers.utils.isAddress(recipientAddress));
+        const isAddress = ethers.utils.isAddress(recipientAddress);
+        if (isAddress) {
+          setValidAddress(true);
+        } else {
+          const resolved = await MAINNET_PROVIDER.resolveName(recipientAddress);
+          if (resolved) {
+            setResolvedAddress(resolved);
+            setValidAddress(true);
+          } else {
+            setValidAddress(false);
+          }
+        }
       }
     }, 1000)
 
@@ -57,9 +69,9 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
 
   function disabled() {
     if (recipientType === AuthType.EMAIL) {
-      return !recipientName || !recipientEmail;
+      return !recipientName || !validEmail;
     } else if (recipientType === AuthType.ADDRESS) {
-      return !recipientAddress;
+      return !validAddress;
     }
     return false;
   }
@@ -74,7 +86,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
         recipientType,
         recipientName,
         recipientEmail,
-        recipientAddress,
+        recipientAddress: resolvedAddress || recipientAddress,
       }),
     }).then(res => res.json());
     return snaps.id;
@@ -139,7 +151,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
             type="email"
             name="email"
             id="email"
-            className={`bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md ${validEmail ? "border-gray-500" : "border-pink-500 text-pink-600"}`}
+            className={`bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md ${validEmail === undefined || validEmail ? "border-gray-500" : "border-pink-500 text-pink-600"}`}
             value={recipientEmail}
             onChange={(e) => setRecipientEmail(e.target.value)}
           />
@@ -148,7 +160,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
 
       {recipientType === "address" &&
         <div>
-          <label className="block text-sm font-medium text-gray-300">Ethereum Address or ENS</label>
+          <label className="block text-sm font-medium text-gray-300 mt-3">Ethereum Address or ENS</label>
           <div className="mt-1 relative rounded-md shadow-sm">
             <input
               type="text"

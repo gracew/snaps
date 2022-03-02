@@ -2,8 +2,10 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from "walletlink";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+import { ethers } from "ethers";
 
 const INFURA_ID = "a71874bbcb6a450398f24a7bbd436eda";
+export const MAINNET_PROVIDER = new ethers.providers.InfuraProvider("homestead", INFURA_ID);
 
 export enum AuthType {
   EMAIL = "email",
