@@ -128,6 +128,12 @@ const GiveCategory: NextPage = () => {
     }
   }
 
+  function getOpenSeaUrl() {
+    return process.env.NEXT_PUBLIC_CONTRACT_ADDRESS === "0x967442D189Be3d4Dc6457115C1CA67F7d76D3330"
+      ? `https://testnets.opensea.io/assets/mumbai/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}/${snaps.minted_token_id}`
+      : `https://opensea.io/assets/matic/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}/${snaps.minted_token_id}`;
+  }
+
   const category = spcTypes.find(c => c.id === snaps?.category);
 
   if (!snaps) {
@@ -177,7 +183,7 @@ const GiveCategory: NextPage = () => {
         :
         <PrimaryButton
           className="my-3"
-          onClick={() => setShowPanel(true)}
+          href={getOpenSeaUrl()}
           text="View on OpenSea"
         />
       }

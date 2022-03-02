@@ -84,8 +84,6 @@ From: ${snaps.sender_fname || snaps.sender_wallet_address}`,
   console.log("transaction event: ", event);
   const tokenId = event.args[2].toNumber();
   console.log("token id: ", tokenId);
-  const openSeaUrl = `https://testnets.opensea.io/assets/mumbai/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}/${tokenId}`;
-  console.log(openSeaUrl);
 
   const { data, error } = await supabase
     .from("snaps")

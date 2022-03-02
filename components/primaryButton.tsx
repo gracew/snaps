@@ -1,6 +1,6 @@
 import Spinner from "./spinner";
 
-interface PrimaryButtonProps extends React.HTMLProps<HTMLButtonElement> {
+interface PrimaryButtonProps extends React.HTMLProps<HTMLAnchorElement> {
     text: string;
     loading?: boolean;
 }
@@ -8,22 +8,21 @@ interface PrimaryButtonProps extends React.HTMLProps<HTMLButtonElement> {
 const PrimaryButton = (props: PrimaryButtonProps) => {
     const { text, disabled, className, loading, ...rest } = props;
     if (disabled || loading) {
-        return <button
+        return <a
             {...rest}
             type="button"
             className={`flex-1 text-gray-800 bg-lime-200 cursor-not-allowed font-medium rounded-lg text-sm px-4 py-2.5 text-center ${className}`}
-            disabled={true}
         >
             {text}
             {loading && <Spinner />}
-        </button>
+        </a>
     }
     return (
-        <button
+        <a
             {...rest}
             type="button"
-            className={`flex-1 text-gray-800 bg-lime-300 hover:bg-lime-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-4 py-2.5 text-center ${className}`}
-        >{text}</button>
+            className={`cursor-pointer flex-1 text-gray-800 bg-lime-300 hover:bg-lime-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-4 py-2.5 text-center ${className}`}
+        >{text}</a>
     )
 }
 
