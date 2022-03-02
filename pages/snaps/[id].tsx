@@ -134,12 +134,8 @@ const SnapsDetails: NextPage = (props: any) => {
       return "Snaps: Digital Collectible Shoutouts";
     }
 
-    const sender = snaps.sender_fname
-      ? snaps.sender_fname
-      : shortenAddress(snaps.sender_wallet_address);
-    const recipient = snaps.recipient_fname
-      ? snaps.recipient_fname
-      : shortenAddress(snaps.recipient_wallet_address);
+    const sender = snaps.sender_fname || props.sender;
+    const recipient = snaps.recipient_fname || props.recipient;
 
     return `Snaps: ${sender} sent ${recipient} a collectible shoutout`;
   }
