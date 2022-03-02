@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthType } from '../auth';
 import { supabase } from '../pages/api/supabase';
 import { definitions } from "../types/supabase";
@@ -28,7 +28,19 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   const [recipientName, setRecipientName] = useState<string>(existingData?.recipient_fname || "");
   const [recipientEmail, setRecipientEmail] = useState<string>(existingData?.recipient_email || "");
   const [recipientAddress, setRecipientAddress] = useState<string>(existingData?.recipient_wallet_address || "");
+  const [validEmail, setValidEmail] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      // only validate email after user has stopped typing for 1s
+      if (recipientEmail) {
+        setValidEmail(validateEmail(recipientEmail) !== null);
+      }
+    }, 1000)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [recipientEmail])
 
   function disabled() {
     if (recipientType === AuthType.EMAIL) {
@@ -102,7 +114,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
             type="text"
             name="fname"
             id="fname"
-            className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-500 rounded-md"
+            className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-500 rounded-md "
             value={recipientName}
             onChange={(e) => setRecipientName(e.target.value)}
           />
@@ -111,10 +123,10 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
         <label className="block text-sm font-medium text-gray-300 mt-3">Email</label>
         <div className="mt-1 relative rounded-md shadow-sm">
           <input
-            type="text"
+            type="email"
             name="email"
             id="email"
-            className="bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-500 rounded-md"
+            className={`bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md ${validEmail ? "border-gray-500" : "border-pink-500 text-pink-600"}`}
             value={recipientEmail}
             onChange={(e) => setRecipientEmail(e.target.value)}
           />
