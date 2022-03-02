@@ -24,6 +24,7 @@ const SnapsDetails: NextPage = (props: any) => {
   const [showPanel, setShowPanel] = useState(false);
   const [me, setMe] = useContext(UserContext);
   const [minting, setMinting] = useState(false);
+  const [matchingEmail, setMatchingEmail] = useState(false);
 
   async function getMe() {
     return fetch('/api/me', {
@@ -37,9 +38,18 @@ const SnapsDetails: NextPage = (props: any) => {
       .then(setMe);
   };
 
+
   useEffect(() => {
     if (id) {
-      setSnaps(props.snaps);
+      fetch('/api/matchesRecipientEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id }),
+      })
+        .then(res => res.json())
+        .then(setMatchingEmail);
     }
   }, [id]);
 
@@ -85,40 +95,43 @@ const SnapsDetails: NextPage = (props: any) => {
         <GoogleButton />
       </MintPanelContents>
     );
+    const mint = (
+      <MintPanelContents
+        text="This won't cost you any transaction fees."
+      >
+        <PrimaryButton text="Claim as NFT" onClick={mintNFT} loading={minting} />
+      </MintPanelContents>
+    );
 
-    if (!me?.sub) {
-      // not logged in
-      if (snaps!.recipient_type === AuthType.ADDRESS) {
+    if (snaps!.recipient_type === AuthType.ADDRESS) {
+      if (!me || !me.address) {
         return connectWallet;
       } else {
-        return connectEmail;
-      }
-    } else if (me.address) {
-      if (snaps!.recipient_type === AuthType.ADDRESS) {
         if (me.address.toLowerCase() === snaps!.recipient_wallet_address?.toLowerCase()) {
-          return (
-            <MintPanelContents
-              text="This won't cost you any transaction fees."
-            >
-              <PrimaryButton text="Claim as NFT" onClick={mintNFT} loading={minting} />
-            </MintPanelContents>
-          );
+          return mint;
         }
-      } else {
-        return connectEmail;
+        // else user address doesn't match the recipient address
       }
-    } else if (me.email) {
-      if (snaps!.recipient_type === AuthType.ADDRESS) {
-        return connectWallet;
+    } else {
+      // recipient_type is email
+      if (!me || !me.email) {
+        return connectEmail;
       } else {
-        return (
-          <div className="flex flex-col pb-3">
-            <div className="mb-4">
-              In order to claim this collectible, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
-            </div>
-            <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
-          </div>
-        )
+        if (matchingEmail) {
+          if (me.address) {
+            return mint;
+          } else {
+            return (
+              <div className="flex flex-col pb-3">
+                <div className="mb-4">
+                  In order to claim this collectible, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
+                </div>
+                <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
+              </div>
+            )
+          }
+        }
+        // else user email doesn't match the recipient email
       }
     }
   }
