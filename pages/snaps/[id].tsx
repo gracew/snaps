@@ -16,10 +16,10 @@ import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
-const SnapsDetails: NextPage = (params: any) => {
+const SnapsDetails: NextPage = (props: any) => {
   const router = useRouter();
   const { id } = router.query;
-  const [snaps, setSnaps] = useState<any>();
+  const [snaps, setSnaps] = useState<any>(props.snaps);
   const [copied, setCopied] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [me, setMe] = useContext(UserContext);
@@ -39,7 +39,7 @@ const SnapsDetails: NextPage = (params: any) => {
 
   useEffect(() => {
     if (id) {
-      setSnaps(params.snaps);
+      setSnaps(props.snaps);
     }
   }, [id]);
 
