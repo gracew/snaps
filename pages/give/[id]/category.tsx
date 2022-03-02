@@ -91,7 +91,7 @@ const GiveCategory: NextPage = () => {
 
       <h2 className="my-2">Select a category:</h2>
 
-      <div className='my-5 py-3 grid grid-cols-2 gap-3'>
+      <div className='py-3 grid grid-cols-2 gap-3'>
         {spcTypes.map(t => <MinimalCard
           key={t.label}
           selected={category === t.id}
