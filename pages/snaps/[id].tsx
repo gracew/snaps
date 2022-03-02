@@ -184,6 +184,7 @@ const GiveCategory: NextPage = () => {
         <PrimaryButton
           className="my-3"
           href={getOpenSeaUrl()}
+          target="_blank"
           text="View on OpenSea"
         />
       }
