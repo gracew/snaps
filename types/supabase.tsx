@@ -115,9 +115,8 @@ export interface paths {
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
-          claimed?: parameters["rowFilter.snaps.claimed"];
-          claimed_at?: parameters["rowFilter.snaps.claimed_at"];
-          recipient_id?: parameters["rowFilter.snaps.recipient_id"];
+          minted_at?: parameters["rowFilter.snaps.minted_at"];
+          minted_token_id?: parameters["rowFilter.snaps.minted_token_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -177,9 +176,8 @@ export interface paths {
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
-          claimed?: parameters["rowFilter.snaps.claimed"];
-          claimed_at?: parameters["rowFilter.snaps.claimed_at"];
-          recipient_id?: parameters["rowFilter.snaps.recipient_id"];
+          minted_at?: parameters["rowFilter.snaps.minted_at"];
+          minted_token_id?: parameters["rowFilter.snaps.minted_token_id"];
         };
         header: {
           /** Preference */
@@ -203,9 +201,8 @@ export interface paths {
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
-          claimed?: parameters["rowFilter.snaps.claimed"];
-          claimed_at?: parameters["rowFilter.snaps.claimed_at"];
-          recipient_id?: parameters["rowFilter.snaps.recipient_id"];
+          minted_at?: parameters["rowFilter.snaps.minted_at"];
+          minted_token_id?: parameters["rowFilter.snaps.minted_token_id"];
         };
         body: {
           /** snaps */
@@ -321,6 +318,28 @@ export interface paths {
       };
     };
   };
+  "/rpc/get_received_snaps_with_sender": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            recipient_wallet_address: string;
+            /** Format: text */
+            recipient_email: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/get_snaps_with_sender": {
     post: {
       parameters: {
@@ -384,16 +403,10 @@ export interface definitions {
     category?: string;
     /** Format: text */
     note?: string;
-    /** Format: boolean */
-    claimed: boolean;
     /** Format: timestamp without time zone */
-    claimed_at?: string;
-    /**
-     * Format: uuid
-     * @description Note:
-     * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
-     */
-    recipient_id?: string;
+    minted_at?: string;
+    /** Format: integer */
+    minted_token_id?: number;
   };
   users: {
     /**
@@ -476,12 +489,10 @@ export interface parameters {
   "rowFilter.snaps.category": string;
   /** Format: text */
   "rowFilter.snaps.note": string;
-  /** Format: boolean */
-  "rowFilter.snaps.claimed": string;
   /** Format: timestamp without time zone */
-  "rowFilter.snaps.claimed_at": string;
-  /** Format: uuid */
-  "rowFilter.snaps.recipient_id": string;
+  "rowFilter.snaps.minted_at": string;
+  /** Format: integer */
+  "rowFilter.snaps.minted_token_id": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: uuid */

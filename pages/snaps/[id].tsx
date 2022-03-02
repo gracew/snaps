@@ -139,7 +139,7 @@ const GiveCategory: NextPage = () => {
   }
 
   const inner = getInnerComponent();
-  const claimable = !snaps.claimed &&
+  const claimable = !snaps.minted_at &&
     (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
     inner !== undefined;
 
@@ -168,25 +168,24 @@ const GiveCategory: NextPage = () => {
         description={snaps?.note!}
       />
 
-      {!claimable &&
+      {claimable ?
         <PrimaryButton
           className="my-3"
-          onClick={copy}
-          text={copied ? "Copied!" : "Share"}
-        />}
-      {claimable &&
-        <>
-          <PrimaryButton
-            className="my-3"
-            onClick={() => setShowPanel(true)}
-            text="Claim"
-          />
-          <SecondaryButton
-            onClick={copy}
-            text={copied ? "Copied!" : "Share"}
-          />
-        </>
+          onClick={() => setShowPanel(true)}
+          text="Claim"
+        />
+        :
+        <PrimaryButton
+          className="my-3"
+          onClick={() => setShowPanel(true)}
+          text="View on OpenSea"
+        />
       }
+      <SecondaryButton
+        onClick={copy}
+        text={copied ? "Copied!" : "Share"}
+      />
+
       <MintPanel
         snaps={snaps}
         open={showPanel}

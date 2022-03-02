@@ -18,13 +18,13 @@ const categoryIpfsMap: Record<string, string> = {
 
 const provider = new ethers.providers.InfuraProvider("maticmum", "a71874bbcb6a450398f24a7bbd436eda")
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-const contract = new ethers.Contract(process.env.NFT_CONTRACT_ADDRESS!, ERC721NFT.abi, signer);
+const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!, ERC721NFT.abi, signer);
 
 async function getRecipientWalletAddress(snaps: definitions["snaps"]) {
   if (snaps.recipient_wallet_address) {
     return snaps.recipient_wallet_address;
   }
-  const { data, error }= await supabase
+  const { data, error } = await supabase
     .from<definitions["users"]>("users")
     .select("*")
     .eq("email", snaps.recipient_email);
@@ -40,9 +40,7 @@ export default async function handler(
 ) {
   await runMiddleware(req, res, validateJwt);
   const snapsRes = await supabase
-    .from<definitions["snaps"]>("snaps")
-    .select("*")
-    .eq("id", req.body.id);
+    .rpc('get_snaps_with_sender', { snaps_id: req.body.id });
 
   if (snapsRes.error) {
     res.status(500).end();
@@ -62,7 +60,7 @@ export default async function handler(
     res.status(400).end("unknown category: " + snaps.category);
     return;
   }
-  
+
   const recipientAddress = await getRecipientWalletAddress(snaps);
   if (!recipientAddress) {
     res.status(400).end("missing recipient wallet address");
@@ -71,7 +69,9 @@ export default async function handler(
 
   const metadata = {
     name: "Snaps",
-    description: snaps.note,
+    description: `${snaps.note}
+
+From: ${snaps.sender_fname || snaps.sender_wallet_address}`,
     image: `https://ipfs.infura.io/ipfs/${categoryIpfsMap[snaps.category]}`,
   };
   const metadataResult = await client.add(JSON.stringify(metadata));
@@ -84,14 +84,14 @@ export default async function handler(
   console.log("transaction event: ", event);
   const tokenId = event.args[2].toNumber();
   console.log("token id: ", tokenId);
-  const openSeaUrl = `https://testnets.opensea.io/assets/mumbai/${process.env.NFT_CONTRACT_ADDRESS}/${tokenId}`;
+  const openSeaUrl = `https://testnets.opensea.io/assets/mumbai/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}/${tokenId}`;
   console.log(openSeaUrl);
 
   const { data, error } = await supabase
     .from("snaps")
     .update({
-      claimed: true,
-      claimed_at: new Date().toISOString(),
+      minted_at: new Date().toISOString(),
+      minted_token_id: tokenId,
     })
     .eq('id', snaps.id);
   res.status(200).json(data);

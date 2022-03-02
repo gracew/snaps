@@ -11,7 +11,7 @@ const PrimaryButton = (props: PrimaryButtonProps) => {
         return <button
             {...rest}
             type="button"
-            className={`flex-1 text-gray-800 bg-lime-200 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center ${className}`}
+            className={`flex-1 text-gray-800 bg-lime-200 cursor-not-allowed font-medium rounded-lg text-sm px-4 py-2.5 text-center ${className}`}
             disabled={true}
         >
             {text}
@@ -22,7 +22,7 @@ const PrimaryButton = (props: PrimaryButtonProps) => {
         <button
             {...rest}
             type="button"
-            className={`flex-1 text-gray-800 bg-lime-300 hover:bg-lime-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center ${className}`}
+            className={`flex-1 text-gray-800 bg-lime-300 hover:bg-lime-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-4 py-2.5 text-center ${className}`}
         >{text}</button>
     )
 }
