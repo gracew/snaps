@@ -30,7 +30,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
     </Head>
     <UserContext.Provider value={[me, setMe]}>
-      <Component {...pageProps} />
+      <div className="flex flex-col min-h-screen items-center bg-gray-900 text-gray-200 pb-8">
+        <Component {...pageProps} />
+      </div>
     </UserContext.Provider>
   </div>
 }

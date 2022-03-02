@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
-const GiveCategory: NextPage = () => {
+const SnapsDetails: NextPage = (params: any) => {
   const router = useRouter();
   const { id } = router.query;
   const [snaps, setSnaps] = useState<any>();
@@ -38,16 +38,9 @@ const GiveCategory: NextPage = () => {
   };
 
   useEffect(() => {
-    async function getExistingData() {
-      const { data, error } = await supabase
-        .rpc('get_snaps_with_sender', { snaps_id: id });
-      // TODO: handle error case
-      if (!error && data && data.length > 0) {
-        setSnaps(data[0]);
-      }
+    if (id) {
+      setSnaps(params.snaps);
     }
-
-    getExistingData();
   }, [id]);
 
   async function copy() {
@@ -238,4 +231,17 @@ const GiveCategory: NextPage = () => {
   )
 }
 
-export default GiveCategory;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { data, error } = await supabase
+    .rpc('get_snaps_with_sender', { snaps_id: context.query.id });
+  if (error || !data || data.length === 0) {
+    return {
+      props: {}
+    }
+  }
+  return {
+    props: { snaps: data[0] }
+  }
+}
+
+export default SnapsDetails;
