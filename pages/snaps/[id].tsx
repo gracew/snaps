@@ -78,7 +78,7 @@ const GiveCategory: NextPage = () => {
   function getInnerComponent() {
     const connectWallet = (
       <MintPanelContents
-        text="If you own the Polygon address that this collectible was sent to, connect your wallet to claim."
+        text="If you own the address that this collectible was sent to, connect your wallet to claim."
       >
         <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
       </MintPanelContents>
@@ -149,7 +149,6 @@ const GiveCategory: NextPage = () => {
     (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
     inner !== undefined;
 
-  console.log("me " + me?.sub);
   return (
     <div className="w-80 flex flex-col">
       <Nav />
@@ -176,19 +175,23 @@ const GiveCategory: NextPage = () => {
 
       {claimable ?
         <PrimaryButton
-          className="my-3"
+          className="mt-3"
           onClick={() => setShowPanel(true)}
           text="Claim"
         />
         :
-        <PrimaryButton
-          className="my-3"
-          href={getOpenSeaUrl()}
-          target="_blank"
-          text="View on OpenSea"
-        />
+        snaps.minted_at ?
+          <PrimaryButton
+            className="mt-3"
+            href={getOpenSeaUrl()}
+            target="_blank"
+            text="View on OpenSea"
+          />
+          :
+          <></>
       }
       <SecondaryButton
+            className="mt-3"
         onClick={copy}
         text={copied ? "Copied!" : "Share"}
       />

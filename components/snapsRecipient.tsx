@@ -148,7 +148,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
 
       {recipientType === "address" &&
         <div>
-          <label className="block text-sm font-medium text-gray-300">Polygon Address</label>
+          <label className="block text-sm font-medium text-gray-300">Ethereum Address or ENS</label>
           <div className="mt-1 relative rounded-md shadow-sm">
             <input
               type="text"

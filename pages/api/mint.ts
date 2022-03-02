@@ -92,5 +92,9 @@ From: ${snaps.sender_fname || snaps.sender_wallet_address}`,
       minted_token_id: tokenId,
     })
     .eq('id', snaps.id);
-  res.status(200).json(data);
+  if (error || !data || data.length === 0) {
+    res.status(500).end("failed to update mint status");
+    return;
+  }
+  res.status(200).json(data[0]);
 }
