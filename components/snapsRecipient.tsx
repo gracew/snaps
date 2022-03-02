@@ -30,7 +30,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   const [recipientEmail, setRecipientEmail] = useState<string>(existingData?.recipient_email || "");
   const [recipientAddress, setRecipientAddress] = useState<string>(existingData?.recipient_wallet_address || "");
   const [validEmail, setValidEmail] = useState(true);
-  const [validAddress, setValidAddress] = useState(true);
+  const [validAddress, setValidAddress] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -154,7 +154,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
               type="text"
               name="polygonaddress"
               id="polygonaddress"
-              className={`bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md ${validAddress ? "border-gray-500" : "border-pink-500 text-pink-600"}`}
+              className={`bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md ${validAddress === undefined ? "border-gray-500" : validAddress ? "border-green-400 text-green-500" : "border-pink-500 text-pink-600"}`}
               value={recipientAddress}
               onChange={(e) => setRecipientAddress(e.target.value)}
             />
