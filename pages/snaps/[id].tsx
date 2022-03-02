@@ -141,6 +141,10 @@ const GiveCategory: NextPage = () => {
   if (!snaps) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center">
+        <Head>
+          <title>Snaps from X to Y</title>
+          <meta name="twitter:title" content="Snaps from X to Y" />
+        </Head>
         <LargeSpinner />
       </div>
     );
