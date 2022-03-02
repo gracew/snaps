@@ -138,14 +138,6 @@ const GiveCategory: NextPage = () => {
 
   const category = spcTypes.find(c => c.id === snaps?.category);
 
-  if (!snaps) {
-    return (
-      <div className="flex flex-col min-h-screen items-center justify-center">
-        <LargeSpinner />
-      </div>
-    );
-  }
-
   const inner = getInnerComponent();
   const claimable = !snaps.minted_at &&
     (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
@@ -166,65 +158,72 @@ const GiveCategory: NextPage = () => {
       </Head>
 
       <Nav />
-      <div className="mt-5 mb-3 flex justify-between">
-        {/* TODO: look up ENS */}
-        <h2>From:
-          <div>
-            {
-              snaps.sender_fname
-                ? snaps.sender_fname
-                : <ShortenedAddress address={snaps.sender_wallet_address} />
-            }
-          </div>
-        </h2>
-        <h2 className="text-right">To:
-          <div>
-            {
-              snaps.recipient_fname
-                ? snaps.recipient_fname
-                : <ShortenedAddress address={snaps.recipient_wallet_address} />
-            }
-          </div>
-        </h2>
-      </div>
+      {!snaps &&
+        <div className="flex flex-col items-center justify-center">
+          <LargeSpinner />
+        </div>
+      }
+      {snaps && <>
+        <div className="mt-5 mb-3 flex justify-between">
+          {/* TODO: look up ENS */}
+          <h2>From:
+            <div>
+              {
+                snaps.sender_fname
+                  ? snaps.sender_fname
+                  : <ShortenedAddress address={snaps.sender_wallet_address} />
+              }
+            </div>
+          </h2>
+          <h2 className="text-right">To:
+            <div>
+              {
+                snaps.recipient_fname
+                  ? snaps.recipient_fname
+                  : <ShortenedAddress address={snaps.recipient_wallet_address} />
+              }
+            </div>
+          </h2>
+        </div>
 
-      <Card
-        onClick={() => { }}
-        imageUrl={category?.image!}
-        label={category?.label!}
-        description={snaps?.note!}
-      />
-
-      {claimable ?
-        <PrimaryButton
-          className="mt-3"
-          onClick={() => setShowPanel(true)}
-          text="Claim"
+        <Card
+          onClick={() => { }}
+          imageUrl={category?.image!}
+          label={category?.label!}
+          description={snaps?.note!}
         />
-        :
-        snaps.minted_at ?
+
+        {claimable ?
           <PrimaryButton
             className="mt-3"
-            href={getOpenSeaUrl()}
-            target="_blank"
-            text="View on OpenSea"
+            onClick={() => setShowPanel(true)}
+            text="Claim"
           />
           :
-          <></>
-      }
-      <SecondaryButton
-        className="mt-3"
-        onClick={copy}
-        text={copied ? "Copied!" : "Share"}
-      />
+          snaps.minted_at ?
+            <PrimaryButton
+              className="mt-3"
+              href={getOpenSeaUrl()}
+              target="_blank"
+              text="View on OpenSea"
+            />
+            :
+            <></>
+        }
+        <SecondaryButton
+          className="mt-3"
+          onClick={copy}
+          text={copied ? "Copied!" : "Share"}
+        />
 
-      <MintPanel
-        snaps={snaps}
-        open={showPanel}
-        onClose={() => setShowPanel(false)}
-      >
-        {inner}
-      </MintPanel>
+        <MintPanel
+          snaps={snaps}
+          open={showPanel}
+          onClose={() => setShowPanel(false)}
+        >
+          {inner}
+        </MintPanel>
+      </>}
     </div>
   )
 }
