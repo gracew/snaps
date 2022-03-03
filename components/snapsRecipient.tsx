@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { AuthType, MAINNET_PROVIDER } from '../auth';
-import { definitions } from "../types/supabase";
 import ButtonContainer from './buttonContainer';
 import Nav from './nav';
 import Or from './or';
@@ -10,7 +9,7 @@ import PrimaryButton from './primaryButton';
 import SecondaryButton from './secondaryButton';
 
 interface SnapsRecipientProps {
-  existingData?: definitions["snaps"];
+  existingData?: any;
 }
 
 // https://stackoverflow.com/a/46181

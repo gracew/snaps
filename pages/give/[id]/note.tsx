@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -33,6 +34,7 @@ const GiveNote: NextPage = () => {
 
   async function onFinish() {
     setLoading(true);
+    supabase.auth.setAuth(Cookies.get("snToken")!);
     await supabase
       .from<definitions["snaps"]>("snaps")
       .update({ note })
