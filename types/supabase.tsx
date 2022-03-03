@@ -450,6 +450,28 @@ export interface paths {
       };
     };
   };
+  "/rpc/matches_recipient_email": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: uuid */
+            snaps_id: string;
+            /** Format: text */
+            user_email: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/lookup_wallet_address_from_email": {
     post: {
       parameters: {
@@ -491,6 +513,7 @@ export interface definitions {
      * Format: uuid
      * @description Note:
      * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
      */
     id: string;
     /**
