@@ -87,7 +87,7 @@ const Snaps: NextPage = () => {
         </ul>
       </div>
       {loading && (
-        <div className="flex flex-col min-h-screen items-center justify-center">
+        <div className="flex flex-col py-10 items-center">
           <LargeSpinner />
         </div>
       )}
