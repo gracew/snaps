@@ -14,13 +14,14 @@ export default async function handler(
       'get_received_snaps_with_sender',
       { recipient_email: req.body.jwt.email, recipient_wallet_address: req.body.jwt.address },
     );
-  if (error || !data) {
+  if (error) {
     console.log(error);
     res.status(500).end();
     return;
   }
 
+  console.log(data);
   // filter out any incomplete snaps
-  res.status(200).json(data.filter(s => s.note));
+  res.status(200).json((data || []).filter(s => s.note));
   return;
 }
