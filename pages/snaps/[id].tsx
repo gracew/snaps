@@ -70,7 +70,10 @@ const SnapsDetails: NextPage = (props: any) => {
     })
       .then(res => res.json())
       .then(setSnaps)
-      .finally(() => setMinting(false));
+      .finally(() => {
+        setMinting(false);
+        setShowPanel(false);
+      });
   }
 
   async function onClickConnect() {

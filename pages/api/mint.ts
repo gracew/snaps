@@ -76,7 +76,7 @@ From: ${snaps.sender_fname || snaps.sender_wallet_address}`,
   const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
   console.log(`metadata url for snaps ${snaps.id}: ${url}`);
 
-  const transaction = await contract.mintToCaller(recipientAddress, url);
+  const transaction = await contract.mintToCaller(recipientAddress, url, { gasPrice: ethers.utils.parseUnits('50', 'gwei'), gasLimit: 500_000 });
   const tx = await transaction.wait();
   const event = tx.events[0];
   console.log("transaction event: ", event);
