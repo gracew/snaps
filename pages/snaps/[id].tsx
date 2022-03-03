@@ -140,7 +140,7 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   function getOpenSeaUrl() {
-    return process.env.NETWORK === "matic"
+    return process.env.NEXT_PUBLIC_NETWORK === "matic"
       ? `https://opensea.io/assets/matic/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}/${snaps.minted_token_id}`
       : `https://testnets.opensea.io/assets/mumbai/${process.env.NEXT_PUBLIC_CONTRACT_ADDRESS}/${snaps.minted_token_id}`
   }

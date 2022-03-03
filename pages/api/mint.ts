@@ -15,7 +15,7 @@ const categoryIpfsMap: Record<string, string> = {
   spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
 };
 
-const provider = new ethers.providers.InfuraProvider(process.env.NETWORK || "maticmum", "a71874bbcb6a450398f24a7bbd436eda")
+const provider = new ethers.providers.InfuraProvider(process.env.NEXT_PUBLIC_NETWORK || "maticmum", "a71874bbcb6a450398f24a7bbd436eda")
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
 const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!, ERC721NFT.abi, signer);
 
