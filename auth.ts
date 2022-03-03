@@ -30,7 +30,6 @@ export function getWeb3Modal() {
   };
 
   return new Web3Modal({
-    network: "polygon",
     cacheProvider: true,
     providerOptions
   });
