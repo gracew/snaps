@@ -15,9 +15,16 @@ const categoryIpfsMap: Record<string, string> = {
   spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
 };
 
-const provider = new ethers.providers.InfuraProvider(process.env.NEXT_PUBLIC_NETWORK || "maticmum", "a71874bbcb6a450398f24a7bbd436eda")
+const INFURA_ID = "a71874bbcb6a450398f24a7bbd436eda";
+const provider = new ethers.providers.InfuraProvider(process.env.NEXT_PUBLIC_NETWORK || "maticmum", INFURA_ID)
+const mainnetProvider = new ethers.providers.InfuraProvider("homestead", INFURA_ID);
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
 const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!, ERC721NFT.abi, signer);
+
+async function resolveAddress(address: string) {
+  const resolved = await mainnetProvider.lookupAddress(address);
+  return resolved || address;
+}
 
 async function getRecipientWalletAddress(snaps: any) {
   if (snaps.recipient_wallet_address) {
@@ -65,11 +72,14 @@ export default async function handler(
     return;
   }
 
+  const sender = snaps.sender_wallet_address
+    ? await resolveAddress(snaps.sender_wallet_address)
+    : snaps.sender_fname;
   const metadata = {
     name: "Snaps",
     description: `${snaps.note}
 
-From: ${snaps.sender_fname || snaps.sender_wallet_address}`,
+From: ${sender}`,
     image: `https://ipfs.infura.io/ipfs/${categoryIpfsMap[snaps.category]}`,
   };
   const metadataResult = await client.add(JSON.stringify(metadata));
