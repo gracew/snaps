@@ -26,7 +26,7 @@ const Nav = ({ hideGiveSnaps }: NavProps) => {
         <div className="flex w-auto">
           {!hideGiveSnaps && <PrimaryButton
             text="Give Snaps"
-            onClick={() => router.push("/give")}
+            href="/give"
           />}
           <AuthButton />
         </div>

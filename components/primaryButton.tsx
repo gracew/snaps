@@ -9,7 +9,6 @@ const PrimaryButton = (props: PrimaryButtonProps) => {
     const { text, disabled, className, loading, ...rest } = props;
     if (disabled || loading) {
         return <a
-            {...rest}
             type="button"
             className={`flex-1 text-gray-800 bg-lime-200 cursor-not-allowed font-medium rounded-lg text-sm px-4 py-2.5 text-center ${className}`}
         >

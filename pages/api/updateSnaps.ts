@@ -17,8 +17,8 @@ export default async function handler(
     .from<definitions["snaps"]>("snaps")
     .update({
       recipient_type: recipientType,
-      recipient_fname: recipientName,
-      recipient_wallet_address: recipientAddress,
+      recipient_fname: recipientName || null,
+      recipient_wallet_address: recipientAddress || null,
     })
     .eq('id', id);
 
