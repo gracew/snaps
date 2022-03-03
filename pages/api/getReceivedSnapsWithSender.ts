@@ -20,7 +20,6 @@ export default async function handler(
     return;
   }
 
-  console.log(data);
   // filter out any incomplete snaps
   res.status(200).json((data || []).filter(s => s.note));
   return;

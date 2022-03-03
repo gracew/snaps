@@ -16,7 +16,7 @@ export default async function handler(
   const address = req.body.address?.toLowerCase();
   
   await runMiddleware(req, res, validateJwtIfExists);
-  const validAddress = req.body.jwt?.address !== undefined;
+  const validAddress = req.body.jwt?.address !== undefined && req.body.jwt?.address !== null;
 
   const { data } = await supabase
     .from("nonces")
