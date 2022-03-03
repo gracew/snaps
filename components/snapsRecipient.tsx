@@ -75,6 +75,9 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   }
 
   async function createSnaps() {
+    const data = recipientType === AuthType.EMAIL
+      ? { recipientName, recipientEmail }
+      : { recipientAddress: resolvedAddress || recipientAddress };
     const snaps = await fetch('/api/createSnaps', {
       method: 'POST',
       headers: {
@@ -82,15 +85,16 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
       },
       body: JSON.stringify({
         recipientType,
-        recipientName,
-        recipientEmail,
-        recipientAddress: resolvedAddress || recipientAddress,
+        ...data,
       }),
     }).then(res => res.json());
     return snaps.id;
   }
 
   async function updateSnaps() {
+    const data = recipientType === AuthType.EMAIL
+      ? { recipientName, recipientEmail }
+      : { recipientAddress: resolvedAddress || recipientAddress };
     await fetch('/api/updateSnaps', {
       method: 'POST',
       headers: {
@@ -99,9 +103,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
       body: JSON.stringify({
         id: existingData!.id,
         recipientType,
-        recipientName,
-        recipientEmail,
-        recipientAddress: resolvedAddress || recipientAddress,
+        ...data,
       }),
     }).then(res => res.json());
     return existingData!.id;
