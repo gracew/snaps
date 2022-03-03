@@ -2,7 +2,8 @@ import Image from "next/image";
 import { ReactNode } from "react";
 
 interface MinimalCardProps {
-  onClick: () => void;
+  onClick?: () => void;
+  href?: string;
   imageUrl: string;
   label: string;
   secondaryLabel: string | ReactNode;
@@ -10,10 +11,11 @@ interface MinimalCardProps {
   hover?: boolean;
 }
 
-const MinimalCard = ({ onClick, imageUrl, label, secondaryLabel, selected, hover }: MinimalCardProps) => {
+const MinimalCard = ({ onClick, href, imageUrl, label, secondaryLabel, selected, hover }: MinimalCardProps) => {
   return (
     <a
       onClick={onClick}
+      href={href}
       className={`cursor-pointer my-2 overflow-hidden max-w-sm bg-gray-800 rounded-lg border-2 shadow-md ${hover ? "hover:border-blue-500" : ""} ${selected ? "border-blue-500" : "border-gray-700"}`}
     >
       <div className="h-48 overflow-hidden relative">

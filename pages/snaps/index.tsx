@@ -113,7 +113,7 @@ const Snaps: NextPage = () => {
             return (
               <MinimalCard
                 key={snaps.id}
-                onClick={() => router.push(`/snaps/${snaps.id}`)}
+                href={`/snaps/${snaps.id}`}
                 imageUrl={category?.image!}
                 label={category?.label!}
                 secondaryLabel={secondaryLabel}
@@ -139,7 +139,7 @@ const Snaps: NextPage = () => {
             return (
               <MinimalCard
                 key={snaps.id}
-                onClick={() => router.push(`/snaps/${snaps.id}`)}
+                href={`/snaps/${snaps.id}`}
                 imageUrl={category?.image!}
                 label={category?.label!}
                 secondaryLabel={secondaryLabel}
