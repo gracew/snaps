@@ -154,6 +154,10 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   const category = spcTypes.find(c => c.id === snaps?.category);
+  const inner = getInnerComponent();
+  const claimable = !snaps.minted_at &&
+    (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
+    inner !== undefined;
 
   return (
     <div className="w-80 flex flex-col">
@@ -196,36 +200,50 @@ const SnapsDetails: NextPage = (props: any) => {
           description={snaps.note!}
         />
 
-        {!snaps.minted_at && (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase())
+        {claimable
           ?
-          <PrimaryButton
-            className="mt-3"
-            onClick={() => setShowPanel(true)}
-            text="Claim"
-          />
-          :
-          snaps.minted_at ?
+          <>
             <PrimaryButton
               className="mt-3"
-              href={getOpenSeaUrl()}
-              target="_blank"
-              text="View on OpenSea"
+              onClick={() => setShowPanel(true)}
+              text="Claim"
             />
+            <SecondaryButton
+              className="mt-3"
+              onClick={copy}
+              text={copied ? "Copied!" : "Share"}
+            />
+          </>
+          :
+          snaps.minted_at ?
+            <>
+
+              <PrimaryButton
+                className="mt-3"
+                href={getOpenSeaUrl()}
+                target="_blank"
+                text="View on OpenSea"
+              />
+              <SecondaryButton
+                className="mt-3"
+                onClick={copy}
+                text={copied ? "Copied!" : "Share"}
+              />
+            </>
             :
-            <></>
+            <PrimaryButton
+              className="mt-3"
+              onClick={copy}
+              text={copied ? "Copied!" : "Share"}
+            />
         }
-        <SecondaryButton
-          className="mt-3"
-          onClick={copy}
-          text={copied ? "Copied!" : "Share"}
-        />
 
         <MintPanel
           snaps={snaps}
           open={showPanel}
           onClose={() => setShowPanel(false)}
         >
-          {getInnerComponent()}
+          {inner}
         </MintPanel>
       </>}
     </div>
