@@ -14,8 +14,12 @@ export default async function handler(
     .from<definitions["snaps"]>("snaps")
     .select("*")
     .eq("id", req.body.id);
-  if (error || !data || data.length === 0) {
+  if (error) {
     res.status(500).end();
+    return;
+  } 
+  if (!data || data.length === 0) {
+    res.status(404).end();
     return;
   }
 
