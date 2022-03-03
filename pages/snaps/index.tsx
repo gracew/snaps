@@ -45,12 +45,15 @@ const Snaps: NextPage = () => {
         return;
       }
 
-      const { data, error } = await supabase
-        .rpc('get_received_snaps_with_sender', { recipient_email: me.email, recipient_wallet_address: me.address });
-      if (!error && data && data.length > 0) {
-        // filter out any incomplete snaps
-        setReceived(data.filter(s => s.note));
-      }
+      return fetch('/api/getReceivedSnapsWithSender', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({}),
+      })
+        .then(res => res.json())
+        .then(setReceived);
     };
 
     Promise.all([getGiven(), getReceived()]).then(() => setLoading(false));

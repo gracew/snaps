@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ERC721NFT from "../../ERC721NFT.json";
-import { definitions } from "../../types/supabase";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
@@ -20,18 +19,17 @@ const provider = new ethers.providers.InfuraProvider(process.env.NETWORK || "mat
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
 const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!, ERC721NFT.abi, signer);
 
-async function getRecipientWalletAddress(snaps: definitions["snaps"]) {
+async function getRecipientWalletAddress(snaps: any) {
   if (snaps.recipient_wallet_address) {
     return snaps.recipient_wallet_address;
   }
+  // join snaps.id on recipient_emails table on users table
   const { data, error } = await supabase
-    .from<definitions["users"]>("users")
-    .select("*")
-    .eq("email", snaps.recipient_email);
+    .rpc('lookup_wallet_address_from_email', { snaps_id: snaps.id });
   if (error || !data || data.length === 0) {
     return undefined;
   }
-  return data[0].wallet_address;
+  return data;
 }
 
 export default async function handler(

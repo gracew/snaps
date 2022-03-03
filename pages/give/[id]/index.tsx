@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import LargeSpinner from '../../../components/largeSpinner';
 import SnapsRecipient from '../../../components/snapsRecipient';
 import { definitions } from "../../../types/supabase";
-import { supabase } from '../../api/supabase';
 
 const GiveToEdit: NextPage = () => {
   const router = useRouter();
@@ -13,22 +12,26 @@ const GiveToEdit: NextPage = () => {
 
   useEffect(() => {
     async function getExistingData() {
-      const { data, error } = await supabase
-        .from<definitions["snaps"]>("snaps")
-        .select("*")
-        .eq("id", id as string);
-      if (!error && data && data.length > 0) {
-        setSnaps(data[0]);
-      }
+      await fetch('/api/getSnapsWithRecipient', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id }),
+      })
+        .then(res => res.json())
+        .then(setSnaps);
     };
 
-    getExistingData();
+    if (id) {
+      getExistingData();
+    }
   }, [id]);
 
   if (!snaps) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center">
-          <LargeSpinner />
+        <LargeSpinner />
       </div>
     );
   }

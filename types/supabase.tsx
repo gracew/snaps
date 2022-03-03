@@ -102,6 +102,99 @@ export interface paths {
       };
     };
   };
+  "/recipient_emails": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.recipient_emails.id"];
+          snaps_id?: parameters["rowFilter.recipient_emails.snaps_id"];
+          recipient_email?: parameters["rowFilter.recipient_emails.recipient_email"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["recipient_emails"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** recipient_emails */
+          recipient_emails?: definitions["recipient_emails"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.recipient_emails.id"];
+          snaps_id?: parameters["rowFilter.recipient_emails.snaps_id"];
+          recipient_email?: parameters["rowFilter.recipient_emails.recipient_email"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.recipient_emails.id"];
+          snaps_id?: parameters["rowFilter.recipient_emails.snaps_id"];
+          recipient_email?: parameters["rowFilter.recipient_emails.recipient_email"];
+        };
+        body: {
+          /** recipient_emails */
+          recipient_emails?: definitions["recipient_emails"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/snaps": {
     get: {
       parameters: {
@@ -111,7 +204,6 @@ export interface paths {
           sender_id?: parameters["rowFilter.snaps.sender_id"];
           recipient_type?: parameters["rowFilter.snaps.recipient_type"];
           recipient_fname?: parameters["rowFilter.snaps.recipient_fname"];
-          recipient_email?: parameters["rowFilter.snaps.recipient_email"];
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
@@ -172,7 +264,6 @@ export interface paths {
           sender_id?: parameters["rowFilter.snaps.sender_id"];
           recipient_type?: parameters["rowFilter.snaps.recipient_type"];
           recipient_fname?: parameters["rowFilter.snaps.recipient_fname"];
-          recipient_email?: parameters["rowFilter.snaps.recipient_email"];
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
@@ -197,7 +288,6 @@ export interface paths {
           sender_id?: parameters["rowFilter.snaps.sender_id"];
           recipient_type?: parameters["rowFilter.snaps.recipient_type"];
           recipient_fname?: parameters["rowFilter.snaps.recipient_fname"];
-          recipient_email?: parameters["rowFilter.snaps.recipient_email"];
           recipient_wallet_address?: parameters["rowFilter.snaps.recipient_wallet_address"];
           category?: parameters["rowFilter.snaps.category"];
           note?: parameters["rowFilter.snaps.note"];
@@ -360,6 +450,48 @@ export interface paths {
       };
     };
   };
+  "/rpc/matches_recipient_email": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: uuid */
+            snaps_id: string;
+            /** Format: text */
+            user_email: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/lookup_wallet_address_from_email": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: uuid */
+            snaps_id: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {
@@ -375,6 +507,23 @@ export interface definitions {
      * @default extensions.uuid_generate_v4()
      */
     nonce?: string;
+  };
+  recipient_emails: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
+     */
+    id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `snaps.id`.<fk table='snaps' column='id'/>
+     */
+    snaps_id: string;
+    /** Format: text */
+    recipient_email: string;
   };
   snaps: {
     /**
@@ -395,8 +544,6 @@ export interface definitions {
     recipient_type: string;
     /** Format: text */
     recipient_fname?: string;
-    /** Format: text */
-    recipient_email?: string;
     /** Format: text */
     recipient_wallet_address?: string;
     /** Format: text */
@@ -469,6 +616,14 @@ export interface parameters {
   "rowFilter.nonces.wallet_address": string;
   /** Format: uuid */
   "rowFilter.nonces.nonce": string;
+  /** @description recipient_emails */
+  "body.recipient_emails": definitions["recipient_emails"];
+  /** Format: uuid */
+  "rowFilter.recipient_emails.id": string;
+  /** Format: uuid */
+  "rowFilter.recipient_emails.snaps_id": string;
+  /** Format: text */
+  "rowFilter.recipient_emails.recipient_email": string;
   /** @description snaps */
   "body.snaps": definitions["snaps"];
   /** Format: uuid */
@@ -481,8 +636,6 @@ export interface parameters {
   "rowFilter.snaps.recipient_type": string;
   /** Format: text */
   "rowFilter.snaps.recipient_fname": string;
-  /** Format: text */
-  "rowFilter.snaps.recipient_email": string;
   /** Format: text */
   "rowFilter.snaps.recipient_wallet_address": string;
   /** Format: text */

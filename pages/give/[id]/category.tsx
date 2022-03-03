@@ -1,14 +1,15 @@
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import ButtonContainer from '../../../components/buttonContainer'
-import LargeSpinner from '../../../components/largeSpinner'
-import MinimalCard from '../../../components/minimalCard'
-import Nav from '../../../components/nav'
-import PrimaryButton from '../../../components/primaryButton'
-import SecondaryButton from '../../../components/secondaryButton'
-import { definitions } from "../../../types/supabase"
-import { supabase } from '../../api/supabase'
+import Cookies from "js-cookie";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import ButtonContainer from '../../../components/buttonContainer';
+import LargeSpinner from '../../../components/largeSpinner';
+import MinimalCard from '../../../components/minimalCard';
+import Nav from '../../../components/nav';
+import PrimaryButton from '../../../components/primaryButton';
+import SecondaryButton from '../../../components/secondaryButton';
+import { definitions } from "../../../types/supabase";
+import { supabase } from '../../api/supabase';
 
 export const spcTypes = [
   {
@@ -61,6 +62,7 @@ const GiveCategory: NextPage = () => {
 
   async function onNext() {
     setLoading(true);
+    supabase.auth.setAuth(Cookies.get("snToken")!);
     await supabase
       .from<definitions["snaps"]>("snaps")
       .update({ category })

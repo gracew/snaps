@@ -2,8 +2,6 @@ import { ethers } from "ethers";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { AuthType, MAINNET_PROVIDER } from '../auth';
-import { supabase } from '../pages/api/supabase';
-import { definitions } from "../types/supabase";
 import ButtonContainer from './buttonContainer';
 import Nav from './nav';
 import Or from './or';
@@ -11,7 +9,7 @@ import PrimaryButton from './primaryButton';
 import SecondaryButton from './secondaryButton';
 
 interface SnapsRecipientProps {
-  existingData?: definitions["snaps"];
+  existingData?: any;
 }
 
 // https://stackoverflow.com/a/46181
@@ -93,15 +91,19 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
   }
 
   async function updateSnaps() {
-    await supabase
-      .from<definitions["snaps"]>("snaps")
-      .update({
-        recipient_type: recipientType,
-        recipient_fname: recipientName,
-        recipient_email: recipientEmail,
-        recipient_wallet_address: recipientAddress,
-      })
-      .eq('id', existingData!.id);
+    await fetch('/api/updateSnaps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: existingData!.id,
+        recipientType,
+        recipientName,
+        recipientEmail,
+        recipientAddress: resolvedAddress || recipientAddress,
+      }),
+    }).then(res => res.json());
     return existingData!.id;
   }
 
@@ -127,7 +129,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
         />
         <Or />
         <PrimaryButton
-          text="Polygon Address"
+          text="Ethereum Address"
           onClick={() => setRecipientType(AuthType.ADDRESS)}
         />
       </div>}

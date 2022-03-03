@@ -12,9 +12,9 @@ export default async function handler(
   await runMiddleware(req, res, validateJwt);
 
   const recipientInfo: Partial<definitions["snaps"]> = req.body.recipientType === AuthType.EMAIL
-    ? { recipient_fname: req.body.recipientName, recipient_email: req.body.recipientEmail }
+    ? { recipient_fname: req.body.recipientName }
     : { recipient_wallet_address: req.body.recipientAddress };
-  const { data, error } = await supabase
+  const insertSnapsRes = await supabase
     .from<definitions["snaps"]>("snaps")
     .insert([{
       sender_id: req.body.jwt.sub,
@@ -22,16 +22,26 @@ export default async function handler(
       ...recipientInfo,
     }]);
 
-  if (error) {
-    console.log(error);
-    res.status(500).end();
-    return;
-  }
-  if (!data || data.length === 0) {
+  if (insertSnapsRes.error || !insertSnapsRes.data || insertSnapsRes.data.length === 0) {
     res.status(500).end();
     return;
   }
 
-  res.status(200).json(data[0]);
+  const snaps = insertSnapsRes.data[0];
+  if (req.body.recipientType === AuthType.EMAIL) {
+    // save recipient email to separate, non-public table
+    const insertEmailRes = await supabase
+      .from<definitions["recipient_emails"]>("recipient_emails")
+      .insert([{
+        snaps_id: snaps.id,
+        recipient_email: req.body.recipientEmail,
+      }]);
+    if (insertEmailRes.error || !insertEmailRes.data || insertEmailRes.data.length === 0) {
+      res.status(500).end();
+      return;
+    }
+  }
+
+  res.status(200).json(snaps);
   return;
 }
