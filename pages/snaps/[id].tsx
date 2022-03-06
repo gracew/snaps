@@ -86,14 +86,14 @@ const SnapsDetails: NextPage = (props: any) => {
   function getInnerComponent() {
     const connectWallet = (
       <MintPanelContents
-        text="If you own the address that this collectible was sent to, connect your wallet to claim."
+        text="Congrats, you've received a shoutout! If you own the address that this collectible was sent to, connect your wallet to claim."
       >
         <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
       </MintPanelContents>
     );
     const connectEmail = (
       <MintPanelContents
-        text="If you own the email address that this collectible was sent to, log in with Google to claim."
+        text="Congrats, you've received a shoutout! If you own the email address that this collectible was sent to, log in with Google to claim."
       >
         <GoogleButton />
       </MintPanelContents>
@@ -127,7 +127,8 @@ const SnapsDetails: NextPage = (props: any) => {
             return (
               <div className="flex flex-col pb-3">
                 <div className="mb-4">
-                  In order to claim this collectible, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
+                  {/* TODO: link to dashboard */}
+                  Congrats, this collectible is now available in your dashboard! If you want to turn this collectible into an NFT, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
                 </div>
                 <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
               </div>
@@ -175,6 +176,12 @@ const SnapsDetails: NextPage = (props: any) => {
       </Head>
 
       <Nav />
+      <div className='bg-gray-800 rounded-lg my-5 px-5 py-3'>
+        ⚠️ Since you sent this shoutout to a wallet address, you'll need to share the link below with your friend so they see it.
+      </div>
+      <div className='bg-gray-800 rounded-lg my-5 px-5 py-3'>
+        We've emailed your friend and let them know of your appreciation 🙂
+      </div>
 
       {!snaps && <>
         <div className="flex flex-col min-h-screen items-center justify-center">

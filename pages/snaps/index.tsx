@@ -109,7 +109,6 @@ const Snaps: NextPage = () => {
             const secondaryLabel = <>
               To: {snaps.recipient_fname || <ShortenedAddress address={snaps.recipient_wallet_address!} />}
             </>
-            console.log(category);
             return (
               <MinimalCard
                 key={snaps.id}

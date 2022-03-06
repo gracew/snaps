@@ -25,7 +25,7 @@ const Nav = ({ hideGiveSnaps }: NavProps) => {
         </div>
         <div className="flex w-auto">
           {!hideGiveSnaps && <PrimaryButton
-            text="Give Snaps"
+            text="Share the ❤️"
             href="/give"
           />}
           <AuthButton />
