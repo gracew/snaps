@@ -86,14 +86,14 @@ const SnapsDetails: NextPage = (props: any) => {
   function getInnerComponent() {
     const connectWallet = (
       <MintPanelContents
-        text="Congrats, you've received a shoutout! If you own the address that this collectible was sent to, connect your wallet to claim."
+        text="If you own the address that this collectible was sent to, connect your wallet to claim."
       >
         <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
       </MintPanelContents>
     );
     const connectEmail = (
       <MintPanelContents
-        text="Congrats, you've received a shoutout! If you own the email address that this collectible was sent to, log in with Google to claim."
+        text="If you own the email address that this collectible was sent to, log in with Google to claim."
       >
         <GoogleButton />
       </MintPanelContents>
