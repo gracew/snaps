@@ -63,7 +63,7 @@ const GiveNote: NextPage = () => {
         Give Snaps
       </h1>
       {/* TODO: look up ENS */}
-      <h2 className="my-2">Write a note of appreciation for {snaps?.recipient_fname || <ShortenedAddress address={snaps?.recipient_wallet_address!} />}!</h2>
+      <h2 className="my-2">Personalize this shoutout! Write a note of appreciation for {snaps?.recipient_fname || <ShortenedAddress address={snaps?.recipient_wallet_address!} />}.</h2>
 
       <div className="mt-1 relative rounded-md shadow-sm">
         <textarea

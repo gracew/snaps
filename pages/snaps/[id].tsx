@@ -1,5 +1,6 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { AuthType, connect, walletLogin } from '../../auth';
@@ -127,7 +128,7 @@ const SnapsDetails: NextPage = (props: any) => {
             return (
               <div className="flex flex-col pb-3">
                 <div className="mb-4">
-                  In order to claim this collectible, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
+                  Congrats, this collectible is now available in <Link href="/snaps">your dashboard</Link>! If you want to turn this collectible into an NFT, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
                 </div>
                 <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
               </div>
@@ -158,9 +159,8 @@ const SnapsDetails: NextPage = (props: any) => {
 
   const category = spcTypes.find(c => c.id === snaps?.category);
   const inner = getInnerComponent();
-  const claimable = !snaps.minted_at &&
-    (!me || me.sub.toLowerCase() !== snaps.sender_id.toLowerCase()) &&
-    inner !== undefined;
+  const isSender = me && me.sub.toLowerCase() === snaps.sender_id.toLowerCase();
+  const claimable = !snaps.minted_at && !isSender && inner !== undefined;
 
   return (
     <div className="w-80 flex flex-col">
@@ -175,6 +175,12 @@ const SnapsDetails: NextPage = (props: any) => {
       </Head>
 
       <Nav />
+      {isSender && snaps.recipient_type === AuthType.ADDRESS && <div className='bg-gray-800 rounded-lg my-5 px-5 py-3'>
+        ⚠️ Since you sent this shoutout to a wallet address, you&apos;ll need to share the link below with your friend so they see it.
+      </div>}
+      {isSender && snaps.recipient_type === AuthType.EMAIL && <div className='bg-gray-800 rounded-lg my-5 px-5 py-3'>
+        We&apos;ll email your friend and let them know of your appreciation 🙂
+      </div>}
 
       {!snaps && <>
         <div className="flex flex-col min-h-screen items-center justify-center">

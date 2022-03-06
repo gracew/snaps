@@ -91,7 +91,7 @@ const GiveCategory: NextPage = () => {
         Give Snaps
       </h1>
 
-      <h2 className="my-2">Select a category:</h2>
+      <h2 className="my-2">What makes your friend special?</h2>
 
       <div className='py-3 grid grid-cols-2 gap-3'>
         {spcTypes.map(t => <MinimalCard
