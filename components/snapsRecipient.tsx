@@ -122,7 +122,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
       <h1 className="text-2xl font-bold mt-5 mb-3">
         Give Snaps and Spread ❤️
       </h1>
-      <h2 className="my-2">Send a shoutout to a friend in 3 simple steps. They'll be able to claim it for free.</h2>
+      <h2 className="my-2">Send a shoutout to a friend in 3 simple steps. They&apos;ll be able to claim it for free.</h2>
       <h2 className="my-2">Who are you sending to?</h2>
 
       {!recipientType && <div className="flex flex-col">
