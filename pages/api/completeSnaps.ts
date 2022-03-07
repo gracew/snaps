@@ -24,6 +24,7 @@ export default async function handler(
   const snaps = data[0];
 
   if (snaps.recipient_type === AuthType.EMAIL) {
+    const host = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000";
     const emailRes = await supabase
       .from<definitions["recipient_emails"]>("recipient_emails")
       .select("*")
@@ -42,11 +43,13 @@ export default async function handler(
         {
           to: emailRes.data[0].recipient_email,
         }
-      ]
+      ],
+      dynamicTemplateData: {
+        snaps_url: `${host}/snaps/${snaps.id}`,
+      }
     }
     // TODO(gracew): make this idempotent
-    const sendgridRes = await sendgrid.send(msg);
-    console.log(sendgridRes);
+    await sendgrid.send(msg);
     res.status(200).end("could not notify recipient");
   }
   return;
