@@ -31,7 +31,8 @@ export function getWeb3Modal() {
 
   return new Web3Modal({
     cacheProvider: true,
-    providerOptions
+    providerOptions,
+    theme: "dark",
   });
 }
 
