@@ -44,6 +44,7 @@ export default async function handler(
     // TODO(gracew): make this idempotent
     const sendgridRes = await sendgrid.send(msg);
     console.log(sendgridRes);
+    res.status(200).end("could not notify recipient");
   }
   return;
 }
