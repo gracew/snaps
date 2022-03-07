@@ -229,7 +229,7 @@ const SnapsDetails: NextPage = (props: any) => {
 
               <PrimaryButton
                 className="mt-3"
-                href={getOpenSeaUrl()}
+                onClick={() => window.open(getOpenSeaUrl(), '_blank')}
                 target="_blank"
                 text="View on OpenSea"
               />
