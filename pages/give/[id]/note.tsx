@@ -34,11 +34,13 @@ const GiveNote: NextPage = () => {
 
   async function onFinish() {
     setLoading(true);
-    supabase.auth.setAuth(Cookies.get("snToken")!);
-    await supabase
-      .from<definitions["snaps"]>("snaps")
-      .update({ note })
-      .eq('id', id as string);
+    await fetch('/api/completeSnaps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id, note }),
+    })
     router.push(`/snaps/${id}`);
   }
 
