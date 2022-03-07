@@ -34,7 +34,10 @@ export default async function handler(
     }
     const msg = {
       templateId: "d-5aff4fd54154455c8afddef351c648d9",
-      from: "hello@givesnaps.xyz",
+      from: {
+        name: "GiveSnaps",
+        email: "hello@givesnaps.xyz",
+      },
       personalizations: [
         {
           to: emailRes.data[0].recipient_email,
