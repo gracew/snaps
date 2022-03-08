@@ -77,6 +77,7 @@ const GiveNote: NextPage = () => {
           onChange={(e) => setNote(e.target.value)}
         />
       </div>
+      <p className="mt-2 text-xs text-gray-400">This will be publicly visible.</p>
 
       <ButtonContainer>
         <SecondaryButton

@@ -149,6 +149,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
             onChange={(e) => setRecipientName(e.target.value)}
           />
         </div>
+        <p className="mt-2 text-xs text-gray-400">This will be publicly visible.</p>
 
         <label className="block text-sm font-medium text-gray-300 mt-3">Email</label>
         <div className="mt-1 relative rounded-md shadow-sm">
@@ -161,6 +162,7 @@ const SnapsRecipient = ({ existingData }: SnapsRecipientProps) => {
             onChange={(e) => setRecipientEmail(e.target.value)}
           />
         </div>
+        <p className="mt-2 text-xs text-gray-400">This is private and will only be used to notify your friend.</p>
       </div>}
 
       {recipientType === "address" &&
