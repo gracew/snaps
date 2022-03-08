@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { AuthType } from '../../auth';
 import { definitions } from "../../types/supabase";
 import { runMiddleware, validateJwt } from './middleware';
+import { mint } from './mint';
 import { supabase } from './supabase';
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY!);
@@ -50,7 +51,8 @@ export default async function handler(
     }
     // TODO(gracew): make this idempotent
     await sendgrid.send(msg);
-    res.status(200).end("could not notify recipient");
+  } else {
+    await mint(snaps.id);
   }
-  return;
+  res.status(200).end();
 }

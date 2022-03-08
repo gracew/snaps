@@ -39,36 +39,32 @@ async function getRecipientWalletAddress(snaps: any) {
   return data;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  await runMiddleware(req, res, validateJwt);
+export async function mint(id: string) {
   const snapsRes = await supabase
-    .rpc('get_snaps_with_sender', { snaps_id: req.body.id });
+    .rpc('get_snaps_with_sender', { snaps_id: id });
 
   if (snapsRes.error) {
-    res.status(500).end();
+    console.log("could not fetch snaps with sender", snapsRes.error);
     return;
   }
   if (!snapsRes.data || snapsRes.data.length === 0) {
-    res.status(404).end();
+    console.log("could not fetch snaps with sender");
     return;
   }
 
   const snaps = snapsRes.data[0];
   if (!snaps.note || !snaps.category) {
-    res.status(400).end("incomplete snap");
+    console.log("incomplete snap");
     return;
   }
   if (!categoryIpfsMap[snaps.category]) {
-    res.status(400).end("unknown category: " + snaps.category);
+    console.log("unknown category: " + snaps.category);
     return;
   }
 
   const recipientAddress = await getRecipientWalletAddress(snaps);
   if (!recipientAddress) {
-    res.status(400).end("missing recipient wallet address");
+    console.log("missing recipient wallet address");
     return;
   }
 
@@ -101,8 +97,21 @@ From: ${sender}`,
     })
     .eq('id', snaps.id);
   if (error || !data || data.length === 0) {
-    res.status(500).end("failed to update mint status");
+    console.log("failed to update mint status", error);
     return;
   }
-  res.status(200).json(data[0]);
+  return data[0];
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
+  await runMiddleware(req, res, validateJwt);
+  const snaps = await mint(req.body.id);
+  if (!snaps) {
+    res.status(500).end();
+    return;
+  }
+  res.status(200).json(snaps);
 }

@@ -186,7 +186,7 @@ const SnapsDetails: NextPage = (props: any) => {
 
       <Nav />
       {isSender && snaps.recipient_type === AuthType.ADDRESS && <div className='bg-gray-800 rounded-lg my-5 px-5 py-3'>
-        ⚠️ Since you sent this shoutout to a wallet address, you&apos;ll need to share the link below with your friend so they see it.
+        We&apos;ve sent this shoutout to your friend&apos;s wallet address 🤩 Let them know by sharing the link below.
       </div>}
       {isSender && snaps.recipient_type === AuthType.EMAIL && <div className='bg-gray-800 rounded-lg my-5 px-5 py-3'>
         We&apos;ll email your friend and let them know of your appreciation 🙂

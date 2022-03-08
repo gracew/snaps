@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import Spinner from "./spinner";
 
 interface PrimaryButtonProps extends React.HTMLProps<HTMLButtonElement> {
