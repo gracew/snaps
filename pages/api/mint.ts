@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ERC721NFT from "../../ERC721NFT.json";
-import { animationIpfsMap, imageIpfsMap } from "../give/[id]/category";
+import { animationIpfsMap, imageIpfsMap, iwdTypes } from "../give/[id]/category";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
@@ -62,11 +62,12 @@ export async function mint(id: string) {
     return;
   }
 
+  const category = iwdTypes.find(c => c.id === snaps.category);
   const sender = snaps.sender_wallet_address
     ? await resolveAddress(snaps.sender_wallet_address)
     : snaps.sender_fname;
   const metadata: Record<string, string> = {
-    name: "Snaps",
+    name: "IWD 2022: " + category!.label,
     description: `${snaps.note}
 
 From: ${sender}`,
