@@ -161,6 +161,20 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps?.category);
+
+  function getVideoTag() {
+    if (animationIpfsMap[category!.id]) {
+      return (
+        <>
+          <meta property="og:video" content={`https://ipfs.infura.io/ipfs/${animationIpfsMap[category!.id]}`} />
+          <meta property="og:video:type" content="video" />
+          <meta property="og:video:width" content="720" />
+          <meta property="og:video:height" content="1280" />
+        </>
+      )
+    }
+  }
+
   const hash = animationIpfsMap[category!.id] || imageIpfsMap[category!.id];
   const imageUrl = `https://ipfs.infura.io/ipfs/${hash}`
   const inner = getInnerComponent();
@@ -173,11 +187,13 @@ const SnapsDetails: NextPage = (props: any) => {
       <Head>
         <title>{getTitle()}</title>
         <meta name="description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
-        <meta key="image" property="og:image" content={category?.image} />
+        <meta key="image" property="og:image" content={`https://ipfs.infura.io/ipfs/${imageIpfsMap[snaps.category]}`} />
+        {getVideoTag()}
+
         <meta name="twitter:title" content={getTitle()} />
         <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
-        <meta name="twitter:image" content={category?.image} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={`https://ipfs.infura.io/ipfs/${imageIpfsMap[snaps.category]}`} />
       </Head>
 
       <Nav />
