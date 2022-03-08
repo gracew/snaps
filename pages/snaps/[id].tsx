@@ -11,7 +11,7 @@ import MintPanel from '../../components/mintPanel';
 import MintPanelContents from '../../components/mintPanelContents';
 import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
-import SecondaryButton from '../../components/secondaryButton';
+import Share from '../../components/share';
 import { shortenAddress } from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
 import { spcTypes } from '../give/[id]/category';
@@ -21,7 +21,6 @@ const SnapsDetails: NextPage = (props: any) => {
   const router = useRouter();
   const { id } = router.query;
   const [snaps, setSnaps] = useState<any>(props.snaps);
-  const [copied, setCopied] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [me, setMe] = useContext(UserContext);
   const [minting, setMinting] = useState(false);
@@ -53,12 +52,6 @@ const SnapsDetails: NextPage = (props: any) => {
         .then(setMatchingEmail);
     }
   }, [id]);
-
-  async function copy() {
-    const host = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000";
-    await navigator.clipboard.writeText(`${host}${router.asPath}`);
-    setCopied(true);
-  }
 
   async function mintNFT() {
     setMinting(true);
@@ -172,6 +165,7 @@ const SnapsDetails: NextPage = (props: any) => {
   const isSender = me && me.sub.toLowerCase() === snaps.sender_id.toLowerCase();
   const claimable = !snaps.minted_at && !isSender && inner !== undefined;
 
+  const shareText = `${snaps.sender_fname || props.sender} sent ${snaps.recipient_fname || props.recipient} a collectible shoutout with @givesnaps 🥰`;
   return (
     <div className="w-80 flex flex-col">
       <Head>
@@ -227,11 +221,7 @@ const SnapsDetails: NextPage = (props: any) => {
               onClick={() => setShowPanel(true)}
               text="Claim"
             />
-            <SecondaryButton
-              className="mt-3"
-              onClick={copy}
-              text={copied ? "Copied!" : "Share"}
-            />
+            <Share shareText={shareText} />
           </>
           :
           snaps.minted_at ?
@@ -243,18 +233,10 @@ const SnapsDetails: NextPage = (props: any) => {
                 target="_blank"
                 text="View on OpenSea"
               />
-              <SecondaryButton
-                className="mt-3"
-                onClick={copy}
-                text={copied ? "Copied!" : "Share"}
-              />
+              <Share shareText={shareText} />
             </>
             :
-            <PrimaryButton
-              className="mt-3"
-              onClick={copy}
-              text={copied ? "Copied!" : "Share"}
-            />
+            <Share shareText={shareText} />
         }
 
         <MintPanel

@@ -60,7 +60,7 @@ const GiveNote: NextPage = () => {
 
   return (
     <div className="w-80 flex flex-col">
-      <Nav />
+      <Nav hideGiveSnaps={true} />
       <h1 className="text-2xl font-bold mt-5 mb-3">
         Give Snaps
       </h1>

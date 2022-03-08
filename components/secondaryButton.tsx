@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 interface SecondaryButtonProps extends React.HTMLProps<HTMLButtonElement> {
-    text: string;
+    text: string | ReactNode;
 }
 
 const SecondaryButton = (props: SecondaryButtonProps) => {
