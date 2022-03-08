@@ -214,6 +214,7 @@ const SnapsDetails: NextPage = (props: any) => {
           mediaType={category!.nftMediaType}
           label={category!.label}
           description={snaps.note!}
+          isSafari={props.isSafari}
         />
 
         {claimable
@@ -257,7 +258,7 @@ const SnapsDetails: NextPage = (props: any) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data, error } = await supabase
     .rpc('get_snaps_with_sender', { snaps_id: context.query.id });
-  const props: Record<string, string> = {};
+  const props: Record<string, any> = {};
   if (error || !data || data.length === 0) {
     return { props };
   }
@@ -272,6 +273,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props.recipient = (await shortenAddress(snaps.recipient_wallet_address));
   }
 
+  const isSafari = /^((?!chrome|android).)*safari/i.test(context.req.headers['user-agent']!);
+  props.isSafari = isSafari;
   return { props };
 }
 
