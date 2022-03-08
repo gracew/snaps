@@ -44,11 +44,12 @@ export const iwdTypes: Category[] = [
     image: "/iwd/CreativeGenius.png",
     nftMediaType: "video",
   },
-  /*{
+  {
     id: "iwd_uplifting_soul",
     label: 'Uplifting Soul',
-    image: "/iwd/uplifting_soul.png"
-  },*/
+    image: "/iwd/UpliftingSoul.png",
+    nftMediaType: "video",
+  },
   {
     id: "iwd_fearless_activist",
     label: 'Fearless Activist',
@@ -96,6 +97,7 @@ export const imageIpfsMap: Record<string, string> = {
   iwd_innovative_pioneer: "QmfXdEfXxTZ6W9j9MQe2PvZXuqXWPDxSCEVyygRbGpXj2x",
   iwd_creative_genius: "QmNpM28ToNsGqfm2Ng9gQraYec49CrT8zVLkPuFvpxLzGC",
   iwd_fearless_activist: "QmXvW2p28GqmqXWrnXZJfw9AQmaQkb39CvTNBNxB9zLnfQ",
+  iwd_uplifting_soul: "QmYU2DhLLBxhK86HM7dcL5xwFRiE51w2w6ZQfYycXC5X4R",
 };
 export const animationIpfsMap: Record<string, string> = {
   iwd_powerful_voice: "Qmcoxo138eFbqND3RJwM5suXzdDW4LZoJFHFkE8qLNikPp",
@@ -103,6 +105,7 @@ export const animationIpfsMap: Record<string, string> = {
   iwd_innovative_pioneer: "QmZNdCozrcg4wLDXsFQEpdaa451SMiH4aoS39VFHosPK95",
   iwd_creative_genius: "QmbYzSZCAHVZLzu99toMsVuoJmhwt67x7UD2LtFk8RrLXq",
   iwd_fearless_activist: "QmeUQcfQP6ZiBKYr1z1DzAopKrQkZG4CAbg5SLio1rwd63",
+  iwd_uplifting_soul: "QmYBZVHMkVH8ix3fWhdxSvG4Nyyh98iJR3FpPC6DdP18aA",
 };
 
 
