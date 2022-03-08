@@ -8,7 +8,7 @@ import PrimaryButton from '../../components/primaryButton';
 import ShortenedAddress from '../../components/shortenedAddress';
 import { definitions } from '../../types/supabase';
 import { supabase } from '../api/supabase';
-import { spcTypes } from '../give/[id]/category';
+import { iwdTypes, spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 enum Tab {
@@ -105,7 +105,7 @@ const Snaps: NextPage = () => {
       {!loading && currentTab === Tab.GIVEN && !hideGiveSnapsInNav && (
         <div className='my-5 py-3 grid grid-cols-2 gap-3'>
           {given.map(snaps => {
-            const category = spcTypes.find(c => c.id === snaps.category);
+            const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
             const secondaryLabel = <>
               To: {snaps.recipient_fname || <ShortenedAddress address={snaps.recipient_wallet_address!} />}
             </>
@@ -131,7 +131,7 @@ const Snaps: NextPage = () => {
       {!loading && currentTab === Tab.RECEIVED && received.length > 0 && (
         <div className='my-5 py-3 grid grid-cols-2 gap-3'>
           {received.map((snaps: any) => {
-            const category = spcTypes.find(c => c.id === snaps.category);
+            const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
             const secondaryLabel = <>
               From: {snaps.sender_fname || <ShortenedAddress address={snaps.sender_wallet_address} />}
             </>;

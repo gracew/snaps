@@ -14,7 +14,7 @@ import PrimaryButton from '../../components/primaryButton';
 import Share from '../../components/share';
 import { shortenAddress } from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
-import { spcTypes } from '../give/[id]/category';
+import { categoryIpfsMap, iwdTypes, spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 const SnapsDetails: NextPage = (props: any) => {
@@ -160,7 +160,8 @@ const SnapsDetails: NextPage = (props: any) => {
     return `Snaps: ${sender} sent ${recipient} a collectible shoutout`;
   }
 
-  const category = spcTypes.find(c => c.id === snaps?.category);
+  const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps?.category);
+  const imageUrl = `https://ipfs.infura.io/ipfs/${categoryIpfsMap[category!.id]}`
   const inner = getInnerComponent();
   const isSender = me && me.sub.toLowerCase() === snaps.sender_id.toLowerCase();
   const claimable = !snaps.minted_at && !isSender && inner !== undefined;
@@ -208,8 +209,9 @@ const SnapsDetails: NextPage = (props: any) => {
 
         <Card
           onClick={() => { }}
-          imageUrl={category?.image!}
-          label={category?.label!}
+          imageUrl={imageUrl}
+          mediaType={category!.nftMediaType}
+          label={category!.label}
           description={snaps.note!}
         />
 
