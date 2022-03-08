@@ -209,6 +209,7 @@ export interface paths {
           note?: parameters["rowFilter.snaps.note"];
           minted_at?: parameters["rowFilter.snaps.minted_at"];
           minted_token_id?: parameters["rowFilter.snaps.minted_token_id"];
+          created_transaction?: parameters["rowFilter.snaps.created_transaction"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -269,6 +270,7 @@ export interface paths {
           note?: parameters["rowFilter.snaps.note"];
           minted_at?: parameters["rowFilter.snaps.minted_at"];
           minted_token_id?: parameters["rowFilter.snaps.minted_token_id"];
+          created_transaction?: parameters["rowFilter.snaps.created_transaction"];
         };
         header: {
           /** Preference */
@@ -293,6 +295,7 @@ export interface paths {
           note?: parameters["rowFilter.snaps.note"];
           minted_at?: parameters["rowFilter.snaps.minted_at"];
           minted_token_id?: parameters["rowFilter.snaps.minted_token_id"];
+          created_transaction?: parameters["rowFilter.snaps.created_transaction"];
         };
         body: {
           /** snaps */
@@ -554,6 +557,8 @@ export interface definitions {
     minted_at?: string;
     /** Format: integer */
     minted_token_id?: number;
+    /** Format: boolean */
+    created_transaction?: boolean;
   };
   users: {
     /**
@@ -646,6 +651,8 @@ export interface parameters {
   "rowFilter.snaps.minted_at": string;
   /** Format: integer */
   "rowFilter.snaps.minted_token_id": string;
+  /** Format: boolean */
+  "rowFilter.snaps.created_transaction": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: uuid */

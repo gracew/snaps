@@ -62,6 +62,7 @@ export async function mint(id: string) {
     return;
   }
 
+
   const category = iwdTypes.find(c => c.id === snaps.category);
   const sender = snaps.sender_wallet_address
     ? await resolveAddress(snaps.sender_wallet_address)
@@ -81,6 +82,16 @@ From: ${sender}`,
   const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
   console.log(`metadata url for snaps ${snaps.id}: ${url}`);
 
+  if (snaps.minted_at || snaps.created_transaction) {
+    // avoid double minting
+    return snaps;
+  }
+  await supabase
+    .from("snaps")
+    .update({
+      created_transaction: true,
+    })
+    .eq('id', snaps.id);
   const transaction = await contract.mintToCaller(recipientAddress, url, { gasPrice: ethers.utils.parseUnits('50', 'gwei'), gasLimit: 500_000 });
   const tx = await transaction.wait();
   const event = tx.events[0];
