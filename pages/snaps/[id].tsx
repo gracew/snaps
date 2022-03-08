@@ -128,7 +128,17 @@ const SnapsDetails: NextPage = (props: any) => {
             return (
               <div className="flex flex-col pb-3">
                 <div className="mb-4">
-                  Congrats, this collectible is now available in <Link href="/snaps">your dashboard</Link>! If you want to turn this collectible into an NFT, you&apos;ll need to connect a crypto wallet. If you don&apos;t have one yet, we recommend <a href="https://metamask.io/download/">MetaMask</a>.
+                  Congrats, this collectible is now available in <span className="text-lime-200 hover:text-lime-300">
+                    <Link href="/snaps">your dashboard</Link></span>! If you want
+                  to turn this collectible into an NFT, you&apos;ll need to connect a crypto wallet. If you don&apos;t
+                  have one yet, check out <a
+                    href="https://medium.com/@helena.gagern/how-to-mint-your-first-nft-for-free-6a252bb59824"
+                    className="text-lime-200 hover:text-lime-300"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    our guide
+                  </a> for setting one up.
                 </div>
                 <PrimaryButton text="Connect Wallet" onClick={onClickConnect} />
               </div>
