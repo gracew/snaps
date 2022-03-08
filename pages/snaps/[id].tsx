@@ -160,13 +160,18 @@ const SnapsDetails: NextPage = (props: any) => {
     return `Snaps: ${sender} sent ${recipient} a collectible shoutout`;
   }
 
+  function supabaseUrl(categoryLabel: string, ext: string) {
+    const filename = categoryLabel.replace(" ", "");
+    return `https://njhiojpoxltfrgalbnub.supabase.in/storage/v1/object/public/snaps-public/${filename}.${ext}`;
+  }
+
   const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps?.category);
 
   function getVideoTag() {
-    if (animationIpfsMap[category!.id]) {
+    if (category!.nftMediaType === 'video') {
       return (
         <>
-          <meta property="og:video" content={`https://ipfs.infura.io/ipfs/${animationIpfsMap[category!.id]}`} />
+          <meta property="og:video" content={supabaseUrl(category!.label, 'mp4')} />
           <meta property="og:video:type" content="video" />
           <meta property="og:video:width" content="720" />
           <meta property="og:video:height" content="1280" />
@@ -175,8 +180,6 @@ const SnapsDetails: NextPage = (props: any) => {
     }
   }
 
-  const hash = animationIpfsMap[category!.id] || imageIpfsMap[category!.id];
-  const imageUrl = `https://ipfs.infura.io/ipfs/${hash}`
   const inner = getInnerComponent();
   const isSender = me && me.sub.toLowerCase() === snaps.sender_id.toLowerCase();
   const claimable = !snaps.minted_at && !isSender && inner !== undefined;
@@ -187,13 +190,13 @@ const SnapsDetails: NextPage = (props: any) => {
       <Head>
         <title>{getTitle()}</title>
         <meta name="description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
-        <meta key="image" property="og:image" content={`https://ipfs.infura.io/ipfs/${imageIpfsMap[snaps.category]}`} />
+        <meta key="image" property="og:image" content={supabaseUrl(category!.label, 'png')} />
         {getVideoTag()}
 
         <meta name="twitter:title" content={getTitle()} />
         <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={`https://ipfs.infura.io/ipfs/${imageIpfsMap[snaps.category]}`} />
+        <meta name="twitter:image" content={supabaseUrl(category!.label, 'png')} />
       </Head>
 
       <Nav />
@@ -226,7 +229,7 @@ const SnapsDetails: NextPage = (props: any) => {
 
         <Card
           onClick={() => { }}
-          imageUrl={imageUrl}
+          imageUrl={`https://ipfs.infura.io/ipfs/${animationIpfsMap[category!.id] || imageIpfsMap[category!.id]}`}
           mediaType={category!.nftMediaType}
           label={category!.label}
           description={snaps.note!}
