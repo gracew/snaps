@@ -2,18 +2,12 @@ import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ERC721NFT from "../../ERC721NFT.json";
+import { animationIpfsMap, imageIpfsMap } from "../give/[id]/category";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
 // @ts-ignore
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
-
-const categoryIpfsMap: Record<string, string> = {
-  spc_nurture: "QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb",
-  spc_scale: "QmZ7yBnzGL1zRKo7eo5VorbgshoCX9mn2SGyunZ4N2rssM",
-  spc_dig: "QmaQ2HMkqc3r9JJvjcmyx6zFiB7fxvfUXW8Wc1qN6qfX5X",
-  spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
-};
 
 const INFURA_ID = "a71874bbcb6a450398f24a7bbd436eda";
 const provider = new ethers.providers.InfuraProvider(process.env.NEXT_PUBLIC_NETWORK || "maticmum", INFURA_ID)
@@ -57,7 +51,7 @@ export async function mint(id: string) {
     console.log("incomplete snap");
     return;
   }
-  if (!categoryIpfsMap[snaps.category]) {
+  if (!imageIpfsMap[snaps.category]) {
     console.log("unknown category: " + snaps.category);
     return;
   }
@@ -71,13 +65,17 @@ export async function mint(id: string) {
   const sender = snaps.sender_wallet_address
     ? await resolveAddress(snaps.sender_wallet_address)
     : snaps.sender_fname;
-  const metadata = {
+  const metadata: Record<string, string> = {
     name: "Snaps",
     description: `${snaps.note}
 
 From: ${sender}`,
-    image: `https://ipfs.infura.io/ipfs/${categoryIpfsMap[snaps.category]}`,
+    image: `https://ipfs.infura.io/ipfs/${imageIpfsMap[snaps.category]}`,
   };
+  const animation = animationIpfsMap[snaps.category];
+  if (animation) {
+    metadata.animation_url = `https://ipfs.infura.io/ipfs/${animation}`;
+  }
   const metadataResult = await client.add(JSON.stringify(metadata));
   const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
   console.log(`metadata url for snaps ${snaps.id}: ${url}`);
