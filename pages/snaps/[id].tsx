@@ -195,7 +195,7 @@ const SnapsDetails: NextPage = (props: any) => {
 
         <meta name="twitter:title" content={getTitle()} />
         <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:image" content={supabaseUrl(category!.label, 'png')} />
       </Head>
 
