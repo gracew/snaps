@@ -14,7 +14,7 @@ import PrimaryButton from '../../components/primaryButton';
 import Share from '../../components/share';
 import { shortenAddress } from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
-import { categoryIpfsMap, iwdTypes, spcTypes } from '../give/[id]/category';
+import { animationIpfsMap, imageIpfsMap, iwdTypes, spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 const SnapsDetails: NextPage = (props: any) => {
@@ -161,7 +161,8 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps?.category);
-  const imageUrl = `https://ipfs.infura.io/ipfs/${categoryIpfsMap[category!.id]}`
+  const hash = animationIpfsMap[category!.id] || imageIpfsMap[category!.id];
+  const imageUrl = `https://ipfs.infura.io/ipfs/${hash}`
   const inner = getInnerComponent();
   const isSender = me && me.sub.toLowerCase() === snaps.sender_id.toLowerCase();
   const claimable = !snaps.minted_at && !isSender && inner !== undefined;

@@ -86,11 +86,18 @@ export const spcTypes: Category[] = [
     nftMediaType: "image",
   },
 ]
-export const categoryIpfsMap: Record<string, string> = {
+export const imageIpfsMap: Record<string, string> = {
   spc_nurture: "QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb",
   spc_scale: "QmZ7yBnzGL1zRKo7eo5VorbgshoCX9mn2SGyunZ4N2rssM",
   spc_dig: "QmaQ2HMkqc3r9JJvjcmyx6zFiB7fxvfUXW8Wc1qN6qfX5X",
   spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
+  iwd_powerful_voice: "Qme8ArgCuwQiMeFDcrUeQ7MkkdNgNJKv4WiZ8iBFDGr9cs",
+  iwd_motivation_muse: "QmRVy9SotJktHdkQNJ4F6gi6TupDPb4S4FUSgdisgpYupi",
+  iwd_innovative_pioneer: "QmfXdEfXxTZ6W9j9MQe2PvZXuqXWPDxSCEVyygRbGpXj2x",
+  iwd_creative_genius: "QmNpM28ToNsGqfm2Ng9gQraYec49CrT8zVLkPuFvpxLzGC",
+  iwd_fearless_activist: "QmXvW2p28GqmqXWrnXZJfw9AQmaQkb39CvTNBNxB9zLnfQ",
+};
+export const animationIpfsMap: Record<string, string> = {
   iwd_powerful_voice: "Qmcoxo138eFbqND3RJwM5suXzdDW4LZoJFHFkE8qLNikPp",
   iwd_motivation_muse: "QmS1RWRc4iGSCDoYa17Z8EZvsG6W9EFFFCPkdpN5nkQxey",
   iwd_innovative_pioneer: "QmZNdCozrcg4wLDXsFQEpdaa451SMiH4aoS39VFHosPK95",
