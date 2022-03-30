@@ -86,6 +86,12 @@ export const spcTypes: Category[] = [
     image: "/spc/own.png",
     nftMediaType: "image",
   },
+  {
+    id: "spc_first_bug",
+    label: 'Bug Basher',
+    image: "/spc/first_bug.png",
+    nftMediaType: "image",
+  },
 ]
 export const imageIpfsMap: Record<string, string> = {
   spc_nurture: "QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb",
