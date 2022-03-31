@@ -92,6 +92,12 @@ export const spcTypes: Category[] = [
     image: "/spc/first_bug.png",
     nftMediaType: "image",
   },
+  {
+    id: "spc_fastest_referral",
+    label: 'Fastest Referral',
+    image: "/spc/fastest_referral.png",
+    nftMediaType: "image",
+  },
 ]
 export const imageIpfsMap: Record<string, string> = {
   spc_nurture: "QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb",
@@ -99,6 +105,7 @@ export const imageIpfsMap: Record<string, string> = {
   spc_dig: "QmaQ2HMkqc3r9JJvjcmyx6zFiB7fxvfUXW8Wc1qN6qfX5X",
   spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
   spc_first_bug: "Qmc4PPDUNJNY7uiDyhbfM7tcaiDa4uGShE2L2hXBu9wY16",
+  spc_fastest_referral: "QmZsTCsG5UbSQjHyAiphyCrRBAb6Ysryop21k1MvJNg8m2",
   iwd_powerful_voice: "Qme8ArgCuwQiMeFDcrUeQ7MkkdNgNJKv4WiZ8iBFDGr9cs",
   iwd_motivation_muse: "QmRVy9SotJktHdkQNJ4F6gi6TupDPb4S4FUSgdisgpYupi",
   iwd_innovative_pioneer: "QmfXdEfXxTZ6W9j9MQe2PvZXuqXWPDxSCEVyygRbGpXj2x",
