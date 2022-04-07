@@ -160,16 +160,11 @@ const SnapsDetails: NextPage = (props: any) => {
     return `Snaps: ${sender} sent ${recipient} a collectible shoutout`;
   }
 
-  function supabaseUrl(categoryLabel: string, ext: string) {
-    const filename = categoryLabel.replace(" ", "");
-    return `https://njhiojpoxltfrgalbnub.supabase.in/storage/v1/object/public/snaps-public/${filename}.${ext}`;
-  }
-
   function getVideoTag() {
     if (props.category?.videoUrl) {
       return (
         <>
-          <meta property="og:video" content={supabaseUrl(props.category!.label, 'mp4')} />
+          <meta property="og:video" content={props.category.videoUrl} />
           <meta property="og:video:type" content="video" />
           <meta property="og:video:width" content="720" />
           <meta property="og:video:height" content="1280" />
@@ -188,13 +183,13 @@ const SnapsDetails: NextPage = (props: any) => {
       <Head>
         <title>{getTitle()}</title>
         <meta name="description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
-        <meta key="image" property="og:image" content={supabaseUrl(props.category!.label, 'png')} />
+        <meta key="image" property="og:image" content={props.category.image_url} />
         {getVideoTag()}
 
         <meta name="twitter:title" content={getTitle()} />
         <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content={supabaseUrl(props.category!.label, 'png')} />
+        <meta name="twitter:image" content={props.category.image_url} />
       </Head>
 
       <Nav />

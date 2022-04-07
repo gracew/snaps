@@ -116,7 +116,7 @@ const Snaps: NextPage = () => {
               <MinimalCard
                 key={snaps.id}
                 href={`/snaps/${snaps.id}`}
-                imageUrl={snaps.category?.image || snaps.category?.media}
+                imageUrl={snaps.category?.image_url}
                 label={snaps.category?.label!}
                 secondaryLabel={secondaryLabel}
                 hover={true}
@@ -141,7 +141,7 @@ const Snaps: NextPage = () => {
               <MinimalCard
                 key={snaps.id}
                 href={`/snaps/${snaps.id}`}
-                imageUrl={snaps.category?.image || snaps.category?.media}
+                imageUrl={snaps.category?.image_url}
                 label={snaps.category?.label!}
                 secondaryLabel={secondaryLabel}
                 hover={true}
