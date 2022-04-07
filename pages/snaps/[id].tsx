@@ -15,7 +15,6 @@ import PrimaryButton from '../../components/primaryButton';
 import Share from '../../components/share';
 import { shortenAddress } from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
-import { animationIpfsMap, imageIpfsMap } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 const SnapsDetails: NextPage = (props: any) => {
@@ -167,7 +166,7 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   function getVideoTag() {
-    if (props.category!.media_type === 'video') {
+    if (props.category?.videoUrl) {
       return (
         <>
           <meta property="og:video" content={supabaseUrl(props.category!.label, 'mp4')} />
@@ -228,8 +227,8 @@ const SnapsDetails: NextPage = (props: any) => {
 
         <Card
           onClick={() => { }}
-          imageUrl={props.category.media || `https://ipfs.infura.io/ipfs/${animationIpfsMap[props.category!.id] || imageIpfsMap[props.category!.id]}`}
-          mediaType={props.category!.media_type}
+          imageUrl={props.category.image_url}
+          videoUrl={props.category.video_url}
           label={props.category!.label}
           description={snaps.note!}
           isSafari={props.isSafari}

@@ -3,7 +3,6 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { resolveCategory } from "../../category";
 import ERC721NFT from "../../ERC721NFT.json";
-import { animationIpfsMap, imageIpfsMap, iwdTypes, spcTypes } from "../give/[id]/category";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
@@ -52,7 +51,8 @@ export async function mint(id: string) {
     console.log("incomplete snap");
     return;
   }
-  if (!imageIpfsMap[snaps.category]) {
+  const category = await resolveCategory(snaps.category);
+  if (!category) {
     console.log("unknown category: " + snaps.category);
     return;
   }
@@ -60,13 +60,6 @@ export async function mint(id: string) {
   const recipientAddress = await getRecipientWalletAddress(snaps);
   if (!recipientAddress) {
     console.log("missing recipient wallet address");
-    return;
-  }
-
-
-  const category = await resolveCategory(snaps.category);
-  if (!category) {
-    console.log("could not resolve category");
     return;
   }
 
@@ -79,11 +72,10 @@ export async function mint(id: string) {
     description: `${snaps.note}
 
 From: ${sender}`,
-    image: `https://ipfs.infura.io/ipfs/${imageIpfsMap[snaps.category]}`,
+    image: category.image_url,
   };
-  const animation = animationIpfsMap[snaps.category];
-  if (animation) {
-    metadata.animation_url = `https://ipfs.infura.io/ipfs/${animation}`;
+  if (category.video_url) {
+    metadata.animation_url = category.video_url;
   }
   const metadataResult = await client.add(JSON.stringify(metadata));
   const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;

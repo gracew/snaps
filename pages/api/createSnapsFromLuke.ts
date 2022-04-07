@@ -27,20 +27,21 @@ export default async function handler(
       res.end(String(err));
       return;
     }
-    const { recipientName, recipientEmail, note, label, mediaType } = fields;
+    const { recipientName, recipientEmail, note, label } = fields;
 
-    const metadataResult = await client.add(fs.createReadStream((files["media"] as any).filepath));
-    const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
-
-    console.log(url);
+    const imageResult = await client.add(fs.createReadStream((files["image"] as any).filepath));
+    const data: Record<string, any> = {
+      label,
+      image_url: `https://ipfs.infura.io/ipfs/${imageResult.path}`,
+    }
+    if ("video" in files) {
+      const videoResult = await client.add(fs.createReadStream((files["image"] as any).filepath));
+      data["video_url"] = `https://ipfs.infura.io/ipfs/${videoResult.path}`;
+    }
 
     const insertCategoryRes = await supabase
       .from("categories")
-      .insert([{
-        label,
-        media: url,
-        media_type: mediaType,
-      }]);
+      .insert([data]);
 
     if (insertCategoryRes.error || !insertCategoryRes.data || insertCategoryRes.data.length === 0) {
       res.status(500).end();
