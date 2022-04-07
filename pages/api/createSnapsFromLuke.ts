@@ -3,6 +3,7 @@ import fs from "fs";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { definitions } from "../../types/supabase";
+import { sendEmail } from "./completeSnaps";
 import { supabase } from './supabase';
 
 // @ts-ignore
@@ -52,8 +53,8 @@ export default async function handler(
     const insertSnapsRes = await supabase
       .from<definitions["snaps"]>("snaps")
       .insert([{
-        sender_id: "36f30956-96db-40b5-a040-9ace042b44be",
-        //sender_id: "8581e3bd-9a1f-4ef1-a384-1306df1f89af",
+        // sender_id: "36f30956-96db-40b5-a040-9ace042b44be", // test sender on staging
+        sender_id: "8581e3bd-9a1f-4ef1-a384-1306df1f89af",
         recipient_type: "email",
         recipient_fname: recipientName as string,
         note: note as string,
@@ -76,6 +77,8 @@ export default async function handler(
       res.status(500).end();
       return;
     }
+
+    await sendEmail(snaps.id);
 
     res.status(200).json(snaps);
     return;
