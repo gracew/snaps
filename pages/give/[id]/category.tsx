@@ -14,47 +14,51 @@ import { supabase } from '../../api/supabase';
 interface Category {
   id: string;
   label: string;
-  image: string;
-  nftMediaType: "video" | "image";
+  image_url: string;
+  video_url?: string;
   description?: string;
+}
+
+function ipfsUrl(hash: string) {
+  return `https://ipfs.infura.io/ipfs/${hash}`;
 }
 
 export const iwdTypes: Category[] = [
   {
     id: "iwd_powerful_voice",
     label: 'Powerful Voice',
-    image: "/iwd/PowerfulVoice.png",
-    nftMediaType: "video",
+    image_url: ipfsUrl("Qme8ArgCuwQiMeFDcrUeQ7MkkdNgNJKv4WiZ8iBFDGr9cs"),
+    video_url: ipfsUrl("Qmcoxo138eFbqND3RJwM5suXzdDW4LZoJFHFkE8qLNikPp"),
   },
   {
     id: "iwd_motivation_muse",
     label: 'Motivation Muse',
-    image: "/iwd/MotivationMuse.png",
-    nftMediaType: "video",
+    image_url: ipfsUrl("QmRVy9SotJktHdkQNJ4F6gi6TupDPb4S4FUSgdisgpYupi"),
+    video_url: ipfsUrl("QmS1RWRc4iGSCDoYa17Z8EZvsG6W9EFFFCPkdpN5nkQxey"),
   },
   {
     id: "iwd_innovative_pioneer",
     label: 'Innovative Pioneer',
-    image: "/iwd/InnovativePioneer.png",
-    nftMediaType: "video",
+    image_url: ipfsUrl("QmfXdEfXxTZ6W9j9MQe2PvZXuqXWPDxSCEVyygRbGpXj2x"),
+    video_url: ipfsUrl("QmZNdCozrcg4wLDXsFQEpdaa451SMiH4aoS39VFHosPK95"),
   },
   {
     id: "iwd_creative_genius",
     label: 'Creative Genius',
-    image: "/iwd/CreativeGenius.png",
-    nftMediaType: "video",
+    image_url: ipfsUrl("QmNpM28ToNsGqfm2Ng9gQraYec49CrT8zVLkPuFvpxLzGC"),
+    video_url: ipfsUrl("QmbYzSZCAHVZLzu99toMsVuoJmhwt67x7UD2LtFk8RrLXq"),
   },
   {
     id: "iwd_uplifting_soul",
     label: 'Uplifting Soul',
-    image: "/iwd/UpliftingSoul.png",
-    nftMediaType: "video",
+    image_url: ipfsUrl("QmYU2DhLLBxhK86HM7dcL5xwFRiE51w2w6ZQfYycXC5X4R"),
+    video_url: ipfsUrl("QmYBZVHMkVH8ix3fWhdxSvG4Nyyh98iJR3FpPC6DdP18aA"),
   },
   {
     id: "iwd_fearless_activist",
     label: 'Fearless Activist',
-    image: "/iwd/FearlessActivist.png",
-    nftMediaType: "video",
+    image_url: ipfsUrl("QmXvW2p28GqmqXWrnXZJfw9AQmaQkb39CvTNBNxB9zLnfQ"),
+    video_url: ipfsUrl("QmeUQcfQP6ZiBKYr1z1DzAopKrQkZG4CAbg5SLio1rwd63"),
   },
 ]
 export const spcTypes: Category[] = [
@@ -62,66 +66,37 @@ export const spcTypes: Category[] = [
     id: "spc_nurture",
     label: 'Nurture Yourself',
     description: "The best work is built on a foundation of self-care. Don't be afraid to get your needs met.",
-    image: "/spc/nurture.png",
-    nftMediaType: "image",
+    image_url: ipfsUrl("QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb"),
   },
   {
     id: "spc_scale",
     label: 'Scale Your Mountain',
     description: "We explore with intention and ask hard questions of each other, to find work that matters to us.",
-    image: "/spc/scale.png",
-    nftMediaType: "image",
+    image_url: ipfsUrl("QmZ7yBnzGL1zRKo7eo5VorbgshoCX9mn2SGyunZ4N2rssM"),
   },
   {
     id: "spc_dig",
     label: 'Dig Deep Wells',
     description: "By showing up authentically and investing in meaningful relationships, we forge bonds that will last beyond our time at SPC.",
-    image: "/spc/dig.png",
-    nftMediaType: "image",
+    image_url: ipfsUrl("QmaQ2HMkqc3r9JJvjcmyx6zFiB7fxvfUXW8Wc1qN6qfX5X"),
   },
   {
     id: "spc_own",
     label: 'Own Your Better Future',
     description: "By immersing yourself and taking initiative, you leave a legacy for those who will walk in your steps. SPC is yours now: you don't need to ask for permission!",
-    image: "/spc/own.png",
-    nftMediaType: "image",
+    image_url: ipfsUrl("QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE"),
   },
   {
     id: "spc_first_bug",
     label: 'Bug Basher',
-    image: "/spc/first_bug.png",
-    nftMediaType: "image",
+    image_url: ipfsUrl("Qmc4PPDUNJNY7uiDyhbfM7tcaiDa4uGShE2L2hXBu9wY16"),
   },
   {
     id: "spc_fastest_referral",
     label: 'Fastest Referral',
-    image: "/spc/fastest_referral.png",
-    nftMediaType: "image",
+    image_url: ipfsUrl("QmZsTCsG5UbSQjHyAiphyCrRBAb6Ysryop21k1MvJNg8m2"),
   },
 ]
-export const imageIpfsMap: Record<string, string> = {
-  spc_nurture: "QmdfmoP1LWcGsuDxvJuD4aC18dhXGkrypDWjAGKD2xHDKb",
-  spc_scale: "QmZ7yBnzGL1zRKo7eo5VorbgshoCX9mn2SGyunZ4N2rssM",
-  spc_dig: "QmaQ2HMkqc3r9JJvjcmyx6zFiB7fxvfUXW8Wc1qN6qfX5X",
-  spc_own: "QmVk3JURy2ChnydXfQY7B5RhuYGHs6XjjTS3Vz8V59dKaE",
-  spc_first_bug: "Qmc4PPDUNJNY7uiDyhbfM7tcaiDa4uGShE2L2hXBu9wY16",
-  spc_fastest_referral: "QmZsTCsG5UbSQjHyAiphyCrRBAb6Ysryop21k1MvJNg8m2",
-  iwd_powerful_voice: "Qme8ArgCuwQiMeFDcrUeQ7MkkdNgNJKv4WiZ8iBFDGr9cs",
-  iwd_motivation_muse: "QmRVy9SotJktHdkQNJ4F6gi6TupDPb4S4FUSgdisgpYupi",
-  iwd_innovative_pioneer: "QmfXdEfXxTZ6W9j9MQe2PvZXuqXWPDxSCEVyygRbGpXj2x",
-  iwd_creative_genius: "QmNpM28ToNsGqfm2Ng9gQraYec49CrT8zVLkPuFvpxLzGC",
-  iwd_fearless_activist: "QmXvW2p28GqmqXWrnXZJfw9AQmaQkb39CvTNBNxB9zLnfQ",
-  iwd_uplifting_soul: "QmYU2DhLLBxhK86HM7dcL5xwFRiE51w2w6ZQfYycXC5X4R",
-};
-export const animationIpfsMap: Record<string, string> = {
-  iwd_powerful_voice: "Qmcoxo138eFbqND3RJwM5suXzdDW4LZoJFHFkE8qLNikPp",
-  iwd_motivation_muse: "QmS1RWRc4iGSCDoYa17Z8EZvsG6W9EFFFCPkdpN5nkQxey",
-  iwd_innovative_pioneer: "QmZNdCozrcg4wLDXsFQEpdaa451SMiH4aoS39VFHosPK95",
-  iwd_creative_genius: "QmbYzSZCAHVZLzu99toMsVuoJmhwt67x7UD2LtFk8RrLXq",
-  iwd_fearless_activist: "QmeUQcfQP6ZiBKYr1z1DzAopKrQkZG4CAbg5SLio1rwd63",
-  iwd_uplifting_soul: "QmYBZVHMkVH8ix3fWhdxSvG4Nyyh98iJR3FpPC6DdP18aA",
-};
-
 
 const GiveCategory: NextPage = () => {
   const router = useRouter();
@@ -184,7 +159,7 @@ const GiveCategory: NextPage = () => {
           selected={category === t.id}
           hover={true}
           onClick={() => setCategory(t.id)}
-          imageUrl={t.image}
+          imageUrl={t.image_url}
           label={t.label}
         />)}
       </div>

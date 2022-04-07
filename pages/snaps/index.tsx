@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
+import { resolveCategory } from '../../category';
 import LargeSpinner from '../../components/largeSpinner';
 import MinimalCard from '../../components/minimalCard';
 import Nav from '../../components/nav';
@@ -8,7 +9,6 @@ import PrimaryButton from '../../components/primaryButton';
 import ShortenedAddress from '../../components/shortenedAddress';
 import { definitions } from '../../types/supabase';
 import { supabase } from '../api/supabase';
-import { iwdTypes, spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 enum Tab {
@@ -19,7 +19,7 @@ enum Tab {
 const Snaps: NextPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [given, setGiven] = useState<definitions["snaps"][]>([]);
+  const [given, setGiven] = useState<any[]>([]);
   const [received, setReceived] = useState<any>([]);
   const [currentTab, setCurrentTab] = useState(Tab.GIVEN);
   const [me, setMe] = useContext(UserContext);
@@ -36,7 +36,11 @@ const Snaps: NextPage = () => {
         .eq("sender_id", me.sub);
       if (!error && data && data.length > 0) {
         // filter out any incomplete snaps
-        setGiven(data.filter(s => s.note));
+        const formatted = await Promise.all(data.filter(s => s.note).map(async s => {
+          s.category = await resolveCategory(s.category!);
+          return s;
+        }));
+        setGiven(formatted);
       }
     };
 
@@ -105,7 +109,6 @@ const Snaps: NextPage = () => {
       {!loading && currentTab === Tab.GIVEN && !hideGiveSnapsInNav && (
         <div className='my-5 py-3 grid grid-cols-2 gap-3'>
           {given.map(snaps => {
-            const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
             const secondaryLabel = <>
               To: {snaps.recipient_fname || <ShortenedAddress address={snaps.recipient_wallet_address!} />}
             </>
@@ -113,8 +116,8 @@ const Snaps: NextPage = () => {
               <MinimalCard
                 key={snaps.id}
                 href={`/snaps/${snaps.id}`}
-                imageUrl={category?.image!}
-                label={category?.label!}
+                imageUrl={snaps.category?.image_url}
+                label={snaps.category?.label!}
                 secondaryLabel={secondaryLabel}
                 hover={true}
               />
@@ -131,7 +134,6 @@ const Snaps: NextPage = () => {
       {!loading && currentTab === Tab.RECEIVED && received.length > 0 && (
         <div className='my-5 py-3 grid grid-cols-2 gap-3'>
           {received.map((snaps: any) => {
-            const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
             const secondaryLabel = <>
               From: {snaps.sender_fname || <ShortenedAddress address={snaps.sender_wallet_address} />}
             </>;
@@ -139,8 +141,8 @@ const Snaps: NextPage = () => {
               <MinimalCard
                 key={snaps.id}
                 href={`/snaps/${snaps.id}`}
-                imageUrl={category?.image!}
-                label={category?.label!}
+                imageUrl={snaps.category?.image_url}
+                label={snaps.category?.label!}
                 secondaryLabel={secondaryLabel}
                 hover={true}
               />

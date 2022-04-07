@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { AuthType, connect, walletLogin } from '../../auth';
+import { resolveCategory } from '../../category';
 import Card from '../../components/card';
 import GoogleButton from '../../components/googleButton';
 import LargeSpinner from '../../components/largeSpinner';
@@ -14,7 +15,6 @@ import PrimaryButton from '../../components/primaryButton';
 import Share from '../../components/share';
 import { shortenAddress } from '../../components/shortenedAddress';
 import { supabase } from '../api/supabase';
-import { animationIpfsMap, imageIpfsMap, iwdTypes, spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 const SnapsDetails: NextPage = (props: any) => {
@@ -160,18 +160,11 @@ const SnapsDetails: NextPage = (props: any) => {
     return `Snaps: ${sender} sent ${recipient} a collectible shoutout`;
   }
 
-  function supabaseUrl(categoryLabel: string, ext: string) {
-    const filename = categoryLabel.replace(" ", "");
-    return `https://njhiojpoxltfrgalbnub.supabase.in/storage/v1/object/public/snaps-public/${filename}.${ext}`;
-  }
-
-  const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps?.category);
-
   function getVideoTag() {
-    if (category!.nftMediaType === 'video') {
+    if (props.category?.videoUrl) {
       return (
         <>
-          <meta property="og:video" content={supabaseUrl(category!.label, 'mp4')} />
+          <meta property="og:video" content={props.category.videoUrl} />
           <meta property="og:video:type" content="video" />
           <meta property="og:video:width" content="720" />
           <meta property="og:video:height" content="1280" />
@@ -190,13 +183,13 @@ const SnapsDetails: NextPage = (props: any) => {
       <Head>
         <title>{getTitle()}</title>
         <meta name="description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
-        <meta key="image" property="og:image" content={supabaseUrl(category!.label, 'png')} />
+        <meta key="image" property="og:image" content={props.category.image_url} />
         {getVideoTag()}
 
         <meta name="twitter:title" content={getTitle()} />
         <meta name="twitter:description" content="Send shoutouts to teammates and colleagues as digital collectibles." />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:image" content={supabaseUrl(category!.label, 'png')} />
+        <meta name="twitter:image" content={props.category.image_url} />
       </Head>
 
       <Nav />
@@ -229,9 +222,9 @@ const SnapsDetails: NextPage = (props: any) => {
 
         <Card
           onClick={() => { }}
-          imageUrl={`https://ipfs.infura.io/ipfs/${animationIpfsMap[category!.id] || imageIpfsMap[category!.id]}`}
-          mediaType={category!.nftMediaType}
-          label={category!.label}
+          imageUrl={props.category.image_url}
+          videoUrl={props.category.video_url}
+          label={props.category!.label}
           description={snaps.note!}
           isSafari={props.isSafari}
         />
@@ -291,6 +284,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (snaps.recipient_wallet_address) {
     props.recipient = (await shortenAddress(snaps.recipient_wallet_address));
   }
+
+  props.category = await resolveCategory(snaps.category);
 
   const isSafari = /^((?!chrome|android).)*safari/i.test(context.req.headers['user-agent']!);
   props.isSafari = isSafari;

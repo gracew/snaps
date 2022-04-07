@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { resolveCategory } from '../../category';
 import { runMiddleware, validateJwt } from './middleware';
 import { supabase } from './supabase';
 
@@ -21,6 +22,13 @@ export default async function handler(
   }
 
   // filter out any incomplete snaps
-  res.status(200).json((data || []).filter(s => s.note));
+  const formatted = await Promise.all((data || [])
+    .filter(snap => snap.note)
+    .map(async s => {
+      s.category = await resolveCategory(s.category!);
+      return s;
+    }));
+
+  res.status(200).json(formatted);
   return;
 }
