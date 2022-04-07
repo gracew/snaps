@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { AuthType, connect, walletLogin } from '../../auth';
+import { resolveCategory } from '../../category';
 import Card from '../../components/card';
 import GoogleButton from '../../components/googleButton';
 import LargeSpinner from '../../components/largeSpinner';
@@ -13,9 +14,8 @@ import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import Share from '../../components/share';
 import { shortenAddress } from '../../components/shortenedAddress';
-import { resolveCategory } from '../api/createSnapsFromLuke';
 import { supabase } from '../api/supabase';
-import { animationIpfsMap, imageIpfsMap, iwdTypes, spcTypes } from '../give/[id]/category';
+import { animationIpfsMap, imageIpfsMap } from '../give/[id]/category';
 import { UserContext } from '../_app';
 
 const SnapsDetails: NextPage = (props: any) => {

@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { resolveCategory } from "../../category";
 import ERC721NFT from "../../ERC721NFT.json";
 import { animationIpfsMap, imageIpfsMap, iwdTypes, spcTypes } from "../give/[id]/category";
-import { resolveCategory } from "./createSnapsFromLuke";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
