@@ -7,6 +7,7 @@ import Nav from '../../components/nav';
 import PrimaryButton from '../../components/primaryButton';
 import ShortenedAddress from '../../components/shortenedAddress';
 import { definitions } from '../../types/supabase';
+import { resolveCategory } from '../api/createSnapsFromLuke';
 import { supabase } from '../api/supabase';
 import { iwdTypes, spcTypes } from '../give/[id]/category';
 import { UserContext } from '../_app';
@@ -104,8 +105,8 @@ const Snaps: NextPage = () => {
       )}
       {!loading && currentTab === Tab.GIVEN && !hideGiveSnapsInNav && (
         <div className='my-5 py-3 grid grid-cols-2 gap-3'>
-          {given.map(snaps => {
-            const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
+          {given.map(async snaps => {
+            const category = await resolveCategory(snaps.category!);
             const secondaryLabel = <>
               To: {snaps.recipient_fname || <ShortenedAddress address={snaps.recipient_wallet_address!} />}
             </>
@@ -113,7 +114,7 @@ const Snaps: NextPage = () => {
               <MinimalCard
                 key={snaps.id}
                 href={`/snaps/${snaps.id}`}
-                imageUrl={category?.image!}
+                imageUrl={category?.image || category.media}
                 label={category?.label!}
                 secondaryLabel={secondaryLabel}
                 hover={true}
@@ -130,8 +131,8 @@ const Snaps: NextPage = () => {
       )}
       {!loading && currentTab === Tab.RECEIVED && received.length > 0 && (
         <div className='my-5 py-3 grid grid-cols-2 gap-3'>
-          {received.map((snaps: any) => {
-            const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
+          {received.map(async (snaps: any) => {
+            const category = await resolveCategory(snaps.category);
             const secondaryLabel = <>
               From: {snaps.sender_fname || <ShortenedAddress address={snaps.sender_wallet_address} />}
             </>;
@@ -139,7 +140,7 @@ const Snaps: NextPage = () => {
               <MinimalCard
                 key={snaps.id}
                 href={`/snaps/${snaps.id}`}
-                imageUrl={category?.image!}
+                imageUrl={category?.image || category?.media}
                 label={category?.label!}
                 secondaryLabel={secondaryLabel}
                 hover={true}

@@ -3,12 +3,29 @@ import fs from "fs";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { definitions } from "../../types/supabase";
+import { iwdTypes, spcTypes } from "../give/[id]/category";
 import { supabase } from './supabase';
 
 // @ts-ignore
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
-// don't process the body - busboy will handle that
+export async function resolveCategory(snapsCategory: string) {
+  const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snapsCategory);
+  if (category) {
+    return category;
+  }
+  const categoryRes = await supabase
+    .from("categories")
+    .select("*")
+    .eq('id', snapsCategory);
+  if (!categoryRes.data || categoryRes.data.length === 0) {
+    console.log("could not resolve category");
+    return;
+  }
+  return categoryRes.data[0];
+}
+
+// don't process the body - formidable will handle that
 export const config = {
   api: {
     bodyParser: false

@@ -3,6 +3,7 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ERC721NFT from "../../ERC721NFT.json";
 import { animationIpfsMap, imageIpfsMap, iwdTypes, spcTypes } from "../give/[id]/category";
+import { resolveCategory } from "./createSnapsFromLuke";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
@@ -63,7 +64,12 @@ export async function mint(id: string) {
   }
 
 
-  const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snaps.category);
+  const category = await resolveCategory(snaps.category);
+  if (!category) {
+    console.log("could not resolve category");
+    return;
+  }
+
   const sender = snaps.sender_wallet_address
     ? await resolveAddress(snaps.sender_wallet_address)
     : snaps.sender_fname;
