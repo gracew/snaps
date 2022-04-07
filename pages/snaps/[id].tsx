@@ -167,7 +167,7 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   function getVideoTag() {
-    if (props.category!.nftMediaType === 'video') {
+    if (props.category!.media_type === 'video') {
       return (
         <>
           <meta property="og:video" content={supabaseUrl(props.category!.label, 'mp4')} />
@@ -228,8 +228,8 @@ const SnapsDetails: NextPage = (props: any) => {
 
         <Card
           onClick={() => { }}
-          imageUrl={`https://ipfs.infura.io/ipfs/${animationIpfsMap[props.category!.id] || imageIpfsMap[props.category!.id]}`}
-          mediaType={props.category!.nftMediaType}
+          imageUrl={props.category.media || `https://ipfs.infura.io/ipfs/${animationIpfsMap[props.category!.id] || imageIpfsMap[props.category!.id]}`}
+          mediaType={props.category!.media_type}
           label={props.category!.label}
           description={snaps.note!}
           isSafari={props.isSafari}

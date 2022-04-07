@@ -15,7 +15,7 @@ interface Category {
   id: string;
   label: string;
   image: string;
-  nftMediaType: "video" | "image";
+  media_type: "video" | "image";
   description?: string;
 }
 
@@ -24,37 +24,37 @@ export const iwdTypes: Category[] = [
     id: "iwd_powerful_voice",
     label: 'Powerful Voice',
     image: "/iwd/PowerfulVoice.png",
-    nftMediaType: "video",
+    media_type: "video",
   },
   {
     id: "iwd_motivation_muse",
     label: 'Motivation Muse',
     image: "/iwd/MotivationMuse.png",
-    nftMediaType: "video",
+    media_type: "video",
   },
   {
     id: "iwd_innovative_pioneer",
     label: 'Innovative Pioneer',
     image: "/iwd/InnovativePioneer.png",
-    nftMediaType: "video",
+    media_type: "video",
   },
   {
     id: "iwd_creative_genius",
     label: 'Creative Genius',
     image: "/iwd/CreativeGenius.png",
-    nftMediaType: "video",
+    media_type: "video",
   },
   {
     id: "iwd_uplifting_soul",
     label: 'Uplifting Soul',
     image: "/iwd/UpliftingSoul.png",
-    nftMediaType: "video",
+    media_type: "video",
   },
   {
     id: "iwd_fearless_activist",
     label: 'Fearless Activist',
     image: "/iwd/FearlessActivist.png",
-    nftMediaType: "video",
+    media_type: "video",
   },
 ]
 export const spcTypes: Category[] = [
@@ -63,40 +63,40 @@ export const spcTypes: Category[] = [
     label: 'Nurture Yourself',
     description: "The best work is built on a foundation of self-care. Don't be afraid to get your needs met.",
     image: "/spc/nurture.png",
-    nftMediaType: "image",
+    media_type: "image",
   },
   {
     id: "spc_scale",
     label: 'Scale Your Mountain',
     description: "We explore with intention and ask hard questions of each other, to find work that matters to us.",
     image: "/spc/scale.png",
-    nftMediaType: "image",
+    media_type: "image",
   },
   {
     id: "spc_dig",
     label: 'Dig Deep Wells',
     description: "By showing up authentically and investing in meaningful relationships, we forge bonds that will last beyond our time at SPC.",
     image: "/spc/dig.png",
-    nftMediaType: "image",
+    media_type: "image",
   },
   {
     id: "spc_own",
     label: 'Own Your Better Future',
     description: "By immersing yourself and taking initiative, you leave a legacy for those who will walk in your steps. SPC is yours now: you don't need to ask for permission!",
     image: "/spc/own.png",
-    nftMediaType: "image",
+    media_type: "image",
   },
   {
     id: "spc_first_bug",
     label: 'Bug Basher',
     image: "/spc/first_bug.png",
-    nftMediaType: "image",
+    media_type: "image",
   },
   {
     id: "spc_fastest_referral",
     label: 'Fastest Referral',
     image: "/spc/fastest_referral.png",
-    nftMediaType: "image",
+    media_type: "image",
   },
 ]
 export const imageIpfsMap: Record<string, string> = {
