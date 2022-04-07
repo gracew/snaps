@@ -161,10 +161,10 @@ const SnapsDetails: NextPage = (props: any) => {
   }
 
   function getVideoTag() {
-    if (props.category?.videoUrl) {
+    if (props.category?.video_url) {
       return (
         <>
-          <meta property="og:video" content={props.category.videoUrl} />
+          <meta property="og:video" content={props.category.video_url} />
           <meta property="og:video:type" content="video" />
           <meta property="og:video:width" content="720" />
           <meta property="og:video:height" content="1280" />
