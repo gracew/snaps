@@ -36,7 +36,7 @@ export default async function handler(
       image_url: `https://ipfs.infura.io/ipfs/${imageResult.path}`,
     }
     if ("video" in files) {
-      const videoResult = await client.add(fs.createReadStream((files["image"] as any).filepath));
+      const videoResult = await client.add(fs.createReadStream((files["video"] as any).filepath));
       data["video_url"] = `https://ipfs.infura.io/ipfs/${videoResult.path}`;
     }
 
