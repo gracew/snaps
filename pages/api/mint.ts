@@ -3,6 +3,7 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { resolveCategory } from "../../category";
 import ERC721NFT from "../../ERC721NFT.json";
+import { Category } from "../give/[id]/category";
 import { runMiddleware, validateJwt } from "./middleware";
 import { supabase } from "./supabase";
 
@@ -31,6 +32,18 @@ async function getRecipientWalletAddress(snaps: any) {
     return undefined;
   }
   return data;
+}
+
+function prefixedLabel(category: Category) {
+  if (category.id.startsWith("iwd")) {
+   return `IWD 2022: ${category.label}`;
+  }
+
+  if (category.id.startsWith("earth")) {
+   return `Earth Day 2022: ${category.label}`;
+  }
+
+  return category.label;
 }
 
 export async function mint(id: string) {
@@ -66,9 +79,8 @@ export async function mint(id: string) {
   const sender = snaps.sender_wallet_address
     ? await resolveAddress(snaps.sender_wallet_address)
     : snaps.sender_fname;
-  const name = category?.id.startsWith("iwd") ? `IWD 2022: ${category!.label}` : category!.label;
   const metadata: Record<string, string> = {
-    name,
+    name: prefixedLabel(category!),
     description: `${snaps.note}
 
 From: ${sender}`,

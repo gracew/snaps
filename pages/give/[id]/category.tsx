@@ -11,7 +11,7 @@ import SecondaryButton from '../../../components/secondaryButton';
 import { definitions } from "../../../types/supabase";
 import { supabase } from '../../api/supabase';
 
-interface Category {
+export interface Category {
   id: string;
   label: string;
   image_url: string;
@@ -23,7 +23,13 @@ function ipfsUrl(hash: string) {
   return `https://ipfs.infura.io/ipfs/${hash}`;
 }
 
-export const iwdTypes: Category[] = [
+export const displayedTypes: Category[] = [
+  {
+    id: "earth_warrior",
+    label: 'Earth Warrior',
+    image_url: ipfsUrl("QmcywcHdfmGmy2gKuZ7EQrLqZQDpYSiB3pF51LLC5K1u71"),
+    video_url: ipfsUrl("QmdZuC2hEbMknmCmiQyc7yE1vGcahMWcotZGzuv4BW4qev"),
+  },
   {
     id: "iwd_powerful_voice",
     label: 'Powerful Voice',
@@ -154,7 +160,7 @@ const GiveCategory: NextPage = () => {
       <h2 className="my-2">What makes your friend special?</h2>
 
       <div className='py-3 grid grid-cols-2 gap-3'>
-        {iwdTypes.map(t => <MinimalCard
+        {displayedTypes.map(t => <MinimalCard
           key={t.label}
           selected={category === t.id}
           hover={true}

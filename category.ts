@@ -1,8 +1,8 @@
 import { supabase } from "./pages/api/supabase";
-import { iwdTypes, spcTypes } from "./pages/give/[id]/category";
+import { displayedTypes, spcTypes } from "./pages/give/[id]/category";
 
 export async function resolveCategory(snapsCategory: string) {
-  const category = (spcTypes.concat(iwdTypes)).find(c => c.id === snapsCategory);
+  const category = (spcTypes.concat(displayedTypes)).find(c => c.id === snapsCategory);
   if (category) {
     return category;
   }
