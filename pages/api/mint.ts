@@ -84,11 +84,8 @@ export async function mint(id: string) {
     description: `${snaps.note}
 
 From: ${sender}`,
-    image: category.image_url,
+    image: category.video_url || category.image_url,
   };
-  if (category.video_url) {
-    metadata.animation_url = category.video_url;
-  }
   const metadataResult = await client.add(JSON.stringify(metadata));
   const url = `https://ipfs.infura.io/ipfs/${metadataResult.path}`;
   console.log(`metadata url for snaps ${snaps.id}: ${url}`);
